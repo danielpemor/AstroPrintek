@@ -1,0 +1,67 @@
+---
+const navItems = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Servicios', href: '/services' },
+  { name: 'Sobre Nosotros', href: '/about' },
+  { name: 'Contacto', href: '/contact' }
+];
+---
+
+<header class="bg-white shadow-lg fixed w-full top-0 z-50">
+  <nav class="container mx-auto px-4 lg:px-6 py-4">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="text-2xl font-heading font-bold text-industrial-900">
+          <img src="/images/logo.png" alt="Printek Supplies" class="h-8 w-auto">
+        </a>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div class="hidden md:flex space-x-8">
+        {navItems.map((item) => (
+          <a 
+            href={item.href} 
+            class="text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group"
+          >
+            {item.name}
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
+          </a>
+        ))}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button 
+          id="mobile-menu-button"
+          class="text-industrial-700 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
+      {navItems.map((item) => (
+        <a 
+          href={item.href} 
+          class="block py-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200"
+        >
+          {item.name}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  mobileMenuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import WhyChooseSection from '../components/WhyChooseSection.astro';
+---
+
+<BaseLayout title="Printek - Industrial & IT Sourcing">
+  <Hero 
+    title="Industrial & IT Sourcing"
+    subtitle="Soluciones industriales personalizadas para impulsar tu negocio hacia el futuro."
+    backgroundImage="/images/industrial-hero.jpg"
+    ctaText="Explorar Soluciones"
+    ctaLink="#services"
+  />
+  
+  <ServicesSection />
+  
+  <WhyChooseSection />
+  
+</BaseLayout>

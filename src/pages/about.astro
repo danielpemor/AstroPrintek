@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+
+const stats = [
+  {
+    number: '23',
+    label: 'Años de Experiencia',
+    icon: '🏆'
+  },
+  {
+    number: '1000+',
+    label: 'Servicios Completados',
+    icon: '🚀'
+  },
+  {
+    number: '11+',
+    label: 'Países Atendidos',
+    icon: '🌍'
+  },
+  {
+    number: '98%',
+    label: 'Satisfacción del Cliente',
+    icon: '⭐'
+  }
+];
+---
+
+<BaseLayout title="Sobre Nosotros - Printek Supplies" description="Conoce nuestra historia, misión y el equipo que hace posible las mejores soluciones industriales.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
+          ¿Quiénes somos?
+        </h1>
+        <p class="text-xl text-industrial-100 leading-relaxed">
+          Printek Supplies es una empresa B2B especializada en compras industriales y de TI, fundada en 2002, con sólida experiencia en adquisiciones, logística e importaciones.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Content -->
+        <div>
+          <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+            Lo que nos mueve
+          </h2>
+          <p class="text-lg text-industrial-600 mb-8 leading-relaxed">
+            Cerramos la brecha entre fabricantes y usuarios finales a través de servicios de valor agregado que optimizan los procesos de compra, restablecen la continuidad operativa y reducen riesgos mediante decisiones de abastecimiento inteligentes.
+          </p>
+          
+          <h3 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+            Lo que queremos lograr
+          </h3>
+          <p class="text-lg text-industrial-600 leading-relaxed">
+            Ser el socio estratégico de referencia en compras industriales, reconocido por nuestra capacidad para integrar soluciones ágiles, técnicas y confiables que fortalezcan la cadena de suministro de nuestros clientes y generen ventajas competitivas sostenibles.
+          </p>
+        </div>
+
+        <!-- Visual -->
+        <div class="relative rounded-2xl overflow-hidden shadow-lg">
+          <img 
+            src="/images/piezas.png" 
+            alt="Nuestros procesos industriales" 
+            class="w-full h-96 object-cover"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <!-- Fallback si la imagen no carga -->
+          <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 hidden items-center justify-center">
+            <div class="text-white text-8xl">🎯</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logística Section -->
+  <section class="py-20 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-6xl mx-auto">
+        <!-- Mapa centrado -->
+        <div class="flex justify-center mb-8">
+          <div class="relative rounded-2xl overflow-hidden shadow-xl max-w-2xl w-full">
+            <img 
+              src="/images/mapa.png" 
+              alt="Logística Global - Offshoring y Nearshoring" 
+              class="w-full h-80 object-cover"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- Fallback si la imagen no carga -->
+            <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 hidden items-center justify-center">
+              <div class="text-white text-8xl">🌎</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Texto descriptivo centrado -->
+        <div class="text-center mb-16 max-w-4xl mx-auto">
+          <p class="text-lg text-slate-700 leading-relaxed">
+            Combinando estrategias de offshoring y nearshoring, aseguramos que todos nuestros productos lleguen a <strong>México</strong>, con entregas directas al cliente o a su agente aduanal mediante freight forwarder. Esto nos permite optimizar costos globales y garantizar eficiencia en el suministro local.
+          </p>
+        </div>
+
+        <!-- Título de logros -->
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Nuestros Logros
+          </h2>
+        </div>
+
+        <!-- Stats como recuadros similares a las certificaciones -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {stats.map((stat) => (
+            <div class="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 hover:border-primary-300">
+              <div class="text-5xl mb-4">{stat.icon}</div>
+              <div class="text-3xl font-heading font-bold text-slate-800 mb-3">{stat.number}</div>
+              <div class="text-slate-600 font-medium leading-tight">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+          ¿Listo para Trabajar con Nosotros?
+        </h2>
+        <p class="text-xl text-industrial-600 mb-8 leading-relaxed">
+          Descubre cómo nuestras soluciones pueden transformar 
+          tu operación industrial. Contáctanos hoy mismo.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contacto" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-300 inline-flex items-center justify-center">
+            <span class="mr-2">📞</span>
+            Contactar Ahora
+          </a>
+          <a href="/services" class="bg-white hover:bg-industrial-50 text-industrial-900 border-2 border-industrial-300 px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center">
+            <span class="mr-2">🔧</span>
+            Ver Servicios
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+// Script para manejar imágenes que no cargan
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('img[data-fallback]');
+  
+  images.forEach(img => {
+    img.addEventListener('error', function() {
+      // Si falla la imagen principal, mostrar el gradient fallback
+      this.style.display = 'none';
+      const fallback = this.nextElementSibling;
+      if (fallback && fallback.classList.contains('hidden')) {
+        fallback.classList.remove('hidden');
+        fallback.classList.add('flex');
+      }
+    });
+  });
+});
+</script>

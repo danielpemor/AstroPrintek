@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tipografía base */
+body {
+  @apply font-sans text-gray-800 bg-white leading-relaxed;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-gray-900;
+}
+
+h1 {
+  @apply text-4xl md:text-5xl mb-4;
+}
+
+h2 {
+  @apply text-3xl md:text-4xl mb-4;
+}
+
+h3 {
+  @apply text-2xl md:text-3xl mb-3;
+}
+
+p {
+  @apply mb-4;
+}
+
+/* Botones */
+.btn {
+  @apply inline-block px-6 py-3 rounded-full font-semibold transition-colors;
+}
+
+.btn-primary {
+  @apply bg-blue-800 text-white hover:bg-blue-900;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
+}
+
+/* Contenedores */
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+.section {
+  @apply py-16;
+}
+
+.section-light {
+  @apply bg-gray-50;
+}
+
+.section-dark {
+  @apply bg-blue-900 text-white;
+}
+
+/* Cards */
+.card {
+  @apply bg-white p-6 rounded-xl shadow-md;
+}
+
+/* Utilidades personalizadas */
+.text-muted {
+  @apply text-gray-500;
+}
+
+/* Footer */
+.footer {
+  @apply bg-gray-900 text-white py-10;
+}

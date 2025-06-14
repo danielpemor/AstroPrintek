@@ -1,0 +1,94 @@
+---
+const features = [
+  {
+    icon: '🌍',
+    title: 'Experiencia que resuelve',
+    description: 'Nuestro equipo multidisciplinario domina compras, calidad, producción y logística para enfrentar cualquier reto industrial.'
+  },
+  {
+    icon: '🏭',
+    title: 'Soluciones personalizadas',
+    description: 'No vendemos productos, diseñamos estrategias a la medida que optimizan costos y procesos.'
+  },
+  {
+    icon: '👥',
+    title: 'Abastecimiento sin fronteras',
+    description: 'Navegamos comercio exterior, aduanas y regulaciones para que tu operación sea ágil y sin sorpresas.'
+  },
+  {
+    icon: '💡',
+    title: 'Alianzas estratégicas e innovación',
+    description: 'Trabajamos con fabricantes líderes para ofrecer acceso a las últimas innovaciones del mercado.'
+  },
+  {
+    icon: '🌱',
+    title: 'Sostenibilidad',
+    description: 'Compromiso con soluciones ecológicas y procesos de producción sostenibles.'
+  },
+  {
+    icon: '🛠️',
+    title: 'Soporte Técnico',
+    description: 'Equipo de soporte técnico disponible 24/7 para garantizar el mejor servicio.'
+  }
+];
+---
+
+<section class="py-20 bg-industrial-900 text-white relative overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 100px);"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-6 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+        Por Qué Elegirnos
+      </h2>
+      <p class="text-xl text-industrial-200 max-w-3xl mx-auto leading-relaxed">
+        Somos tu socio de confianza para soluciones personalizadas 
+        construidas sobre años de experiencia
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {features.map((feature, index) => (
+        <div class="text-center group">
+          <!-- Icon Container -->
+          <div class="bg-primary-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-500 transition-colors duration-300 group-hover:transform group-hover:scale-110">
+            <span class="text-3xl">{feature.icon}</span>
+          </div>
+          
+          <!-- Content -->
+          <h3 class="text-xl font-heading font-semibold mb-4">
+            {feature.title}
+          </h3>
+          
+          <p class="text-industrial-300 leading-relaxed">
+            {feature.description}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Statistics -->
+    <div class="mt-20 grid md:grid-cols-4 gap-8 text-center">
+      {[
+        { number: '23', label: 'Años de Experiencia' },
+        { number: '11', label: 'Países Atendidos' },
+        { number: '1000+', label: 'Proyectos Completados' },
+        { number: '24/7', label: 'Soporte Técnico' }
+      ].map((stat) => (
+        <div class="group">
+          <div class="text-4xl md:text-5xl font-heading font-bold text-primary-400 mb-2 group-hover:text-primary-300 transition-colors duration-300">
+            {stat.number}
+          </div>
+          <div class="text-industrial-300 font-medium">
+            {stat.label}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

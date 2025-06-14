@@ -1,0 +1,345 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  {
+    id: 'Abastecimiento Industrial',
+    title: 'Soluciones Técnicas de Abastecimiento Industrial',
+    description: 'Identificamos problemas de abastecimiento como escasez, obsolescencia, calidad y proveedores inestables.',
+    icon: '🏭',
+    features: [
+      'Homologación de componentes',
+      'Sustitución tecnológica',
+      'Integración de fabricantes',
+      'Fabricación de piezas a la medida',
+      'Mantenimiento predictivo'
+    ],
+    applications: [
+      'Centros de distribución',
+      'Plantas manufactureras',
+      'Terminales portuarias',
+      'Almacenes industriales'
+    ]
+  },
+  {
+    id: 'Entregas',
+    title: 'Entregas Urgentes',
+    description: 'Respondemos con agilidad ante situaciones críticas, ya sea en la cadena de suministro o durante el proceso de producción.',
+    icon: '🔧',
+    features: [
+      'Gestión de garantías',
+      'Traducciones técnicas',
+      'Soporte especializado'
+    ],
+    applications: [
+      'Centros de distribución',
+      'Plantas manufactureras',
+      'Terminales portuarias',
+      'Almacenes industriales'
+    ]
+  },
+  {
+    id: 'Soporte',
+    title: 'Soporte Postventa',
+    description: 'Actuamos como enlace entre el cliente y los fabricantes o distribuidores, gestionando fallas, traducciones técnicas y garantías.',
+    icon: '⚙️',
+    features: [
+      'Coordinación logística urgente',
+      'Respuesta inmediata',
+      'Repuestos originales',
+      'Soluciones de emergencia',
+      'Continuidad operativa garantizada'
+    ],
+    applications: [
+      'Instalaciones críticas',
+      'Infraestructura industrial',
+      'Equipos especializados'
+    ]
+  }
+];
+
+const sectors = [
+  {
+    name: 'Automatización y Control Industrial',
+    position: 'Automatización de procesos, control lógico y operación',
+    description: [
+      'Controles, PLC y relés',
+      'Interfaces de operador',
+      'Robótica',
+      'Sistemas de control, análisis, electrónica, IA y medición',
+      'Visión artificial'
+    ],
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-blue-900/90 to-blue-700/90'
+  },
+  {
+    name: 'Movimiento y Transmisión',
+    position: 'Componentes que permiten el movimiento, fuerza y accionamiento de maquinaria',
+    description: [
+      'Motores y movimiento',
+      'Generadores y accionamientos',
+      'Neumáticos',
+      'Bombas y válvulas'
+    ],
+    image: 'https://images.unsplash.com/photo-1565374300643-4fe945d70d7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-gray-900/90 to-gray-700/90'
+  },
+  {
+    name: 'Soluciones Tecnológicas Integrales',
+    position: 'Equipamiento y conectividad completa',
+    description: [
+      'Licenciamiento de software',
+      'Laptops, desktops, monitores, servidores, impresoras',
+      'Almacenamiento de datos',
+      'Sistemas de audio y video'
+    ],
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-indigo-900/90 to-indigo-700/90'
+  },
+  {
+    name: 'Enlace y Comunicación',
+    position: 'Soluciones para vincular sistemas, dispositivos y redes industriales',
+    description: [
+      'Equipos de red',
+      'Interconexiones, cables y conectividad',
+      'Comunicación e interfaz'
+    ],
+    image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-teal-900/90 to-teal-700/90'
+  },
+  {
+    name: 'Herramientas y Diagnóstico',
+    position: 'Instrumentos para mantenimiento, instalación y prueba',
+    description: [
+      'Herramientas especializadas',
+      'Equipo de prueba y medición',
+      'Instrumentos de diagnóstico'
+    ],
+    image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-orange-900/90 to-orange-700/90'
+  },
+  {
+    name: 'Protección y Seguridad',
+    position: 'Equipos que protegen instalaciones, maquinaria y personal',
+    description: [
+      'Protección',
+      'Productos de baja/media tensión, protección eléctrica',
+      'Equipo de seguridad'
+    ],
+    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-red-900/90 to-red-700/90'
+  },
+  {
+    name: 'Componentes Electrónicos',
+    position: 'Dispositivos electrónicos pasivos y activos para sistemas automatizados',
+    description: [
+      'Semiconductores',
+      'Componentes pasivos',
+      'Optoelectrónica',
+      'Electromecánicos',
+      'Sistemas integrados'
+    ],
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    gradient: 'from-green-900/90 to-green-700/90'
+  }
+];
+---
+
+<BaseLayout title="Servicios - Industrias Tech" description="Conoce nuestros servicios especializados en transporte neumático y manejo de materiales industriales.">
+  <!-- Page Header -->
+  <section class="bg-industrial-900 text-white py-20 mt-20">
+    <div class="container mx-auto px-4 lg:px-6 text-center">
+      <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
+        Nuestras Soluciones
+      </h1>
+      <p class="text-xl text-industrial-200 max-w-3xl mx-auto leading-relaxed">
+        Soluciones Técnicas de Abastecimiento Industrial
+      </p>
+    </div>
+  </section>
+
+  <!-- Services Detail -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="space-y-20">
+        {services.map((service, index) => (
+          <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}>
+            <!-- Content -->
+            <div class="lg:w-1/2">
+              <div class="text-6xl mb-6">{service.icon}</div>
+              <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+                {service.title}
+              </h2>
+              <p class="text-lg text-industrial-600 mb-8 leading-relaxed">
+                {service.description}
+              </p>
+
+              <!-- Features -->
+              <div class="mb-8">
+                <h3 class="text-xl font-heading font-semibold text-industrial-900 mb-4">
+                  Características Principales:
+                </h3>
+                <div class="grid md:grid-cols-2 gap-3">
+                  {service.features.map((feature) => (
+                    <div class="flex items-center">
+                      <svg class="w-5 h-5 text-primary-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <span class="text-industrial-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Applications -->
+              <div class="mb-8">
+                <h3 class="text-xl font-heading font-semibold text-industrial-900 mb-4">
+                  #Aplicaciones:
+                </h3>
+                <div class="flex flex-wrap gap-3">
+                  {service.applications.map((app) => (
+                    <span class="bg-primary-100 text-primary-800 px-4 py-2 rounded-full text-sm font-medium">
+                      {app}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <!-- CTA -->
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href="/contact"
+                  class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 text-center"
+                >
+                  #Solicitar Cotización
+                </a>
+                <a 
+                  href="/contact"
+                  class="border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 text-center"
+                >
+                  #Más Información
+                </a>
+              </div>
+            </div>
+
+            <!-- Image/Visual -->
+            <div class="lg:w-1/2">
+              <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-12 text-white text-center shadow-2xl">
+                <div class="text-8xl mb-6 opacity-80">{service.icon}</div>
+                <h3 class="text-2xl font-heading font-bold mb-4">{service.title}</h3>
+                <p class="text-primary-100 leading-relaxed">
+                  Tecnología de vanguardia para soluciones industriales eficientes y confiables.
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Sector Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+          Sectores que atendemos
+        </h2>
+        <p class="text-xl text-industrial-600 max-w-3xl mx-auto">
+          Nuestros servicios permiten a las empresas reenfocar sus recursos de compras, liberándolos de la gestión operativa de insumos no críticos para que puedan concentrarse en los abastecimientos estratégicos.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {sectors.map((sector) => (
+          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group hover:transform hover:scale-105">
+            <!-- Imagen con overlay gradient -->
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src={sector.image} 
+                alt={sector.name}
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+              <!-- Fallback gradient si la imagen falla -->
+              <div class={`absolute inset-0 bg-gradient-to-br ${sector.gradient.replace('from-', 'from-').replace('to-', 'to-')} hidden items-center justify-center`}>
+                <div class="text-white text-6xl">⚙️</div>
+              </div>
+              <!-- Overlay gradient -->
+              <div class={`absolute inset-0 bg-gradient-to-t ${sector.gradient} opacity-60`}></div>
+              <!-- Título sobre la imagen -->
+              <div class="absolute bottom-4 left-4 right-4">
+                <h3 class="text-lg font-heading font-bold text-white leading-tight">
+                  {sector.name}
+                </h3>
+              </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="p-6">
+              <div class="text-primary-600 font-medium mb-3 text-sm">
+                {sector.position}
+              </div>
+              <!-- Lista vertical de bullets -->
+              <ul class="text-industrial-600 text-sm leading-relaxed space-y-2">
+                {sector.description.map((item) => (
+                  <li class="flex items-start">
+                    <span class="text-primary-500 mr-2 mt-1 text-xs">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-industrial-50 py-20">
+    <div class="container mx-auto px-4 lg:px-6 text-center">
+      <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+        ¿Listo para Optimizar sus Procesos?
+      </h2>
+      <p class="text-xl text-industrial-600 mb-8 max-w-3xl mx-auto">
+        Nuestro equipo de expertos está listo para ayudarle a encontrar 
+        la solución perfecta para sus necesidades industriales.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact"
+          class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+        >
+          Contactar Ahora
+        </a>
+        <a 
+          href="/about"
+          class="border-2 border-industrial-600 text-industrial-600 hover:bg-industrial-600 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
+        >
+          Conocer Más
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+// Script para manejar imágenes que no cargan
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('img[data-fallback]');
+  
+  images.forEach(img => {
+    img.addEventListener('error', function() {
+      // Si falla la imagen principal, mostrar el gradient fallback
+      this.style.display = 'none';
+      const fallback = this.nextElementSibling;
+      if (fallback && fallback.classList.contains('hidden')) {
+        fallback.classList.remove('hidden');
+        fallback.classList.add('flex');
+      }
+    });
+  });
+});
+</script>
