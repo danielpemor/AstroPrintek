@@ -4,9 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const services = [
   {
     id: 'Abastecimiento Industrial',
-    title: 'Soluciones Técnicas de Abastecimiento Industrial',
-    description: 'Identificamos problemas de abastecimiento como escasez, obsolescencia, calidad y proveedores inestables.',
-    icon: '🏭',
+    title: 'Abastecimiento técnico industrial a medida',
+    description: 'Nos especializamos en resolver desafíos críticos de abastecimiento para industrias que requieren piezas y componentes técnicos específicos. Identificamos y solucionamos problemas comunes como escasez de suministros, obsolescencia de componentes, inconsistencias de calidad y proveedores poco confiables. Nuestro enfoque es totalmente personalizado para asegurar la continuidad de tu producción y minimizar riesgos operativos.',
+    image: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80',
     features: [
       'Homologación de componentes',
       'Sustitución tecnológica',
@@ -19,30 +19,14 @@ const services = [
       'Plantas manufactureras',
       'Terminales portuarias',
       'Almacenes industriales'
-    ]
+    ],
+    textAlign: 'text-justify'
   },
   {
     id: 'Entregas',
-    title: 'Entregas Urgentes',
-    description: 'Respondemos con agilidad ante situaciones críticas, ya sea en la cadena de suministro o durante el proceso de producción.',
-    icon: '🔧',
-    features: [
-      'Gestión de garantías',
-      'Traducciones técnicas',
-      'Soporte especializado'
-    ],
-    applications: [
-      'Centros de distribución',
-      'Plantas manufactureras',
-      'Terminales portuarias',
-      'Almacenes industriales'
-    ]
-  },
-  {
-    id: 'Soporte',
-    title: 'Soporte Postventa',
-    description: 'Actuamos como enlace entre el cliente y los fabricantes o distribuidores, gestionando fallas, traducciones técnicas y garantías.',
-    icon: '⚙️',
+    title: 'Entregas urgentes',
+    description: 'Sabemos que los paros técnicos o retrasos en producción pueden generar pérdidas significativas. Por eso ofrecemos respuesta ágil ante situaciones críticas en la cadena de suministro o en planta. Activamos protocolos de abastecimiento exprés, localizamos piezas difíciles y coordinamos logística especializada para que todo llegue a tiempo y en condiciones óptimas.',
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80',
     features: [
       'Coordinación logística urgente',
       'Respuesta inmediata',
@@ -51,12 +35,32 @@ const services = [
       'Continuidad operativa garantizada'
     ],
     applications: [
+      'Centros de distribución',
+      'Plantas manufactureras',
+      'Terminales portuarias',
+      'Almacenes industriales'
+    ],
+    textAlign: 'text-justify'
+  },
+  {
+    id: 'Soporte',
+    title: 'Soporte postventa',
+    description: 'Nos convertimos en tu enlace técnico con fabricantes y distribuidores. Brindamos acompañamiento postventa incluyendo gestión de garantías, interpretación de documentación técnica, coordinación de fallas y soporte especializado. Aseguramos que cada componente cumpla su función y que tengas respaldo técnico constante.',
+    image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80',
+    features: [
+      'Gestión de garantías',
+      'Traducciones técnicas',
+      'Soporte especializado'
+    ],
+    applications: [
       'Instalaciones críticas',
       'Infraestructura industrial',
       'Equipos especializados'
-    ]
+    ],
+    textAlign: 'text-justify'
   }
 ];
+
 
 const sectors = [
   {
@@ -146,14 +150,14 @@ const sectors = [
 ---
 
 <BaseLayout title="Servicios - Industrias Tech" description="Conoce nuestros servicios especializados en transporte neumático y manejo de materiales industriales.">
-  <!-- Page Header -->
-  <section class="bg-industrial-900 text-white py-20 mt-20">
+  <!-- Page Header - Color más claro <section class="bg-[#fcb315] text-white py-20 mt-20"> -->
+  <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
     <div class="container mx-auto px-4 lg:px-6 text-center">
       <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
-        Nuestras Soluciones
+        Nuestros servicios
       </h1>
-      <p class="text-xl text-industrial-200 max-w-3xl mx-auto leading-relaxed">
-        Soluciones Técnicas de Abastecimiento Industrial
+      <p class="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+        Todo lo que tu empresa necesita para operar sin interrupciones
       </p>
     </div>
   </section>
@@ -161,12 +165,11 @@ const sectors = [
   <!-- Services Detail -->
   <section class="py-20">
     <div class="container mx-auto px-4 lg:px-6">
-      <div class="space-y-20">
+      <div class="space-y-24">
         {services.map((service, index) => (
-          <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}>
+          <div class={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-16`}>
             <!-- Content -->
             <div class="lg:w-1/2">
-              <div class="text-6xl mb-6">{service.icon}</div>
               <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
                 {service.title}
               </h2>
@@ -191,45 +194,38 @@ const sectors = [
                 </div>
               </div>
 
-              <!-- Applications -->
-              <div class="mb-8">
-                <h3 class="text-xl font-heading font-semibold text-industrial-900 mb-4">
-                  #Aplicaciones:
-                </h3>
-                <div class="flex flex-wrap gap-3">
-                  {service.applications.map((app) => (
-                    <span class="bg-primary-100 text-primary-800 px-4 py-2 rounded-full text-sm font-medium">
-                      {app}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
               <!-- CTA -->
               <div class="flex flex-col sm:flex-row gap-4">
                 <a 
                   href="/contact"
-                  class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 text-center"
+                  class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
                 >
-                  #Solicitar Cotización
+                  Solicitar cotización
                 </a>
                 <a 
                   href="/contact"
                   class="border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 text-center"
                 >
-                  #Más Información
+                  Más Información
                 </a>
               </div>
             </div>
 
-            <!-- Image/Visual -->
+            <!-- Image -->
             <div class="lg:w-1/2">
-              <div class="bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl p-12 text-white text-center shadow-2xl">
-                <div class="text-8xl mb-6 opacity-80">{service.icon}</div>
-                <h3 class="text-2xl font-heading font-bold mb-4">{service.title}</h3>
-                <p class="text-primary-100 leading-relaxed">
-                  Tecnología de vanguardia para soluciones industriales eficientes y confiables.
-                </p>
+              <div class="relative rounded-2xl overflow-hidden shadow-2xl group">
+                <img 
+                  src={service.image} 
+                  alt={service.title}
+                  class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <!-- Overlay con gradiente -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-primary-900/80 via-primary-600/40 to-transparent"></div>
+
+                <!-- Indicador de calidad -->
+                <div class="absolute top-6 right-6">
+                </div>
               </div>
             </div>
           </div>
@@ -239,7 +235,7 @@ const sectors = [
   </section>
 
   <!-- Sector Section -->
-  <section class="py-20">
+  <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 lg:px-6">
       <div class="text-center mb-16">
         <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
@@ -301,7 +297,7 @@ const sectors = [
   <section class="bg-industrial-50 py-20">
     <div class="container mx-auto px-4 lg:px-6 text-center">
       <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
-        ¿Listo para Optimizar sus Procesos?
+        ¿Listo para trabajar con nosotros?
       </h2>
       <p class="text-xl text-industrial-600 mb-8 max-w-3xl mx-auto">
         Nuestro equipo de expertos está listo para ayudarle a encontrar 
@@ -309,16 +305,16 @@ const sectors = [
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a 
-          href="/contact"
-          class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+          href="/contact"  ---bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105---
+          class="bg-[#fcb315] hover:bg-[#e6a013] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
         >
-          Contactar Ahora
+          Contactar ahora
         </a>
         <a 
           href="/about"
           class="border-2 border-industrial-600 text-industrial-600 hover:bg-industrial-600 hover:text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300"
         >
-          Conocer Más
+          Conocer más
         </a>
       </div>
     </div>

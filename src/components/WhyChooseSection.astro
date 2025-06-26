@@ -1,94 +1,223 @@
----
-const features = [
-  {
-    icon: '🌍',
-    title: 'Experiencia que resuelve',
-    description: 'Nuestro equipo multidisciplinario domina compras, calidad, producción y logística para enfrentar cualquier reto industrial.'
-  },
-  {
-    icon: '🏭',
-    title: 'Soluciones personalizadas',
-    description: 'No vendemos productos, diseñamos estrategias a la medida que optimizan costos y procesos.'
-  },
-  {
-    icon: '👥',
-    title: 'Abastecimiento sin fronteras',
-    description: 'Navegamos comercio exterior, aduanas y regulaciones para que tu operación sea ágil y sin sorpresas.'
-  },
-  {
-    icon: '💡',
-    title: 'Alianzas estratégicas e innovación',
-    description: 'Trabajamos con fabricantes líderes para ofrecer acceso a las últimas innovaciones del mercado.'
-  },
-  {
-    icon: '🌱',
-    title: 'Sostenibilidad',
-    description: 'Compromiso con soluciones ecológicas y procesos de producción sostenibles.'
-  },
-  {
-    icon: '🛠️',
-    title: 'Soporte Técnico',
-    description: 'Equipo de soporte técnico disponible 24/7 para garantizar el mejor servicio.'
-  }
-];
----
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección de Características Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'industrial': {
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            900: '#111827'
+                        },
+                        'primary': {
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb'
+                        }
+                    },
+                    fontFamily: {
+                        'heading': ['system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Fondo claro sofisticado */
+        .gradient-bg-light {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 70%, #e2e8f0 100%);
+        }
 
-<section class="py-20 bg-industrial-900 text-white relative overflow-hidden">
-  <!-- Background Pattern -->
-  <div class="absolute inset-0 opacity-5">
-    <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 100px);"></div>
-  </div>
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
 
-  <div class="container mx-auto px-4 lg:px-6 relative z-10">
-    <!-- Section Header -->
-    <div class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">
-        Por Qué Elegirnos
-      </h2>
-      <p class="text-xl text-industrial-200 max-w-3xl mx-auto leading-relaxed">
-        Somos tu socio de confianza para soluciones personalizadas 
-        construidas sobre años de experiencia
-      </p>
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<section class="py-20 gradient-bg-light text-gray-800 relative overflow-hidden">
+
+
+    <!-- Geometric Pattern Overlay -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(37, 99, 235, 0.3) 0%, transparent 50%);"></div>
     </div>
 
-    <!-- Features Grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {features.map((feature, index) => (
-        <div class="text-center group">
-          <!-- Icon Container -->
-          <div class="bg-primary-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-500 transition-colors duration-300 group-hover:transform group-hover:scale-110">
-            <span class="text-3xl">{feature.icon}</span>
-          </div>
-          
-          <!-- Content -->
-          <h3 class="text-xl font-heading font-semibold mb-4">
-            {feature.title}
-          </h3>
-          
-          <p class="text-industrial-300 leading-relaxed">
-            {feature.description}
-          </p>
+
+
+    <div class="container mx-auto px-4 lg:px-6 relative z-10">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <div class="inline-block mb-4">
+            </div>
+            <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                ¿Por Qué Elegirnos?
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Somos tu socio de confianza para estrategias personalizadas 
+                construidas sobre años de experiencia
+            </p>
+            <div class="mt-8 w-24 h-1 bg-gradient-to-r from-primary-600 to-primary-400 mx-auto rounded-full"></div>
         </div>
-      ))}
+
+        <!-- Features Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            <!-- Feature 1 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Experiencia que resuelve
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Nuestro equipo multidisciplinario domina compras, calidad, producción y logística para enfrentar cualquier reto industrial.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Suministro adaptado a tus retos
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    No vendemos productos, diseñamos estrategias a la medida que optimizan costos y procesos.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Abastecimiento sin fronteras
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Navegamos comercio exterior, aduanas y regulaciones para que tu operación sea ágil y sin sorpresas.
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Alianzas estratégicas e innovación
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Trabajamos con fabricantes líderes para ofrecer acceso a las últimas innovaciones del mercado.
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Soporte Técnico
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Equipo de soporte técnico disponible 24/7 para garantizar el mejor servicio.
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="text-center group card-hover">
+                <div class="bg-gradient-to-br from-primary-600 to-primary-700 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-primary-600/30 group-hover:shadow-primary-500/50 transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-heading font-semibold mb-4 text-gray-800">
+                    Logística optimizada
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Coordinamos entregas desde múltiples proveedores con eficiencia, integrando transporte, aduanas y almacenamiento para que tu operación no se detenga.
+                </p>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="relative">
+
+            
+            <div class="grid md:grid-cols-4 gap-8 text-center pt-8">
+                <div class="group">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
+                        <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
+                            23
+                        </div>
+                        <div class="text-gray-600 font-medium">
+                            Años de Experiencia
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
+                        <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
+                            11
+                        </div>
+                        <div class="text-gray-600 font-medium">
+                            Países Atendidos
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
+                        <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
+                            1000+
+                        </div>
+                        <div class="text-gray-600 font-medium">
+                            Proyectos Completados
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="group">
+                    <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
+                        <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
+                            24/7
+                        </div>
+                        <div class="text-gray-600 font-medium">
+                            Soporte Técnico
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Statistics -->
-    <div class="mt-20 grid md:grid-cols-4 gap-8 text-center">
-      {[
-        { number: '23', label: 'Años de Experiencia' },
-        { number: '11', label: 'Países Atendidos' },
-        { number: '1000+', label: 'Proyectos Completados' },
-        { number: '24/7', label: 'Soporte Técnico' }
-      ].map((stat) => (
-        <div class="group">
-          <div class="text-4xl md:text-5xl font-heading font-bold text-primary-400 mb-2 group-hover:text-primary-300 transition-colors duration-300">
-            {stat.number}
-          </div>
-          <div class="text-industrial-300 font-medium">
-            {stat.label}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
+
 </section>
+
+</body>
+</html>
