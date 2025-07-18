@@ -73,7 +73,7 @@ const sectors = [
       'Sistemas de control, análisis, electrónica, IA y medición',
       'Visión artificial'
     ],
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    image: 'https://images.unsplash.com/photo-1697577418970-95d99b5a55cf?q=80&w=1596&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     gradient: 'from-blue-900/90 to-blue-700/90'
   },
   {
@@ -85,7 +85,7 @@ const sectors = [
       'Neumáticos',
       'Bombas y válvulas'
     ],
-    image: 'https://images.unsplash.com/photo-1565374300643-4fe945d70d7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    image: 'https://images.unsplash.com/photo-1640556795357-71d4078d6228?q=80&w=2014&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     gradient: 'from-gray-900/90 to-gray-700/90'
   },
   {
@@ -97,7 +97,7 @@ const sectors = [
       'Almacenamiento de datos',
       'Sistemas de audio y video'
     ],
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    image: 'https://images.unsplash.com/photo-1548092372-6fa982d00458?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     gradient: 'from-indigo-900/90 to-indigo-700/90'
   },
   {
@@ -108,7 +108,7 @@ const sectors = [
       'Interconexiones, cables y conectividad',
       'Comunicación e interfaz'
     ],
-    image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    image: 'https://images.unsplash.com/photo-1639066648921-82d4500abf1a?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     gradient: 'from-teal-900/90 to-teal-700/90'
   },
   {
@@ -119,7 +119,7 @@ const sectors = [
       'Equipo de prueba y medición',
       'Instrumentos de diagnóstico'
     ],
-    image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80',
+    image: 'https://images.unsplash.com/photo-1726255294277-57c46883bd94?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     gradient: 'from-orange-900/90 to-orange-700/90'
   },
   {
@@ -220,9 +220,6 @@ const sectors = [
                   class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
-                <!-- Overlay con gradiente -->
-                <div class="absolute inset-0 bg-gradient-to-tr from-primary-900/80 via-primary-600/40 to-transparent"></div>
-
                 <!-- Indicador de calidad -->
                 <div class="absolute top-6 right-6">
                 </div>
@@ -262,8 +259,6 @@ const sectors = [
               <div class={`absolute inset-0 bg-gradient-to-br ${sector.gradient.replace('from-', 'from-').replace('to-', 'to-')} hidden items-center justify-center`}>
                 <div class="text-white text-6xl">⚙️</div>
               </div>
-              <!-- Overlay gradient -->
-              <div class={`absolute inset-0 bg-gradient-to-t ${sector.gradient} opacity-60`}></div>
               <!-- Título sobre la imagen -->
               <div class="absolute bottom-4 left-4 right-4">
                 <h3 class="text-lg font-heading font-bold text-white leading-tight">
