@@ -3,6 +3,7 @@ interface Props {
   title: string;
   subtitle: string;
   backgroundImage?: string;
+  backgroundVideo?: string;
   ctaText?: string;
   ctaLink?: string;
 }
@@ -11,18 +12,46 @@ const {
   title, 
   subtitle, 
   backgroundImage = '/images/industrial-hero.jpg',
+  backgroundVideo,
   ctaText = 'Conoce Más',
   ctaLink = '#services'
 } = Astro.props;
 ---
 
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
-  <!-- Background Image -->
-  <div 
-    class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style={`background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${backgroundImage})`}
-  >
-  </div>
+  <!-- Video Background -->
+  {backgroundVideo && (
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster={backgroundImage}
+    >
+      <source src={backgroundVideo} type="video/mp4" />
+      <!-- Fallback si el video no carga -->
+      <div 
+        class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={`background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${backgroundImage})`}
+      >
+      </div>
+    </video>
+  )}
+
+  <!-- Background Image (solo si no hay video) -->
+  {!backgroundVideo && (
+    <div 
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+      style={`background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${backgroundImage})`}
+    >
+    </div>
+  )}
+
+  <!-- Dark Overlay para el video (solo si hay video) -->
+  {backgroundVideo && (
+    <div class="absolute inset-0 bg-slate-900/70 z-5"></div>
+  )}
 
   <!-- Content -->
   <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
@@ -58,3 +87,47 @@ const {
     </svg>
   </div>
 </section>
+
+<style>
+  /* Asegurar que el video cubra completamente el contenedor */
+  video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+  
+  /* Optimización para dispositivos móviles */
+  @media (max-width: 768px) {
+    video {
+      object-position: center center;
+    }
+  }
+</style>
+
+<script>
+// Script para manejar el video
+document.addEventListener('DOMContentLoaded', function() {
+  const video = document.querySelector('video');
+  
+  if (video) {
+    // Asegurar que esté silenciado para autoplay
+    video.muted = true;
+    
+    // Intentar reproducir
+    const playPromise = video.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log('Video reproduciéndose automáticamente');
+      }).catch(error => {
+        console.log('Autoplay bloqueado:', error);
+      });
+    }
+    
+    // Reiniciar cuando termine (backup del atributo loop)
+    video.addEventListener('ended', function() {
+      this.currentTime = 0;
+      this.play();
+    });
+  }
+});
+</script>
