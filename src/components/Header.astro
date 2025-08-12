@@ -1,319 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header Multiidioma - Printek</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'industrial': {
-                            700: '#374151',
-                            900: '#111827'
-                        },
-                        'primary': {
-                            500: '#3B82F6',
-                            600: '#2563EB'
-                        }
-                    },
-                    fontFamily: {
-                        'heading': ['system-ui', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-</head>
+---
+const navItems = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Servicios', href: '/services' },
+  { name: 'Sobre Nosotros', href: '/about' },
+  { name: 'Contacto', href: '/contact' }
+];
+---
 
-    <header class="bg-white shadow-lg fixed w-full top-0 z-50">
-        <nav class="container mx-auto px-4 lg:px-6 py-4">
-            <div class="flex justify-between items-center">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-heading font-bold text-industrial-900">
-                        <img src="/images/logo.png" alt="Printek" class="h-12 w-auto">
-                    </a>
-                </div>
-                
-                <!-- Navigation Menu -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <div id="desktop-nav-links" class="flex space-x-8">
-                        <!-- Los enlaces se generarán dinámicamente -->
-                    </div>
-                    
-                    <!-- Language Selector -->
-                    <div class="relative">
-                        <button 
-                            id="language-selector"
-                            class="flex items-center space-x-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
-                        >
-                            <span id="current-language">ES</span>
-                            <svg class="w-4 h-4 transition-transform duration-200" id="language-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <!-- Language Dropdown -->
-                        <div 
-                            id="language-dropdown" 
-                            class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 hidden z-10"
-                        >
-                            <div class="py-1" role="menu">
-                                <a href="#" data-lang="es" class="language-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                    Español
-                                </a>
-                                <a href="#" data-lang="en" class="language-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                    English
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center space-x-4">
-                    <!-- Mobile Language Selector -->
-                    <div class="relative">
-                        <button 
-                            id="mobile-language-selector"
-                            class="text-industrial-700 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
-                        >
-                            <span id="mobile-current-language" class="text-sm font-medium">ES</span>
-                        </button>
-                        
-                        <div 
-                            id="mobile-language-dropdown" 
-                            class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 hidden z-10"
-                        >
-                            <div class="py-1" role="menu">
-                                <a href="#" data-lang="es" class="mobile-language-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                    Español
-                                </a>
-                                <a href="#" data-lang="en" class="mobile-language-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-                                    English
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button 
-                        id="mobile-menu-button"
-                        class="text-industrial-700 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
-                    >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
-                <div id="mobile-nav-links">
-                    <!-- Los enlaces se generarán dinámicamente -->
-                </div>
-            </div>
-        </nav>
-    </header>
+<header class="bg-white shadow-lg fixed w-full top-0 z-50">
+  <nav class="container mx-auto px-4 lg:px-6 py-4">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="text-2xl font-heading font-bold text-industrial-900">
+          <img src="/images/logo.png" alt="Printek" class="h-12 w-auto">
+        </a>
+      </div>
 
+      <!-- Navigation Menu -->
+      <div class="hidden md:flex space-x-8">
+        {navItems.map((item) => (
+          <a 
+            href={item.href} 
+            class="text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group"
+          >
+            {item.name}
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
+          </a>
+        ))}
+      </div>
 
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button 
+          id="mobile-menu-button"
+          class="text-industrial-700 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-    <script>
-        // Configuración de navegación multiidioma
-        const navConfig = {
-            es: [
-                { name: 'Inicio', href: '/' },
-                { name: 'Servicios', href: '/services' },
-                { name: 'Sobre Nosotros', href: '/about' },
-                { name: 'Contacto', href: '/contact' }
-            ],
-            en: [
-                { name: 'Home', href: '/en/' },
-                { name: 'Services', href: '/en/services' },
-                { name: 'About Us', href: '/en/about' },
-                { name: 'Contact', href: '/en/contact' }
-            ]
-        };
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
+      {navItems.map((item) => (
+        <a 
+          href={item.href} 
+          class="block py-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200"
+        >
+          {item.name}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
 
-        class MultilingualNav {
-            constructor() {
-                this.currentLanguage = this.detectLanguage();
-                this.init();
-            }
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
 
-            // Detecta el idioma del navegador y de la URL
-            detectLanguage() {
-                // Primero intenta detectar desde la URL
-                const urlPath = window.location.pathname;
-                if (urlPath.startsWith('/en/') || urlPath === '/en') {
-                    return 'en';
-                }
-                
-                // Si no hay prefijo en la URL, detecta del navegador
-                const browserLang = navigator.language || navigator.languages[0];
-                const langCode = browserLang.split('-')[0].toLowerCase();
-                
-                // Retorna 'en' si el navegador está en inglés, sino 'es'
-                return langCode === 'en' ? 'en' : 'es';
-            }
-
-            // Obtiene la URL base sin prefijo de idioma
-            getBaseUrl() {
-                let path = window.location.pathname;
-                // Remueve el prefijo /en/ si existe
-                if (path.startsWith('/en/')) {
-                    path = path.substring(3);
-                } else if (path === '/en') {
-                    path = '/';
-                }
-                return path || '/';
-            }
-
-            // Genera la URL para un idioma específico
-            generateUrl(href, targetLang) {
-                if (targetLang === 'en') {
-                    // Para inglés, agrega /en/ al principio
-                    if (href === '/') {
-                        return '/en/';
-                    }
-                    return `/en${href}`;
-                } else {
-                    // Para español, usa la URL sin prefijo
-                    return href;
-                }
-            }
-
-            // Renderiza los enlaces de navegación
-            renderNavigation() {
-                const navItems = navConfig[this.currentLanguage];
-                
-                // Desktop navigation
-                const desktopNav = document.getElementById('desktop-nav-links');
-                if (desktopNav) {
-                    desktopNav.innerHTML = navItems.map(item => `
-                        <a href="${item.href}" 
-                           class="text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group">
-                            ${item.name}
-                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
-                        </a>
-                    `).join('');
-                }
-                
-                // Mobile navigation
-                const mobileNav = document.getElementById('mobile-nav-links');
-                if (mobileNav) {
-                    mobileNav.innerHTML = navItems.map(item => `
-                        <a href="${item.href}" 
-                           class="block py-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200">
-                            ${item.name}
-                        </a>
-                    `).join('');
-                }
-            }
-
-            // Actualiza los indicadores de idioma actual
-            updateLanguageIndicators() {
-                const langMap = { es: 'ES', en: 'EN' };
-                const currentLangText = langMap[this.currentLanguage];
-                
-                document.getElementById('current-language').textContent = currentLangText;
-                document.getElementById('mobile-current-language').textContent = currentLangText;
-            }
-
-            // Cambia el idioma
-            changeLanguage(newLang) {
-                if (newLang === this.currentLanguage) return;
-                
-                const baseUrl = this.getBaseUrl();
-                const newUrl = this.generateUrl(baseUrl, newLang);
-                
-                // En un entorno real, esto redirigiría a la nueva URL
-                window.location.href = newUrl;
-            }
-
-            // Cierra todos los dropdowns abiertos
-            closeAllDropdowns() {
-                document.getElementById('language-dropdown').classList.add('hidden');
-                document.getElementById('mobile-language-dropdown').classList.add('hidden');
-                document.getElementById('mobile-menu').classList.add('hidden');
-                
-                // Resetea la flecha del selector de idioma
-                document.getElementById('language-arrow').style.transform = 'rotate(0deg)';
-            }
-
-            // Configura los event listeners
-            setupEventListeners() {
-                // Desktop language selector
-                const langSelector = document.getElementById('language-selector');
-                const langDropdown = document.getElementById('language-dropdown');
-                const langArrow = document.getElementById('language-arrow');
-                
-                langSelector.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const isHidden = langDropdown.classList.contains('hidden');
-                    this.closeAllDropdowns();
-                    
-                    if (isHidden) {
-                        langDropdown.classList.remove('hidden');
-                        langArrow.style.transform = 'rotate(180deg)';
-                    }
-                });
-
-                // Mobile language selector
-                const mobileLangSelector = document.getElementById('mobile-language-selector');
-                const mobileLangDropdown = document.getElementById('mobile-language-dropdown');
-                
-                mobileLangSelector.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const isHidden = mobileLangDropdown.classList.contains('hidden');
-                    this.closeAllDropdowns();
-                    
-                    if (isHidden) {
-                        mobileLangDropdown.classList.remove('hidden');
-                    }
-                });
-
-                // Language option clicks
-                document.querySelectorAll('.language-option, .mobile-language-option').forEach(option => {
-                    option.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const selectedLang = e.currentTarget.getAttribute('data-lang');
-                        this.changeLanguage(selectedLang);
-                    });
-                });
-
-                // Mobile menu toggle
-                const mobileMenuButton = document.getElementById('mobile-menu-button');
-                const mobileMenu = document.getElementById('mobile-menu');
-                
-                mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
-
-                // Close dropdowns when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#language-selector') && 
-                        !e.target.closest('#mobile-language-selector')) {
-                        this.closeAllDropdowns();
-                    }
-                });
-            }
-
-            // Inicializa el componente
-            init() {
-                this.renderNavigation();
-                this.updateLanguageIndicators();
-                this.setupEventListeners();
-            }
-        }
-
-        // Inicializa la navegación multiidioma cuando el DOM está listo
-        document.addEventListener('DOMContentLoaded', () => {
-            new MultilingualNav();
-        });
-    </script>
-</body>
-</html>
+  mobileMenuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>

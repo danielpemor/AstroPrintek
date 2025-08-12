@@ -1,0 +1,273 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const stats = [
+  {
+    number: '23',
+    label: 'Años de Experiencia'
+  },
+  {
+    number: '1000+',
+    label: 'Servicios Completados'
+  },
+  {
+    number: '11+',
+    label: 'Países Atendidos'
+  },
+  {
+    number: '98%',
+    label: 'Satisfacción del Cliente'
+  }
+];
+---
+
+<BaseLayout title="Sobre Nosotros - Printek Supplies" description="Conoce nuestra historia, misión y el equipo que hace posible las mejores soluciones industriales.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
+          ¿Quiénes somos?
+        </h1>
+        <p class="text-xl text-industrial-100 leading-relaxed">
+          Printek Supplies es una empresa B2B especializada en compras industriales y de TI, fundada en 2002, con sólida experiencia en adquisiciones, logística e importaciones.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Content -->
+        <div>
+          <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+            Lo que nos mueve
+          </h2>
+          <p class="text-lg text-industrial-600 mb-8 leading-relaxed">
+            Cerramos la brecha entre fabricantes y usuarios finales a través de servicios de valor agregado que optimizan los procesos de compra, restablecen la continuidad operativa y reducen riesgos mediante decisiones de abastecimiento inteligentes.
+          </p>
+          
+          <h3 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+            Lo que queremos lograr
+          </h3>
+          <p class="text-lg text-industrial-600 leading-relaxed">
+            Ser el socio estratégico de referencia en compras industriales, reconocido por nuestra capacidad para integrar soluciones ágiles, técnicas y confiables que fortalezcan la cadena de suministro de nuestros clientes y generen ventajas competitivas sostenibles.
+          </p>
+        </div>
+
+        <!-- Visual -->
+        <div class="relative rounded-2xl overflow-hidden shadow-lg">
+          <img 
+            src="/images/piezas.png" 
+            alt="Nuestros procesos industriales" 
+            class="w-full h-96 object-cover"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <!-- Fallback si la imagen no carga -->
+          <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 hidden items-center justify-center">
+            <div class="text-white text-center">
+              <svg class="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <p class="text-sm">Procesos Industriales</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logística Section con mapa como background mejorado -->
+  <section class="py-20 relative overflow-hidden min-h-screen flex items-center">
+    <!-- Mapa como background -->
+    <div class="absolute inset-0 z-0">
+      <img 
+        src="/images/mapa.png" 
+        alt="Logística Global - Offshoring y Nearshoring" 
+        class="w-full h-full object-cover"
+        loading="lazy"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <!-- Fallback background si la imagen no carga -->
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-700 hidden">
+        <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);"></div>
+      </div>
+    </div>
+
+    <!-- Overlay más sutil para mejor legibilidad sin oscurecer tanto -->
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-900/40 via-blue-800/30 to-indigo-900/40 z-10"></div>
+    
+    <!-- Overlay adicional para zonas específicas de texto -->
+    <div class="absolute inset-0 z-20">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-transparent"></div>
+    </div>
+
+    <!-- Patrón decorativo más sutil -->
+    <div class="absolute inset-0 z-20 opacity-20">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(37, 99, 235, 0.3) 0%, transparent 50%);"></div>
+    </div>
+
+    <div class="container mx-auto px-4 lg:px-6 relative z-30">
+      <div class="max-w-6xl mx-auto">
+        <!-- Contenido principal centrado con fondos semitransparentes -->
+        <div class="text-center text-white">
+          <!-- Título principal con fondo sutil -->
+          <div class="mb-12 bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 class="text-5xl md:text-7xl font-heading font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-2xl">
+              Logística Global
+            </h2>
+            <p class="text-xl md:text-2xl text-blue-50 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
+              Conectamos el mundo con México a través de estrategias inteligentes de suministro
+            </p>
+            <div class="mt-8 w-32 h-1 bg-gradient-to-r from-blue-400 to-white mx-auto rounded-full shadow-lg"></div>
+          </div>
+
+          <!-- Cards flotantes con mejor contraste -->
+          <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Card Offshoring -->
+            <div class="bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105">
+              <div class="bg-gradient-to-br from-blue-500 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+                <svg class="w-8 h-8 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-heading font-bold mb-4 text-white drop-shadow-md">
+                Offshoring
+              </h3>
+              <p class="text-blue-50 leading-relaxed drop-shadow-sm">
+                Aprovechamos mercados globales para optimizar costos sin comprometer calidad, accediendo a proveedores especializados en todo el mundo.
+              </p>
+            </div>
+
+            <!-- Card Nearshoring -->
+            <div class="bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105">
+              <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+                <svg class="w-8 h-8 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-heading font-bold mb-4 text-white drop-shadow-md">
+                Nearshoring
+              </h3>
+              <p class="text-blue-50 leading-relaxed drop-shadow-sm">
+                Estrategias regionales que reducen tiempos de entrega y facilitan la comunicación, manteniendo proximidad geográfica y ventajas logísticas.
+              </p>
+            </div>
+          </div>
+
+          <!-- Texto descriptivo principal con mejor contraste -->
+          <div class="max-w-5xl mx-auto">
+            <div class="bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/30 shadow-2xl">
+              <p class="text-lg md:text-xl text-blue-50 leading-relaxed drop-shadow-sm">
+                Combinando estrategias de <span class="text-white font-semibold bg-blue-600/30 px-2 py-1 rounded">offshoring</span> y <span class="text-white font-semibold bg-indigo-600/30 px-2 py-1 rounded">nearshoring</span>, aseguramos que todos nuestros productos lleguen a <span class="text-yellow-300 font-bold bg-yellow-600/20 px-2 py-1 rounded">México</span>, con entregas directas al cliente o a su agente aduanal mediante freight forwarder. Esto nos permite optimizar costos globales y garantizar eficiencia en el suministro local.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicadores de ubicación más visibles -->
+    <div class="absolute top-1/4 left-1/4 z-25 animate-pulse">
+      <div class="bg-yellow-400 w-5 h-5 rounded-full shadow-xl ring-4 ring-yellow-300/50 border-2 border-white"></div>
+    </div>
+    <div class="absolute bottom-1/3 right-1/3 z-25 animate-pulse delay-1000">
+      <div class="bg-green-400 w-5 h-5 rounded-full shadow-xl ring-4 ring-green-300/50 border-2 border-white"></div>
+    </div>
+    <div class="absolute top-1/2 right-1/4 z-25 animate-pulse delay-500">
+      <div class="bg-red-400 w-5 h-5 rounded-full shadow-xl ring-4 ring-red-300/50 border-2 border-white"></div>
+    </div>
+    
+    <!-- Puntos adicionales para simular un mapa más dinámico -->
+    <div class="absolute top-1/3 left-1/2 z-25 animate-pulse delay-2000">
+      <div class="bg-purple-400 w-4 h-4 rounded-full shadow-lg ring-3 ring-purple-300/40 border border-white"></div>
+    </div>
+    <div class="absolute bottom-1/4 left-1/3 z-25 animate-pulse delay-1500">
+      <div class="bg-orange-400 w-4 h-4 rounded-full shadow-lg ring-3 ring-orange-300/40 border border-white"></div>
+    </div>
+  </section>
+
+  <!-- Nueva sección dedicada a los logros -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4 lg:px-6">
+      <!-- Título de logros como sección independiente -->
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+          Nuestros Logros
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Más de dos décadas construyendo relaciones sólidas y resultados excepcionales
+        </p>
+        <div class="mt-8 w-24 h-1 bg-gradient-to-r from-primary-600 to-primary-400 mx-auto rounded-full"></div>
+      </div>
+
+      <!-- Stats con diseño homologado -->
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        {stats.map((stat) => (
+          <div class="group">
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
+              <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
+                {stat.number}
+              </div>
+              <div class="text-gray-600 font-medium">
+                {stat.label}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-4xl font-heading font-bold text-industrial-900 mb-6">
+          ¿Listo para Trabajar con Nosotros?
+        </h2>
+        <p class="text-xl text-industrial-600 mb-8 leading-relaxed">
+          Descubre cómo nuestras soluciones pueden transformar 
+          tu operación industrial. Contáctanos hoy mismo.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contacto" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-300 inline-flex items-center justify-center">
+            Contactar Ahora
+          </a>
+          <a href="/services" class="bg-white hover:bg-industrial-50 text-industrial-900 border-2 border-industrial-300 px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center">
+            Ver Servicios
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Fondo claro sofisticado igual al primer diseño */
+  .gradient-bg-light {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 70%, #e2e8f0 100%);
+  }
+</style>
+
+<script>
+// Script para manejar imágenes que no cargan
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('img[onerror]');
+  
+  images.forEach(img => {
+    img.addEventListener('error', function() {
+      // Si falla la imagen principal, mostrar el gradient fallback
+      this.style.display = 'none';
+      const fallback = this.nextElementSibling;
+      if (fallback && fallback.classList.contains('hidden')) {
+        fallback.classList.remove('hidden');
+        fallback.classList.add('flex');
+      }
+    });
+  });
+});
+</script>

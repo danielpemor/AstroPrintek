@@ -1,0 +1,494 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+  'Compras Industriales',
+  'Equipos de TI',
+  'Logística Internacional',
+  'Importaciones',
+  'Consultoría',
+  'Otro'
+];
+---
+
+<BaseLayout title="Contacto - Printek" description="Contáctanos para obtener las mejores soluciones industriales y de TI. Estamos aquí para ayudarte.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
+          Contáctanos
+        </h1>
+        <p class="text-xl text-industrial-100 leading-relaxed">
+          Estamos listos para ayudarte con tus necesidades industriales y de TI. 
+          Hablemos sobre cómo podemos optimizar tu operación.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form and Map Section -->
+  <section class="py-20 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Solicita tu Cotización
+          </h2>
+          <p class="text-lg text-slate-600">
+            Completa el formulario y nos pondremos en contacto contigo en menos de 24 horas con una cotización personalizada.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- Formulario -->
+          <div class="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
+            <!-- Netlify Form -->
+            <form 
+              name="contact" 
+              method="POST" 
+              data-netlify="true" 
+              data-netlify-honeypot="bot-field"
+            >
+              <!-- Netlify form detection -->
+              <input type="hidden" name="form-name" value="contact" />
+              
+              <!-- Honeypot field for spam protection -->
+              <div class="hidden">
+                <label>
+                  Don't fill this out if you're human: <input name="bot-field" />
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Nombre -->
+                <div>
+                  <label for="nombre" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Nombre Completo *
+                  </label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    required
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Tu nombre completo"
+                  />
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="tu@email.com"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Teléfono -->
+                <div>
+                  <label for="telefono" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Teléfono
+                  </label>
+                  <input
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="+52 777 123 4567"
+                  />
+                </div>
+
+                <!-- Empresa -->
+                <div>
+                  <label for="empresa" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Empresa *
+                  </label>
+                  <input
+                    type="text"
+                    id="empresa"
+                    name="empresa"
+                    required
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Nombre de tu empresa"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Ubicación de la empresa -->
+                <div>
+                  <label for="ubicacion" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Ubicación de tu Empresa *
+                  </label>
+                  <input
+                    type="text"
+                    id="ubicacion"
+                    name="ubicacion"
+                    required
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Ciudad, Estado, País"
+                  />
+                </div>
+
+                <!-- Servicio de Interés -->
+                <div>
+                  <label for="servicio" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Servicio de Interés *
+                  </label>
+                  <select
+                    id="servicio"
+                    name="servicio"
+                    required
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                  >
+                    <option value="">Selecciona un servicio</option>
+                    {services.map((service) => (
+                      <option value={service}>{service}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Número de Producto -->
+                <div>
+                  <label for="numeroProducto" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Número de Producto
+                    <span class="text-slate-500 font-normal">(Opcional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="numeroProducto"
+                    name="numeroProducto"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Ej: HP-CF500A, DL380-GEN10"
+                  />
+                </div>
+
+                <!-- Marca y/o Modelo -->
+                <div>
+                  <label for="marcaModelo" class="block text-sm font-semibold text-slate-700 mb-2">
+                    Marca y/o Modelo
+                    <span class="text-slate-500 font-normal">(Opcional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="marcaModelo"
+                    name="marcaModelo"
+                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Ej: HP LaserJet Pro, Dell PowerEdge"
+                  />
+                </div>
+              </div>
+
+              <!-- Mensaje -->
+              <div class="mb-6">
+                <label for="mensaje" class="block text-sm font-semibold text-slate-700 mb-2">
+                  Descripción del Proyecto *
+                </label>
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  rows="4"
+                  required
+                  class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 resize-y"
+                  placeholder="Describe tu proyecto, necesidades específicas, cantidad de productos, fecha estimada de entrega, etc..."
+                ></textarea>
+              </div>
+
+              <!-- Submit Button -->
+            <div class="text-center">
+              <button
+                type="submit"
+                class="w-full bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center hover:shadow-lg transform hover:-translate-y-1"
+              >
+                <img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />
+                Solicitar Cotización
+              </button>
+            </div>
+
+              <!-- Nota de privacidad -->
+              <div class="mt-4 text-center text-sm text-slate-500">
+                Al enviar este formulario, aceptas que procesemos tu información para responder a tu consulta.
+              </div>
+            </form>
+          </div>
+
+          <!-- Mapa y ubicaciones -->
+          <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div class="p-6">
+              <h3 class="text-xl font-heading font-bold text-slate-800 mb-4 text-center">
+                Mapa Interactivo
+              </h3>
+              <div class="flex justify-center space-x-4 mb-4">
+                <button 
+                  id="showMexico" 
+                  class="flex items-center px-4 py-2 bg-red-100 hover:bg-red-200 rounded-lg transition-colors"
+                >
+                  <img src="/images/mexico.png" alt="México" class="w-6 h-6 mr-2">
+                  <span class="text-sm font-medium">México</span>
+                </button>
+                <button 
+                  id="showUSA" 
+                  class="flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
+                >
+                  <img src="/images/estados-unidos.png" alt="Estados Unidos" class="w-6 h-6 mr-2">
+                  <span class="text-sm font-medium">Estados Unidos</span>
+                </button>
+              </div>
+            </div>
+            <div class="h-80">
+              <iframe 
+                id="googleMap"
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx">
+              </iframe>
+            </div>
+          </div>
+
+                <!-- Estados Unidos -->
+                <div class="flex items-start space-x-4">
+                  <div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Information Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Información de Contacto
+          </h2>
+          <p class="text-lg text-slate-600">
+            Múltiples canales para conectar contigo de la manera que prefieras.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Email -->
+          <div class="text-center">
+            <div class="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <img src="/images/mensaje.png" alt="mail" class="w-full h-full object-contain p-2">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Email</h3>
+            <a href="mailto:sales@printeksupplies.com" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              sales@printeksupplies.com
+            </a>
+          </div>
+
+          <!-- Teléfono México -->
+          <div class="text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-full h-full object-contain p-2">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">México</h3>
+            <a href="tel:+526567057931" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              +52 656 705 7931
+            </a>
+            <a href="https://wa.me/526567057931" target="_blank" class="text-green-600 hover:text-green-700 transition-colors text-sm mt-1 block">
+              WhatsApp
+            </a>
+          </div>
+
+          <!-- Teléfono USA -->
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-full h-full object-contain p-2">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Estados Unidos</h3>
+            <a href="tel:+19153072805" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              +1 (915) 307 2805
+            </a>
+            <a href="https://wa.me/19153072805" target="_blank" class="text-green-600 hover:text-green-700 transition-colors text-sm mt-1 block">
+              WhatsApp
+            </a>
+          </div>
+
+          <!-- Horario -->
+          <div class="text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <img src="/images/reloj.png" alt="reloj" class="w-full h-full object-contain p-2">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Horario</h3>
+            <p class="text-slate-600">
+              Lunes - Viernes<br>
+              9:00 - 18:00
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Preguntas Frecuentes
+          </h2>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Cuál es el tiempo de respuesta para cotizaciones?
+            </h3>
+            <p class="text-slate-600">
+              Nos comprometemos a responder todas las solicitudes de cotización en menos de 24 horas hábiles con precios competitivos y tiempos de entrega precisos.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Manejan envíos internacionales?
+            </h3>
+            <p class="text-slate-600">
+              Sí, con oficinas en México y Estados Unidos, facilitamos envíos y logística internacional adaptándose a las regulaciones de cada país.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Trabajan con empresas de cualquier tamaño?
+            </h3>
+            <p class="text-slate-600">
+              Sí, trabajamos con empresas desde pequeñas hasta corporaciones multinacionales, adaptando nuestros servicios y precios a cada necesidad y volumen.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Ofrecen servicios de emergencia?
+            </h3>
+            <p class="text-slate-600">
+              Contamos con servicios de emergencia y entregas express para situaciones críticas que requieren atención inmediata.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+// Manejo del formulario
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form[name="contact"]');
+  
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+      
+      // Mostrar estado de carga
+      submitButton.innerHTML = '<span class="mr-2">⏳</span>Enviando...';
+      submitButton.disabled = true;
+      
+      // Netlify manejará el envío, pero podemos mostrar feedback visual
+      setTimeout(() => {
+        if (!submitButton.disabled) return; // Si ya se procesó, no hacer nada
+        
+        // Esto solo se ejecutará si hay algún error
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+      }, 10000); // 10 segundos timeout
+    });
+  }
+  
+  // Validación en tiempo real
+  const requiredFields = form.querySelectorAll('[required]');
+  requiredFields.forEach(field => {
+    field.addEventListener('blur', function() {
+      if (this.value.trim() === '' && this.hasAttribute('required')) {
+        this.classList.add('border-red-400');
+        this.classList.remove('border-slate-300');
+      } else {
+        this.classList.remove('border-red-400');
+        this.classList.add('border-slate-300');
+      }
+    });
+    
+    field.addEventListener('input', function() {
+      if (this.value.trim() !== '') {
+        this.classList.remove('border-red-400');
+        this.classList.add('border-slate-300');
+      }
+    });
+  });
+
+  // Formateo automático de teléfono
+  const phoneField = document.getElementById('telefono');
+  if (phoneField) {
+    phoneField.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 0) {
+        if (value.startsWith('1') && value.length === 11) {
+          // Formato USA: +1 (915) 307 2805
+          value = value.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3 $4');
+        } else if (value.startsWith('52') && value.length === 12) {
+          // Formato México: +52 656 705 7931
+          value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3 $4');
+        }
+      }
+      e.target.value = value;
+    });
+  }
+});
+  // Funcionalidad del mapa interactivo
+  const showMexicoBtn = document.getElementById('showMexico');
+  const showUSABtn = document.getElementById('showUSA');
+  const googleMap = document.getElementById('googleMap');
+
+  // URLs de los mapas
+  const mexicoMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx";
+  const usaMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx";
+
+  if (showMexicoBtn && showUSABtn && googleMap) {
+    showMexicoBtn.addEventListener('click', function() {
+      googleMap.src = mexicoMapURL;
+      // Resaltar botón activo
+      showMexicoBtn.classList.remove('bg-red-100');
+      showMexicoBtn.classList.add('bg-red-200', 'ring-2', 'ring-red-300');
+      showUSABtn.classList.remove('bg-blue-200', 'ring-2', 'ring-blue-300');
+      showUSABtn.classList.add('bg-blue-100');
+    });
+
+    showUSABtn.addEventListener('click', function() {
+      googleMap.src = usaMapURL;
+      // Resaltar botón activo
+      showUSABtn.classList.remove('bg-blue-100');
+      showUSABtn.classList.add('bg-blue-200', 'ring-2', 'ring-blue-300');
+      showMexicoBtn.classList.remove('bg-red-200', 'ring-2', 'ring-red-300');
+      showMexicoBtn.classList.add('bg-red-100');
+    });
+
+    // Establecer México como activo por defecto
+    showMexicoBtn.classList.add('bg-red-200', 'ring-2', 'ring-red-300');
+    showMexicoBtn.classList.remove('bg-red-100');
+  }
+</script>
