@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ServicesSection from '../../components/ServicesSection.astro';
+import WhyChooseSection from '../../components/WhyChooseSection.astro';
+---
+
+<BaseLayout title="Printek">
+  <Hero 
+    title="Industrial & IT Sourcing"
+    subtitle="Industrial procurement specialists with 23 years of experience."
+    backgroundVideo="/videos/mixkit-grunge-industrial-gears-viewed-in-detail-12339-hd-ready.mp4"
+    backgroundImage="/images/industrial-fallback.jpg"
+    ctaText="Learn More"
+    ctaLink="#services"
+    secondaryCtaText="Contact"
+    secondaryCtaLink="/en/contact"
+  />
+  
+  <ServicesSection />
+  
+  <WhyChooseSection />
+  
+</BaseLayout>
