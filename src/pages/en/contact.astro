@@ -1,0 +1,471 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const services = [
+  'Industrial Purchasing',
+  'IT Equipment',
+  'International Logistics',
+  'Imports',
+  'Consulting',
+  'Other'
+];
+---
+
+<BaseLayout title="Contact - Printek" description="Contact us to get the best industrial and IT solutions. We are here to help you.">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
+          Contact Us
+        </h1>
+        <p class="text-xl text-industrial-100 leading-relaxed">
+          We are ready to help you with your industrial and IT needs. 
+          Let's talk about how we can optimize your operation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form Section - White Background -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Request Your Quote
+          </h2>
+          <p class="text-lg text-slate-600">
+            Complete the form and we will contact you in less than 24 hours with a personalized quote.
+          </p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 rounded-2xl shadow-xl p-8 border border-slate-200">
+          <!-- Netlify Form -->
+            <form 
+                name="contact-en" 
+                method="POST" 
+                data-netlify="true" 
+                data-netlify-honeypot="bot-field"
+                data-netlify-recaptcha="true"
+                netlify-to="sales@printeksupplies.com"
+                action="/en/thank-you"
+            >
+            <!-- Netlify form detection -->
+            <input type="hidden" name="form-name" value="contact-en" />
+    
+            <div style="display: none;">
+            <label>Don't fill this out if you're human: 
+                <input name="bot-field" tabindex="-1" autocomplete="off" />
+            </label>
+            <input name="website" type="url" style="display:none" />
+            <input name="company-url" type="text" style="position:absolute;left:-9999px;" />
+            </div>
+
+    <!-- Timestamp oculto para detectar envíos muy rápidos -->
+    <input type="hidden" name="timestamp" id="formTimestamp" />
+    
+    <!-- Campo de verificación de JavaScript -->
+    <input type="hidden" name="js-enabled" value="false" id="jsEnabled" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <!-- Full Name -->
+      <div>
+        <label for="fullName" class="block text-sm font-semibold text-slate-700 mb-2">
+          Full Name *
+        </label>
+        <input
+          type="text"
+          id="fullName"
+          name="fullName"
+          required
+          minlength="2"
+          maxlength="100"
+          pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="Your full name"
+          data-error-message="Please enter a valid full name (letters only, 2-100 characters)"
+        />
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+          Email *
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="your@email.com"
+          data-error-message="Please enter a valid email address"
+        />
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <!-- Phone -->
+      <div>
+        <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2">
+          Phone
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          pattern="[\+]?[0-9\s\-\(\)]+"
+          minlength="10"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="+1 915 123 4567"
+          data-error-message="Please enter a valid phone number (minimum 10 digits)"
+        />
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <label for="company" class="block text-sm font-semibold text-slate-700 mb-2">
+          Company *
+        </label>
+        <input
+          type="text"
+          id="company"
+          name="company"
+          required
+          minlength="2"
+          maxlength="100"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="Your company name"
+          data-error-message="Please enter your company name (2-100 characters)"
+        />
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <!-- Company Location -->
+      <div>
+        <label for="location" class="block text-sm font-semibold text-slate-700 mb-2">
+          Company Location *
+        </label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          required
+          minlength="2"
+          maxlength="100"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="City, State, Country"
+          data-error-message="Please enter your company location"
+        />
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+
+      <!-- Service of Interest -->
+      <div>
+        <label for="service" class="block text-sm font-semibold text-slate-700 mb-2">
+          Service of Interest *
+        </label>
+        <select
+          id="service"
+          name="service"
+          required
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          data-error-message="Please select a service"
+        >
+          <option value="">Select a service</option>
+          <option value="Industrial Purchasing">Industrial Purchasing</option>
+          <option value="IT Equipment">IT Equipment</option>
+          <option value="International Logistics">International Logistics</option>
+          <option value="Imports">Imports</option>
+          <option value="Consulting">Consulting</option>
+          <option value="Other">Other</option>
+        </select>
+        <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <!-- Product Number -->
+      <div>
+        <label for="productNumber" class="block text-sm font-semibold text-slate-700 mb-2">
+          Product Number
+          <span class="text-slate-500 font-normal">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="productNumber"
+          name="productNumber"
+          maxlength="50"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="Ex: HP-CF500A, DL380-GEN10"
+        />
+      </div>
+
+      <!-- Brand and/or Model -->
+      <div>
+        <label for="brandModel" class="block text-sm font-semibold text-slate-700 mb-2">
+          Brand and/or Model
+          <span class="text-slate-500 font-normal">(Optional)</span>
+        </label>
+        <input
+          type="text"
+          id="brandModel"
+          name="brandModel"
+          maxlength="100"
+          class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
+          placeholder="Ex: HP LaserJet Pro, Dell PowerEdge"
+        />
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="mb-6">
+      <label for="message" class="block text-sm font-semibold text-slate-700 mb-2">
+        Project Description *
+      </label>
+      <textarea
+        id="message"
+        name="message"
+        rows="4"
+        required
+        minlength="10"
+        maxlength="1000"
+        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 resize-y bg-white"
+        placeholder="Describe your project, specific needs, quantity of products, estimated delivery date, etc..."
+        data-error-message="Please describe your project (minimum 10 characters)"
+      ></textarea>
+      <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
+      <div class="text-sm text-slate-500 mt-1">
+        <span id="charCount">0</span>/1000 characters
+      </div>
+    </div>
+
+    <!-- reCAPTCHA -->
+    <div class="mb-6 flex justify-center">
+      <div data-netlify-recaptcha="true"></div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button
+        type="submit"
+        id="submitBtn"
+        disabled
+        class="w-full bg-gray-400 cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center"
+      >
+        <img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />
+        <span id="submitText">Please wait...</span>
+      </button>
+    </div>
+
+    <!-- Privacy Note -->
+    <div class="mt-4 text-center text-sm text-slate-500">
+      By submitting this form, you agree that we process your information to respond to your inquiry.
+      <br>
+      <span class="text-xs">Protected by reCAPTCHA and anti-spam measures.</span>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form[name="contact-en"]');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitText = document.getElementById('submitText');
+  const charCount = document.getElementById('charCount');
+  const messageField = document.getElementById('message');
+  
+  let formLoadTime = Date.now();
+  let minTimeBeforeSubmit = 3000; // 3 seconds minimum
+  
+  // Set timestamp and enable JS detection
+  document.getElementById('formTimestamp').value = formLoadTime;
+  document.getElementById('jsEnabled').value = 'true';
+  
+  // Character counter for message
+  if (messageField && charCount) {
+    messageField.addEventListener('input', function() {
+      const length = this.value.length;
+      charCount.textContent = length;
+      
+      if (length > 1000) {
+        charCount.parentElement.classList.add('text-red-500');
+        charCount.parentElement.classList.remove('text-slate-500');
+      } else {
+        charCount.parentElement.classList.remove('text-red-500');
+        charCount.parentElement.classList.add('text-slate-500');
+      }
+    });
+  }
+  
+  // Enable submit button after minimum time
+  setTimeout(() => {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+    submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'hover:shadow-lg', 'transform', 'hover:-translate-y-1');
+    submitText.textContent = 'Request Quote';
+  }, minTimeBeforeSubmit);
+  
+  // Custom validation
+  function validateField(field) {
+    const errorDiv = field.parentElement.querySelector('.error-message');
+    const errorMessage = field.dataset.errorMessage || 'This field is required';
+    let isValid = true;
+    
+    // Remove previous error styling
+    field.classList.remove('border-red-400');
+    if (errorDiv) {
+      errorDiv.textContent = '';
+      errorDiv.classList.add('hidden');
+    }
+    
+    // Required field validation
+    if (field.hasAttribute('required') && !field.value.trim()) {
+      isValid = false;
+    }
+    
+    // Email validation
+    if (field.type === 'email' && field.value) {
+      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      if (!emailRegex.test(field.value)) {
+        isValid = false;
+      }
+    }
+    
+    // Phone validation
+    if (field.type === 'tel' && field.value) {
+      const phoneRegex = /[\+]?[0-9\s\-\(\)]+/;
+      if (!phoneRegex.test(field.value) || field.value.replace(/\D/g, '').length < 10) {
+        isValid = false;
+      }
+    }
+    
+    // Name validation (only letters and spaces)
+    if (field.id === 'fullName' && field.value) {
+      const nameRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/;
+      if (!nameRegex.test(field.value)) {
+        isValid = false;
+      }
+    }
+    
+    // Length validation
+    if (field.hasAttribute('minlength') && field.value.length < field.getAttribute('minlength')) {
+      isValid = false;
+    }
+    
+    if (field.hasAttribute('maxlength') && field.value.length > field.getAttribute('maxlength')) {
+      isValid = false;
+    }
+    
+    // Select validation
+    if (field.tagName === 'SELECT' && field.hasAttribute('required') && !field.value) {
+      isValid = false;
+    }
+    
+    // Show error if invalid
+    if (!isValid) {
+      field.classList.add('border-red-400');
+      if (errorDiv) {
+        errorDiv.textContent = errorMessage;
+        errorDiv.classList.remove('hidden');
+      }
+    }
+    
+    return isValid;
+  }
+  
+  // Validate on blur
+  const fields = form.querySelectorAll('input, select, textarea');
+  fields.forEach(field => {
+    field.addEventListener('blur', () => validateField(field));
+    field.addEventListener('input', function() {
+      if (this.classList.contains('border-red-400')) {
+        validateField(this);
+      }
+    });
+  });
+  
+  // Form submission with enhanced bot protection
+  form.addEventListener('submit', function(e) {
+    let isFormValid = true;
+    
+    // Validate all fields
+    fields.forEach(field => {
+      if (!validateField(field)) {
+        isFormValid = false;
+      }
+    });
+    
+    // Bot protection checks
+    const timeTaken = Date.now() - formLoadTime;
+    
+    // Check if form was submitted too quickly (likely a bot)
+    if (timeTaken < minTimeBeforeSubmit) {
+      e.preventDefault();
+      alert('Please take your time to fill out the form properly.');
+      return false;
+    }
+    
+    // Check honeypot fields
+    const honeypotField = form.querySelector('input[name="bot-field"]');
+    const websiteField = form.querySelector('input[name="website"]');
+    const companyUrlField = form.querySelector('input[name="company-url"]');
+    
+    if ((honeypotField && honeypotField.value) || 
+        (websiteField && websiteField.value) || 
+        (companyUrlField && companyUrlField.value)) {
+      e.preventDefault();
+      // Silent fail for bots
+      return false;
+    }
+    
+    // Check if JavaScript is enabled
+    const jsField = document.getElementById('jsEnabled');
+    if (!jsField || jsField.value !== 'true') {
+      e.preventDefault();
+      return false;
+    }
+    
+    if (!isFormValid) {
+      e.preventDefault();
+      // Scroll to first error
+      const firstError = form.querySelector('.border-red-400');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstError.focus();
+      }
+      return false;
+    }
+    
+    // Show loading state
+    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
+    submitBtn.disabled = true;
+  });
+  
+  // Automatic phone formatting
+  const phoneField = document.getElementById('phone');
+  if (phoneField) {
+    phoneField.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 0) {
+        if (value.startsWith('1') && value.length <= 11) {
+          // USA format: +1 (915) 307 2805
+          value = value.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3 $4');
+        } else if (value.startsWith('52') && value.length <= 12) {
+          // Mexico format: +52 656 705 7931
+          value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3 $4');
+        }
+      }
+      e.target.value = value;
+    });
+  }
+});
+</script>

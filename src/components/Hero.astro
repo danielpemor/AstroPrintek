@@ -6,6 +6,8 @@ interface Props {
   backgroundVideo?: string;
   ctaText?: string;
   ctaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
 }
 
 const { 
@@ -13,8 +15,10 @@ const {
   subtitle, 
   backgroundImage = '/images/industrial-hero.jpg',
   backgroundVideo,
-  ctaText = 'Conoce Más',
-  ctaLink = '#services'
+  ctaText = 'Ver Propuestas',
+  ctaLink = '#services',
+  secondaryCtaText = 'Contáctanos',
+  secondaryCtaLink = '/contact'
 } = Astro.props;
 ---
 
@@ -65,17 +69,17 @@ const {
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a 
-        href={ctaLink}
+        href={secondaryCtaLink}
         class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
       >
-        {ctaText}
+        {secondaryCtaText}
       </a>
       
       <a 
-        href="/contact"
-        class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+        href={ctaLink}
+        class="bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
       >
-        Contacto
+        {ctaText}
       </a>
     </div>
   </div>
@@ -89,15 +93,27 @@ const {
 </section>
 
 <style>
-  /* Asegurar que el video cubra completamente el contenedor */
+  /* Configuración del video */
   video {
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
   
-  /* Optimización para dispositivos móviles */
+  /* Optimización específica para dispositivos móviles - menos zoom y posición ajustada */
   @media (max-width: 768px) {
     video {
+      object-fit: cover;
+      object-position: right; /* Mover hacia la izquierda */
+      transform: scale(1); /* Menos zoom que antes */
+    }
+  }
+  
+  /* Para tablets */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    video {
+      object-fit: cover;
       object-position: center center;
     }
   }
