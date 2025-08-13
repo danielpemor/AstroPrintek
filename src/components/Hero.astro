@@ -1,7 +1,7 @@
 ---
 interface Props {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   backgroundImage?: string;
   backgroundVideo?: string;
   ctaText?: string;
@@ -10,16 +10,52 @@ interface Props {
   secondaryCtaLink?: string;
 }
 
+// Recibir props opcionales (para mantener compatibilidad)
 const { 
   title, 
   subtitle, 
   backgroundImage = '/images/industrial-hero.jpg',
   backgroundVideo,
-  ctaText = 'Ver Propuestas',
-  ctaLink = '#services',
-  secondaryCtaText = 'Contáctanos',
-  secondaryCtaLink = '/contact'
+  ctaText,
+  ctaLink,
+  secondaryCtaText,
+  secondaryCtaLink
 } = Astro.props;
+
+// Detectar idioma desde la URL para coincidir con la lógica del header
+const currentPath = Astro.url.pathname;
+const isEnglish = currentPath.startsWith('/en/') || currentPath === '/en';
+
+// Traducciones por defecto si no se pasan props
+const translations = {
+  es: {
+    title: 'Industrial & IT Sourcing',
+    subtitle: 'Estrategias personalizadas para el abastecimiento industrial.',
+    ctaText: 'Ver propuestas',
+    ctaLink: '#services',
+    secondaryCtaText: 'Contactar',
+    secondaryCtaLink: '/contact'
+  },
+  en: {
+    title: 'Industrial & IT Sourcing',
+    subtitle: 'Industrial procurement specialists with 23 years of experience.',
+    ctaText: 'Learn More',
+    ctaLink: '#services',
+    secondaryCtaText: 'Contact',
+    secondaryCtaLink: '/en/contact'
+  }
+};
+
+const currentLang = isEnglish ? 'en' : 'es';
+const t = translations[currentLang];
+
+// Usar props si se proporcionan, sino usar traducciones por defecto
+const heroTitle = title || t.title;
+const heroSubtitle = subtitle || t.subtitle;
+const heroCtaText = ctaText || t.ctaText;
+const heroCtaLink = ctaLink || t.ctaLink;
+const heroSecondaryCtaText = secondaryCtaText || t.secondaryCtaText;
+const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
 ---
 
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
@@ -60,26 +96,26 @@ const {
   <!-- Content -->
   <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
     <h1 class="text-5xl md:text-7xl font-heading font-bold mb-6 leading-tight">
-      {title}
+      {heroTitle}
     </h1>
     
     <p class="text-xl md:text-2xl mb-8 font-light leading-relaxed opacity-90">
-      {subtitle}
+      {heroSubtitle}
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a 
-        href={secondaryCtaLink}
+        href={heroSecondaryCtaLink}
         class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
       >
-        {secondaryCtaText}
+        {heroSecondaryCtaText}
       </a>
       
       <a 
-        href={ctaLink}
+        href={heroCtaLink}
         class="bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
       >
-        {ctaText}
+        {heroCtaText}
       </a>
     </div>
   </div>
