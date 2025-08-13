@@ -1,19 +1,20 @@
 ---
-// Detectar idioma del navegador
-const acceptLanguage = Astro.request.headers.get('accept-language') || '';
-const isEnglish = acceptLanguage.toLowerCase().includes('en') && !acceptLanguage.toLowerCase().includes('es');
-
-// Redirigir según el idioma
-if (isEnglish) {
-  return Astro.redirect('/en/');
-}
-
-// Si no es inglés, mostrar contenido en español
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import WhyChooseSection from '../components/WhyChooseSection.astro';
 ---
+
+<script>
+  // Detectar idioma del navegador del lado del cliente
+  const browserLanguage = navigator.language || navigator.languages[0] || 'es';
+  const isEnglish = browserLanguage.toLowerCase().startsWith('en');
+  
+  // Redirigir a inglés si es necesario
+  if (isEnglish && window.location.pathname === '/') {
+    window.location.replace('/en/');
+  }
+</script>
 
 <BaseLayout title="Printek">
   <Hero 
