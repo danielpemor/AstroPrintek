@@ -243,6 +243,9 @@
                 const baseUrl = this.getBaseUrl();
                 const newUrl = this.generateUrl(baseUrl, newLang);
                 
+                // Marcar cambio manual de idioma
+                localStorage.setItem('manual_lang_change', 'true');
+                
                 // En un entorno real, esto redirigiría a la nueva URL
                 window.location.href = newUrl;
             }
@@ -356,6 +359,36 @@
                 this.setupEventListeners();
             }
         }
+
+        // Auto-redirección solo en primera visita
+        (function() {
+            // Solo ejecutar en la página raíz
+            if (window.location.pathname === '/') {
+                // Verificar si es un cambio manual de idioma
+                const isManualChange = localStorage.getItem('manual_lang_change');
+                if (isManualChange) {
+                    localStorage.removeItem('manual_lang_change');
+                    return;
+                }
+                
+                // Verificar si ya visitó el sitio antes
+                const hasVisited = localStorage.getItem('printek_visited');
+                
+                if (!hasVisited) {
+                    const browserLanguage = navigator.language || navigator.languages[0] || 'es';
+                    const isEnglish = browserLanguage.toLowerCase().startsWith('en');
+                    
+                    if (isEnglish) {
+                        localStorage.setItem('printek_visited', 'true');
+                        window.location.href = '/en/';
+                        return;
+                    }
+                }
+                
+                // Marcar como visitado
+                localStorage.setItem('printek_visited', 'true');
+            }
+        })();
 
         // Inicializa la navegación multiidioma cuando el DOM está listo
         document.addEventListener('DOMContentLoaded', () => {

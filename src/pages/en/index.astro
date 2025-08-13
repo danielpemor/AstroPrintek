@@ -5,16 +5,6 @@ import ServicesSection from '../../components/ServicesSection.astro';
 import WhyChooseSection from '../../components/WhyChooseSection.astro';
 ---
 
-<script is:inline>
-  // Marcar que el usuario cambió manualmente de idioma
-  (function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('lang') || document.referrer.includes(window.location.origin)) {
-      sessionStorage.setItem('manualLangSwitch', 'true');
-    }
-  })();
-</script>
-
 <BaseLayout title="Printek">
   <Hero 
     title="Industrial & IT Sourcing"
