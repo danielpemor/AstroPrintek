@@ -5,15 +5,27 @@ import ServicesSection from '../components/ServicesSection.astro';
 import WhyChooseSection from '../components/WhyChooseSection.astro';
 ---
 
-<script>
-  // Detectar idioma del navegador del lado del cliente
-  const browserLanguage = navigator.language || navigator.languages[0] || 'es';
-  const isEnglish = browserLanguage.toLowerCase().startsWith('en');
-  
-  // Redirigir a inglés si es necesario
-  if (isEnglish && window.location.pathname === '/') {
-    window.location.replace('/en/');
-  }
+<script is:inline>
+  // Ejecutar inmediatamente antes que cargue nada
+  (function() {
+    // Verificar si el usuario viene de un cambio manual de idioma
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromLangSwitch = urlParams.has('lang') || sessionStorage.getItem('manualLangSwitch');
+    
+    // Si viene de cambio manual, no redirigir
+    if (fromLangSwitch) {
+      sessionStorage.removeItem('manualLangSwitch');
+      return;
+    }
+    
+    // Solo redirigir si es la primera visita con navegador inglés
+    const browserLanguage = navigator.language || navigator.languages[0] || 'es';
+    const isEnglish = browserLanguage.toLowerCase().startsWith('en');
+    
+    if (isEnglish && window.location.pathname === '/') {
+      window.location.href = '/en/';
+    }
+  })();
 </script>
 
 <BaseLayout title="Printek">
