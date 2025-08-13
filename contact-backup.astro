@@ -1,27 +1,27 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const services = [
-  'Industrial Procurement',
-  'IT Equipment',
-  'International Logistics',
-  'Imports',
-  'Consulting',
-  'Other'
+  'Compras Industriales',
+  'Equipos de TI',
+  'Logística Internacional',
+  'Importaciones',
+  'Consultoría',
+  'Otro'
 ];
 ---
 
-<BaseLayout title="Contact - Printek" description="Contact us for the best industrial and IT solutions. We're here to help you.">
+<BaseLayout title="Contacto - Printek" description="Contáctanos para obtener las mejores soluciones industriales y de TI. Estamos aquí para ayudarte.">
   <!-- Hero Section -->
   <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
     <div class="container mx-auto px-4 lg:px-6">
       <div class="max-w-4xl mx-auto text-center">
         <h1 class="text-5xl md:text-6xl font-heading font-bold mb-6">
-          Contact Us
+          Contáctanos
         </h1>
         <p class="text-xl text-industrial-100 leading-relaxed">
-          We're ready to help you with your industrial and IT needs. 
-          Let's talk about how we can optimize your operation.
+          Estamos listos para ayudarte con tus necesidades industriales y de TI. 
+          Hablemos sobre cómo podemos optimizar tu operación.
         </p>
       </div>
     </div>
@@ -33,16 +33,16 @@ const services = [
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12">
           <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
-            Request Your Quote
+            Solicita tu Cotización
           </h2>
           <p class="text-lg text-slate-600">
-            Complete the form and we'll contact you within 24 hours with a personalized quote.
+            Completa el formulario y nos pondremos en contacto contigo en menos de 24 horas con una cotización personalizada.
           </p>
         </div>
 
-        <!-- Form -->
+        <!-- Formulario -->
         <div class="bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 rounded-2xl shadow-xl p-8 border border-slate-200">
-          <!-- Netlify Form with notifications configured from code -->
+          <!-- Netlify Form con notificaciones configuradas desde código -->
           <form 
             name="contact" 
             method="POST" 
@@ -50,31 +50,31 @@ const services = [
             data-netlify-honeypot="bot-field"
             data-netlify-recaptcha="true"
             netlify-to="sales@printeksupplies.com"
-            action="/en/thank-you"
+            action="/gracias"
           >
             <!-- Netlify form detection -->
             <input type="hidden" name="form-name" value="contact" />
             
-            <!-- Enhanced honeypot field (multiple traps) -->
+            <!-- Campo honeypot mejorado (múltiples trampas) -->
             <div style="display: none;">
-              <label>Don't fill this out if you're human: 
+              <label>No llenes esto si eres humano: 
                 <input name="bot-field" tabindex="-1" autocomplete="off" />
               </label>
               <input name="website" type="url" style="display:none" />
               <input name="company-url" type="text" style="position:absolute;left:-9999px;" />
             </div>
 
-            <!-- Hidden timestamp to detect very fast submissions -->
+            <!-- Timestamp oculto para detectar envíos muy rápidos -->
             <input type="hidden" name="timestamp" id="formTimestamp" />
             
-            <!-- JavaScript verification field -->
+            <!-- Campo de verificación de JavaScript -->
             <input type="hidden" name="js-enabled" value="false" id="jsEnabled" />
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <!-- Name -->
+              <!-- Nombre -->
               <div>
                 <label for="nombre" class="block text-sm font-semibold text-slate-700 mb-2">
-                  Full Name *
+                  Nombre Completo *
                 </label>
                 <input
                   type="text"
@@ -85,8 +85,8 @@ const services = [
                   maxlength="100"
                   pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
-                  placeholder="Your full name"
-                  data-error-message="Please enter a valid name (letters only, 2-100 characters)"
+                  placeholder="Tu nombre completo"
+                  data-error-message="Por favor ingresa un nombre válido (solo letras, 2-100 caracteres)"
                 />
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
@@ -103,18 +103,18 @@ const services = [
                   required
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
-                  placeholder="your@email.com"
-                  data-error-message="Please enter a valid email"
+                  placeholder="tu@email.com"
+                  data-error-message="Por favor ingresa un email válido"
                 />
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <!-- Phone -->
+              <!-- Teléfono -->
               <div>
                 <label for="telefono" class="block text-sm font-semibold text-slate-700 mb-2">
-                  Phone
+                  Teléfono
                 </label>
                 <input
                   type="tel"
@@ -123,16 +123,16 @@ const services = [
                   pattern="[\+]?[0-9\s\-\(\)]+"
                   minlength="10"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
-                  placeholder="+1 915 123 4567"
-                  data-error-message="Please enter a valid phone number (minimum 10 digits)"
+                  placeholder="+52 777 123 4567"
+                  data-error-message="Por favor ingresa un número de teléfono válido (mínimo 10 dígitos)"
                 />
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
 
-              <!-- Company -->
+              <!-- Empresa -->
               <div>
                 <label for="empresa" class="block text-sm font-semibold text-slate-700 mb-2">
-                  Company *
+                  Empresa *
                 </label>
                 <input
                   type="text"
@@ -142,18 +142,18 @@ const services = [
                   minlength="2"
                   maxlength="100"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
-                  placeholder="Your company name"
-                  data-error-message="Please enter your company name (2-100 characters)"
+                  placeholder="Nombre de tu empresa"
+                  data-error-message="Por favor ingresa el nombre de tu empresa (2-100 caracteres)"
                 />
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <!-- Company Location -->
+              <!-- Ubicación de la empresa -->
               <div>
                 <label for="ubicacion" class="block text-sm font-semibold text-slate-700 mb-2">
-                  Company Location *
+                  Ubicación de tu Empresa *
                 </label>
                 <input
                   type="text"
@@ -163,13 +163,13 @@ const services = [
                   minlength="2"
                   maxlength="100"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
-                  placeholder="City, State, Country"
-                  data-error-message="Please enter your company location"
+                  placeholder="Ciudad, Estado, País"
+                  data-error-message="Por favor ingresa la ubicación de tu empresa"
                 />
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
 
-              <!-- Service of Interest -->
+              <!-- Servicio de Interés -->
               <div>
                 <label for="servicio" class="block text-sm font-semibold text-slate-700 mb-2">
                   Service of Interest *
@@ -181,24 +181,24 @@ const services = [
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
                   data-error-message="Please select a service"
                 >
-                  <option value="">Select a service</option>
-                  <option value="Industrial Procurement">Industrial Procurement</option>
-                  <option value="IT Equipment">IT Equipment</option>
-                  <option value="International Logistics">International Logistics</option>
-                  <option value="Imports">Imports</option>
-                  <option value="Consulting">Consulting</option>
-                  <option value="Other">Other</option>
+                    <option value="">Select a service</option>
+                    <option value="Industrial Purchasing">Industrial Purchasing</option>
+                    <option value="IT Equipment">IT Equipment</option>
+                    <option value="International Logistics">International Logistics</option>
+                    <option value="Imports">Imports</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Other">Other</option>
                 </select>
                 <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <!-- Product Number -->
+              <!-- Número de Producto -->
               <div>
                 <label for="numeroProducto" class="block text-sm font-semibold text-slate-700 mb-2">
                   Product Number
-                  <span class="text-slate-500 font-normal">(Optional)</span>
+                  <span class="text-slate-500 font-normal">(Opcional)</span>
                 </label>
                 <input
                   type="text"
@@ -210,11 +210,11 @@ const services = [
                 />
               </div>
 
-              <!-- Brand and/or Model -->
+              <!-- Marca y/o Modelo -->
               <div>
                 <label for="marcaModelo" class="block text-sm font-semibold text-slate-700 mb-2">
                   Brand and/or Model
-                  <span class="text-slate-500 font-normal">(Optional)</span>
+                  <span class="text-slate-500 font-normal">(Opcional)</span>
                 </label>
                 <input
                   type="text"
@@ -227,7 +227,7 @@ const services = [
               </div>
             </div>
 
-            <!-- Message -->
+            <!-- Mensaje -->
             <div class="mb-6">
               <label for="mensaje" class="block text-sm font-semibold text-slate-700 mb-2">
                 Project Description *
@@ -240,12 +240,12 @@ const services = [
                 minlength="10"
                 maxlength="1000"
                 class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 resize-y bg-white"
-                placeholder="Describe your project, specific needs, product quantity, estimated delivery date, etc..."
+                placeholder="Describe your project, specific needs, quantity of products, estimated delivery date, etc..."
                 data-error-message="Please describe your project (minimum 10 characters)"
               ></textarea>
               <div class="error-message text-red-500 text-sm mt-1 hidden"></div>
               <div class="text-sm text-slate-500 mt-1">
-                <span id="charCount">0</span>/1000 characters
+                <span id="charCount">0</span>/1000 caracteres
               </div>
             </div>
 
@@ -263,15 +263,15 @@ const services = [
                 class="w-full bg-gray-400 cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center"
               >
                 <img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />
-                <span id="submitText">Please wait...</span>
+                <span id="submitText">Por favor espera...</span>
               </button>
             </div>
 
-            <!-- Privacy Note -->
+            <!-- Nota de privacidad -->
             <div class="mt-4 text-center text-sm text-slate-500">
-              By submitting this form, you agree that we process your information to respond to your inquiry.
+              Al enviar este formulario, aceptas que procesemos tu información para responder a tu consulta.
               <br>
-              <span class="text-xs">Protected by reCAPTCHA and anti-spam measures.</span>
+              <span class="text-xs">Protegido por reCAPTCHA y medidas anti-spam.</span>
             </div>
           </form>
         </div>
@@ -285,17 +285,17 @@ const services = [
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12">
         <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
-          Our Locations
+          Nuestras Ubicaciones
         </h2>
         <p class="text-lg text-slate-600">
-          Strategically located offices to provide you the best service.
+          Oficinas estratégicamente ubicadas para brindarte el mejor servicio.
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- Interactive Map -->
+        <!-- Mapa interactivo -->
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-          <!-- Map fills entire container -->
+          <!-- Mapa ocupa todo el contenedor -->
           <div class="h-96">
             <iframe 
               id="googleMap"
@@ -305,48 +305,48 @@ const services = [
               allowfullscreen="" 
               loading="lazy" 
               referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx">
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx">
             </iframe>
           </div>
           
-          <!-- Buttons below the map -->
+          <!-- Botones debajo del mapa -->
           <div class="p-6 bg-gradient-to-r from-gray-50 to-slate-50">
             <h3 class="text-xl font-heading font-bold text-slate-800 mb-4 text-center">
-              Select Location
+              Seleccionar Ubicación
             </h3>
             <div class="flex justify-center space-x-4">
               <button 
                 id="showMexico" 
-                class="flex items-center px-6 py-3 bg-red-100 hover:bg-red-200 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+                class="flex items-center px-6 py-3 bg-red-200 ring-2 ring-red-300 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
               >
-                <img src="/images/mexico.png" alt="Mexico" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
-                <span class="text-sm font-semibold text-gray-700">Mexico</span>
+                <img src="/images/mexico.png" alt="México" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
+                <span class="text-sm font-semibold text-gray-700">México</span>
               </button>
               <button 
                 id="showUSA" 
-                class="flex items-center px-6 py-3 bg-blue-200 ring-2 ring-blue-300 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+                class="flex items-center px-6 py-3 bg-blue-100 hover:bg-blue-200 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
               >
-                <img src="/images/estados-unidos.png" alt="United States" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
-                <span class="text-sm font-semibold text-gray-700">United States</span>
+                <img src="/images/estados-unidos.png" alt="Estados Unidos" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
+                <span class="text-sm font-semibold text-gray-700">Estados Unidos</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Location Information -->
+        <!-- Información de ubicaciones -->
         <div class="space-y-8">
-          <!-- United States -->
+          <!-- Estados Unidos -->
           <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 hover:shadow-2xl transition-all duration-300">
             <div class="flex items-start space-x-6">
               <div class="flex-shrink-0">
                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                  <img src="/images/estados-unidos.png" alt="United States" class="w-10 h-10">
+                  <img src="/images/estados-unidos.png" alt="Estados Unidos" class="w-10 h-10">
                 </div>
               </div>
               <div class="flex-1">
                 <h4 class="text-2xl font-heading font-bold text-slate-800 mb-4 flex items-center">
-                  United States
-                  <span class="ml-3 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">Headquarters</span>
+                  Estados Unidos
+                  <span class="ml-3 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">Matriz</span>
                 </h4>
                 <div class="space-y-3 text-slate-600">
                   <div class="flex items-start space-x-3">
@@ -354,7 +354,7 @@ const services = [
                       <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                      <p class="font-semibold text-slate-800">Address:</p>
+                      <p class="font-semibold text-slate-800">Dirección:</p>
                       <p class="text-slate-600">11601 Pellicano Dr Suite D2<br>El Paso, TX 79936</p>
                     </div>
                   </div>
@@ -363,18 +363,18 @@ const services = [
             </div>
           </div>
 
-          <!-- Mexico -->
+          <!-- México -->
           <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 hover:shadow-2xl transition-all duration-300">
             <div class="flex items-start space-x-6">
               <div class="flex-shrink-0">
                 <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                  <img src="/images/mexico.png" alt="Mexico" class="w-10 h-10">
+                  <img src="/images/mexico.png" alt="México" class="w-10 h-10">
                 </div>
               </div>
               <div class="flex-1">
                 <h4 class="text-2xl font-heading font-bold text-slate-800 mb-4 flex items-center">
-                  Mexico
-                  <span class="ml-3 px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full">Branch Office</span>
+                  México
+                  <span class="ml-3 px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full">Sucursal</span>
                 </h4>
                 <div class="space-y-3 text-slate-600">
                   <div class="flex items-start space-x-3">
@@ -382,7 +382,7 @@ const services = [
                       <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                      <p class="font-semibold text-slate-800">Address:</p>
+                      <p class="font-semibold text-slate-800">Dirección:</p>
                       <p class="text-slate-600">Calle Manzanero 1918, Oficina MV117, Col. Sandra Lucía, Ciudad Juárez, Chihuahua, 32530</p>
                     </div>
                   </div>
@@ -402,10 +402,10 @@ const services = [
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
           <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
-            Contact Information
+            Información de Contacto
           </h2>
           <p class="text-lg text-slate-600">
-            Multiple channels to connect with you in your preferred way.
+            Múltiples canales para conectar contigo de la manera que prefieras.
           </p>
         </div>
 
@@ -421,12 +421,12 @@ const services = [
             </a>
           </div>
 
-          <!-- Mexico Phone -->
+          <!-- Teléfono México -->
           <div class="text-center">
             <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img src="/images/llamada-telefonica.png" alt="phone" class="w-12 h-12 object-contain">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-12 h-12 object-contain">
             </div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-2">Mexico</h3>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">México</h3>
             <a href="tel:+526567057931" class="text-primary-600 hover:text-primary-700 transition-colors block">
               +52 656 705 7931
             </a>
@@ -435,12 +435,12 @@ const services = [
             </a>
           </div>
 
-          <!-- USA Phone -->
+          <!-- Teléfono USA -->
           <div class="text-center">
             <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img src="/images/llamada-telefonica.png" alt="phone" class="w-12 h-12 object-contain">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-12 h-12 object-contain">
             </div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-2">United States</h3>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Estados Unidos</h3>
             <a href="tel:+19153072805" class="text-primary-600 hover:text-primary-700 transition-colors block">
               +1 (915) 307 2805
             </a>
@@ -449,15 +449,15 @@ const services = [
             </a>
           </div>
 
-          <!-- Schedule -->
+          <!-- Horario -->
           <div class="text-center">
             <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <img src="/images/reloj.png" alt="clock" class="w-12 h-12 object-contain">
+              <img src="/images/reloj.png" alt="reloj" class="w-12 h-12 object-contain">
             </div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-2">Business Hours</h3>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Horario</h3>
             <p class="text-slate-600">
-              Monday - Friday<br>
-              9:00 AM - 6:00 PM
+              Lunes - Viernes<br>
+              9:00 - 18:00
             </p>
           </div>
         </div>
@@ -471,44 +471,44 @@ const services = [
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12">
           <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
-            Frequently Asked Questions
+            Preguntas Frecuentes
           </h2>
         </div>
 
         <div class="space-y-6">
           <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800 mb-3">
-              What is the response time for quotes?
+              ¿Cuál es el tiempo de respuesta para cotizaciones?
             </h3>
             <p class="text-slate-600">
-              We are committed to responding to all quote requests within 24 business hours with competitive prices and accurate delivery times.
+              Nos comprometemos a responder todas las solicitudes de cotización en menos de 24 horas hábiles con precios competitivos y tiempos de entrega precisos.
             </p>
           </div>
 
           <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800 mb-3">
-              Do you handle international shipping?
+              ¿Manejan envíos internacionales?
             </h3>
             <p class="text-slate-600">
-              Yes, with offices in Mexico and the United States, we facilitate international shipping and logistics adapting to each country's regulations.
+              Sí, con oficinas en México y Estados Unidos, facilitamos envíos y logística internacional adaptándose a las regulaciones de cada país.
             </p>
           </div>
 
           <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800 mb-3">
-              Do you work with companies of any size?
+              ¿Trabajan con empresas de cualquier tamaño?
             </h3>
             <p class="text-slate-600">
-              Yes, we work with companies from small businesses to multinational corporations, adapting our services and prices to each need and volume.
+              Sí, trabajamos con empresas desde pequeñas hasta corporaciones multinacionales, adaptando nuestros servicios y precios a cada necesidad y volumen.
             </p>
           </div>
 
           <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
             <h3 class="text-lg font-semibold text-slate-800 mb-3">
-              Do you offer emergency services?
+              ¿Ofrecen servicios de emergencia?
             </h3>
             <p class="text-slate-600">
-              We have emergency services and express deliveries for critical situations that require immediate attention.
+              Contamos con servicios de emergencia y entregas express para situaciones críticas que requieren atención inmediata.
             </p>
           </div>
         </div>
@@ -526,13 +526,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const messageField = document.getElementById('mensaje');
   
   let formLoadTime = Date.now();
-  let minTimeBeforeSubmit = 3000; // 3 seconds minimum
+  let minTimeBeforeSubmit = 3000; // 3 segundos mínimo
   
-  // Set timestamp and enable JS detection
+  // Establecer timestamp y habilitar detección JS
   document.getElementById('formTimestamp').value = formLoadTime;
   document.getElementById('jsEnabled').value = 'true';
   
-  // Character counter for message
+  // Contador de caracteres para mensaje
   if (messageField && charCount) {
     messageField.addEventListener('input', function() {
       const length = this.value.length;
@@ -548,33 +548,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Enable submit button after minimum time
+  // Habilitar botón de envío después del tiempo mínimo
   setTimeout(() => {
     submitBtn.disabled = false;
     submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
     submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'hover:shadow-lg', 'transform', 'hover:-translate-y-1');
-    submitText.textContent = 'Request Quote';
+    submitText.textContent = 'Solicitar Cotización';
   }, minTimeBeforeSubmit);
   
-  // Custom validation
+  // Validación personalizada
   function validateField(field) {
     const errorDiv = field.parentElement.querySelector('.error-message');
-    const errorMessage = field.dataset.errorMessage || 'This field is required';
+    const errorMessage = field.dataset.errorMessage || 'Este campo es requerido';
     let isValid = true;
     
-    // Remove previous error styles
+    // Remover estilos de error previos
     field.classList.remove('border-red-400');
     if (errorDiv) {
       errorDiv.textContent = '';
       errorDiv.classList.add('hidden');
     }
     
-    // Required field validation
+    // Validación de campo requerido
     if (field.hasAttribute('required') && !field.value.trim()) {
       isValid = false;
     }
     
-    // Email validation
+    // Validación de email
     if (field.type === 'email' && field.value) {
       const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
       if (!emailRegex.test(field.value)) {
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Phone validation
+    // Validación de teléfono
     if (field.type === 'tel' && field.value) {
       const phoneRegex = /[\+]?[0-9\s\-\(\)]+/;
       if (!phoneRegex.test(field.value) || field.value.replace(/\D/g, '').length < 10) {
@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Name validation (letters only)
+    // Validación de nombre (solo letras y espacios)
     if (field.id === 'nombre' && field.value) {
       const nameRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/;
       if (!nameRegex.test(field.value)) {
@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Length validation
+    // Validación de longitud
     if (field.hasAttribute('minlength') && field.value.length < field.getAttribute('minlength')) {
       isValid = false;
     }
@@ -607,12 +607,12 @@ document.addEventListener('DOMContentLoaded', function() {
       isValid = false;
     }
     
-    // Select validation
+    // Validación de select
     if (field.tagName === 'SELECT' && field.hasAttribute('required') && !field.value) {
       isValid = false;
     }
     
-    // Show error if invalid
+    // Mostrar error si es inválido
     if (!isValid) {
       field.classList.add('border-red-400');
       if (errorDiv) {
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
   
-  // Validate on field blur
+  // Validar al salir del campo
   const fields = form.querySelectorAll('input, select, textarea');
   fields.forEach(field => {
     field.addEventListener('blur', () => validateField(field));
@@ -635,28 +635,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Form submission with enhanced anti-bot protection
+  // Envío de formulario con protección anti-bot mejorada
   form.addEventListener('submit', function(e) {
     let isFormValid = true;
     
-    // Validate all fields
+    // Validar todos los campos
     fields.forEach(field => {
       if (!validateField(field)) {
         isFormValid = false;
       }
     });
     
-    // Anti-bot protections
+    // Protecciones anti-bot
     const timeTaken = Date.now() - formLoadTime;
     
-    // Check if form was submitted too quickly (probably a bot)
+    // Verificar si el formulario se envió muy rápido (probablemente un bot)
     if (timeTaken < minTimeBeforeSubmit) {
       e.preventDefault();
-      alert('Please take your time to fill out the form correctly.');
+      alert('Por favor tómate tu tiempo para llenar el formulario correctamente.');
       return false;
     }
     
-    // Check honeypot fields
+    // Verificar campos honeypot
     const honeypotField = form.querySelector('input[name="bot-field"]');
     const websiteField = form.querySelector('input[name="website"]');
     const companyUrlField = form.querySelector('input[name="company-url"]');
@@ -665,11 +665,11 @@ document.addEventListener('DOMContentLoaded', function() {
         (websiteField && websiteField.value) || 
         (companyUrlField && companyUrlField.value)) {
       e.preventDefault();
-      // Silent fail for bots
+      // Falla silenciosa para bots
       return false;
     }
     
-    // Check if JavaScript is enabled
+    // Verificar si JavaScript está habilitado
     const jsField = document.getElementById('jsEnabled');
     if (!jsField || jsField.value !== 'true') {
       e.preventDefault();
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!isFormValid) {
       e.preventDefault();
-      // Scroll to first error
+      // Scroll al primer error
       const firstError = form.querySelector('.border-red-400');
       if (firstError) {
         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -687,22 +687,22 @@ document.addEventListener('DOMContentLoaded', function() {
       return false;
     }
     
-    // Show loading state
-    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
+    // Mostrar estado de carga
+    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Enviando...';
     submitBtn.disabled = true;
   });
   
-  // Automatic phone formatting
+  // Formateo automático de teléfono
   const phoneField = document.getElementById('telefono');
   if (phoneField) {
     phoneField.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length > 0) {
         if (value.startsWith('1') && value.length <= 11) {
-          // USA format: +1 (915) 307 2805
+          // Formato USA: +1 (915) 307 2805
           value = value.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3 $4');
         } else if (value.startsWith('52') && value.length <= 12) {
-          // Mexico format: +52 656 705 7931
+          // Formato México: +52 656 705 7931
           value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3 $4');
         }
       }
@@ -710,22 +710,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Interactive map functionality
+  // Funcionalidad del mapa interactivo
   const showMexicoBtn = document.getElementById('showMexico');
   const showUSABtn = document.getElementById('showUSA');
   const googleMap = document.getElementById('googleMap');
 
-  // Map URLs
+  // URLs de los mapas
   const mexicoMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx";
   const usaMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx";
 
   if (showMexicoBtn && showUSABtn && googleMap) {
-    // IMPORTANT: USA is already set as default location in the HTML
-    // The iframe already loads with the USA URL by default
+    // IMPORTANTE: México ya está establecido como ubicación por defecto en el HTML
+    // El iframe ya carga con la URL de México por defecto
     
     showMexicoBtn.addEventListener('click', function() {
       googleMap.src = mexicoMapURL;
-      // Highlight active button
+      // Resaltar botón activo
       showMexicoBtn.classList.remove('bg-red-100');
       showMexicoBtn.classList.add('bg-red-200', 'ring-2', 'ring-red-300');
       showUSABtn.classList.remove('bg-blue-200', 'ring-2', 'ring-blue-300');
@@ -734,14 +734,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showUSABtn.addEventListener('click', function() {
       googleMap.src = usaMapURL;
-      // Highlight active button
+      // Resaltar botón activo
       showUSABtn.classList.remove('bg-blue-100');
       showUSABtn.classList.add('bg-blue-200', 'ring-2', 'ring-blue-300');
       showMexicoBtn.classList.remove('bg-red-200', 'ring-2', 'ring-red-300');
       showMexicoBtn.classList.add('bg-red-100');
     });
 
-    // USA is already active by default in the HTML with classes bg-blue-200 ring-2 ring-blue-300
+    // México ya está activo por defecto en el HTML con las clases bg-red-200 ring-2 ring-red-300
   }
 });
 </script>

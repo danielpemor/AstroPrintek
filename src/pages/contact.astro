@@ -40,7 +40,7 @@ const services = [
           </p>
         </div>
 
-<!-- Formulario -->
+        <!-- Formulario -->
         <div class="bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 rounded-2xl shadow-xl p-8 border border-slate-200">
           <!-- Netlify Form con notificaciones configuradas desde código -->
           <form 
@@ -275,6 +275,247 @@ const services = [
             </div>
           </form>
         </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Map and Locations Section -->
+<section class="py-20 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50">
+  <div class="container mx-auto px-4 lg:px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+          Nuestras Ubicaciones
+        </h2>
+        <p class="text-lg text-slate-600">
+          Oficinas estratégicamente ubicadas para brindarte el mejor servicio.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Mapa interactivo -->
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+          <!-- Mapa ocupa todo el contenedor -->
+          <div class="h-96">
+            <iframe 
+              id="googleMap"
+              width="100%" 
+              height="100%" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx">
+            </iframe>
+          </div>
+          
+          <!-- Botones debajo del mapa -->
+          <div class="p-6 bg-gradient-to-r from-gray-50 to-slate-50">
+            <h3 class="text-xl font-heading font-bold text-slate-800 mb-4 text-center">
+              Seleccionar Ubicación
+            </h3>
+            <div class="flex justify-center space-x-4">
+              <button 
+                id="showMexico" 
+                class="flex items-center px-6 py-3 bg-red-200 ring-2 ring-red-300 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+              >
+                <img src="/images/mexico.png" alt="México" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
+                <span class="text-sm font-semibold text-gray-700">México</span>
+              </button>
+              <button 
+                id="showUSA" 
+                class="flex items-center px-6 py-3 bg-blue-100 hover:bg-blue-200 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+              >
+                <img src="/images/estados-unidos.png" alt="Estados Unidos" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
+                <span class="text-sm font-semibold text-gray-700">Estados Unidos</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de ubicaciones -->
+        <div class="space-y-8">
+          <!-- Estados Unidos -->
+          <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start space-x-6">
+              <div class="flex-shrink-0">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                  <img src="/images/estados-unidos.png" alt="Estados Unidos" class="w-10 h-10">
+                </div>
+              </div>
+              <div class="flex-1">
+                <h4 class="text-2xl font-heading font-bold text-slate-800 mb-4 flex items-center">
+                  Estados Unidos
+                  <span class="ml-3 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">Matriz</span>
+                </h4>
+                <div class="space-y-3 text-slate-600">
+                  <div class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <p class="font-semibold text-slate-800">Dirección:</p>
+                      <p class="text-slate-600">11601 Pellicano Dr Suite D2<br>El Paso, TX 79936</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- México -->
+          <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start space-x-6">
+              <div class="flex-shrink-0">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <img src="/images/mexico.png" alt="México" class="w-10 h-10">
+                </div>
+              </div>
+              <div class="flex-1">
+                <h4 class="text-2xl font-heading font-bold text-slate-800 mb-4 flex items-center">
+                  México
+                  <span class="ml-3 px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full">Sucursal</span>
+                </h4>
+                <div class="space-y-3 text-slate-600">
+                  <div class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                      <p class="font-semibold text-slate-800">Dirección:</p>
+                      <p class="text-slate-600">Calle Manzanero 1918, Oficina MV117, Col. Sandra Lucía, Ciudad Juárez, Chihuahua, 32530</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Contact Information Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Información de Contacto
+          </h2>
+          <p class="text-lg text-slate-600">
+            Múltiples canales para conectar contigo de la manera que prefieras.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Email -->
+          <div class="text-center">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <img src="/images/mensaje.png" alt="mail" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Email</h3>
+            <a href="mailto:sales@printeksupplies.com" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              sales@printeksupplies.com
+            </a>
+          </div>
+
+          <!-- Teléfono México -->
+          <div class="text-center">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">México</h3>
+            <a href="tel:+526567057931" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              +52 656 705 7931
+            </a>
+            <a href="https://wa.me/526567057931" target="_blank" class="text-green-600 hover:text-green-700 transition-colors text-sm mt-1 block">
+              WhatsApp
+            </a>
+          </div>
+
+          <!-- Teléfono USA -->
+          <div class="text-center">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <img src="/images/llamada-telefonica.png" alt="telefono" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Estados Unidos</h3>
+            <a href="tel:+19153072805" class="text-primary-600 hover:text-primary-700 transition-colors block">
+              +1 (915) 307 2805
+            </a>
+            <a href="https://wa.me/19153072805" target="_blank" class="text-green-600 hover:text-green-700 transition-colors text-sm mt-1 block">
+              WhatsApp
+            </a>
+          </div>
+
+          <!-- Horario -->
+          <div class="text-center">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <img src="/images/reloj.png" alt="reloj" class="w-12 h-12 object-contain">
+            </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Horario</h3>
+            <p class="text-slate-600">
+              Lunes - Viernes<br>
+              9:00 - 18:00
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50">
+    <div class="container mx-auto px-4 lg:px-6">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-heading font-bold text-slate-800 mb-6">
+            Preguntas Frecuentes
+          </h2>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Cuál es el tiempo de respuesta para cotizaciones?
+            </h3>
+            <p class="text-slate-600">
+              Nos comprometemos a responder todas las solicitudes de cotización en menos de 24 horas hábiles con precios competitivos y tiempos de entrega precisos.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Manejan envíos internacionales?
+            </h3>
+            <p class="text-slate-600">
+              Sí, con oficinas en México y Estados Unidos, facilitamos envíos y logística internacional adaptándose a las regulaciones de cada país.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Trabajan con empresas de cualquier tamaño?
+            </h3>
+            <p class="text-slate-600">
+              Sí, trabajamos con empresas desde pequeñas hasta corporaciones multinacionales, adaptando nuestros servicios y precios a cada necesidad y volumen.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-semibold text-slate-800 mb-3">
+              ¿Ofrecen servicios de emergencia?
+            </h3>
+            <p class="text-slate-600">
+              Contamos con servicios de emergencia y entregas express para situaciones críticas que requieren atención inmediata.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -469,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Funcionalidad del mapa interactivo (corregir ubicación por defecto)
+  // Funcionalidad del mapa interactivo
   const showMexicoBtn = document.getElementById('showMexico');
   const showUSABtn = document.getElementById('showUSA');
   const googleMap = document.getElementById('googleMap');
@@ -479,8 +720,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const usaMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx";
 
   if (showMexicoBtn && showUSABtn && googleMap) {
-    // Establecer México como ubicación por defecto al cargar
-    googleMap.src = mexicoMapURL;
+    // IMPORTANTE: México ya está establecido como ubicación por defecto en el HTML
+    // El iframe ya carga con la URL de México por defecto
     
     showMexicoBtn.addEventListener('click', function() {
       googleMap.src = mexicoMapURL;
@@ -500,9 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
       showMexicoBtn.classList.add('bg-red-100');
     });
 
-    // Establecer México como activo por defecto
-    showMexicoBtn.classList.add('bg-red-200', 'ring-2', 'ring-red-300');
-    showMexicoBtn.classList.remove('bg-red-100');
+    // México ya está activo por defecto en el HTML con las clases bg-red-200 ring-2 ring-red-300
   }
 });
 </script>
