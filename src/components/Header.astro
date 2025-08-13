@@ -142,9 +142,8 @@
                 this.init();
             }
 
-            // Detecta el idioma basándose solo en la URL (no en el navegador)
+            // Detecta el idioma basándose en la URL Y el navegador
             detectLanguage() {
-                // Solo detecta desde la URL para coincidir con Astro
                 const urlPath = window.location.pathname;
                 
                 // Si la URL tiene /en/ o es /en, es inglés
@@ -152,8 +151,17 @@
                     return 'en';
                 }
                 
-                // Si no tiene prefijo /en/, siempre es español
-                // Esto ignora la configuración del navegador para coincidir con Astro
+                // Si estamos en la raíz (/), detectar desde el navegador también
+                if (urlPath === '/') {
+                    const browserLanguage = navigator.language || navigator.languages[0] || 'es';
+                    const isEnglish = browserLanguage.toLowerCase().startsWith('en');
+                    
+                    if (isEnglish) {
+                        return 'en';
+                    }
+                }
+                
+                // Si no tiene prefijo /en/ y no es raíz con navegador inglés, es español
                 return 'es';
             }
 
@@ -171,6 +179,11 @@
 
             // Genera la URL para un idioma específico
             generateUrl(href, targetLang) {
+                // Si estamos cambiando desde inglés a español en la raíz
+                if (window.location.pathname === '/' && this.currentLanguage === 'en' && targetLang === 'es') {
+                    return '/';
+                }
+                
                 if (targetLang === 'en') {
                     // Para inglés, agrega /en/ al principio
                     if (href === '/') {
