@@ -3,18 +3,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import WhyChooseSection from '../components/WhyChooseSection.astro';
+
+// Detectar idioma del navegador
+const acceptLanguage = Astro.request.headers.get('accept-language') || '';
+const isEnglish = acceptLanguage.toLowerCase().includes('en') && !acceptLanguage.toLowerCase().includes('es');
+
+// Contenido según el idioma
+const content = {
+  es: {
+    title: "Industrial & IT Sourcing",
+    subtitle: "Estrategias personalizadas para el abastecimiento industrial.",
+    ctaText: "Ver propuestas",
+    secondaryCtaText: "Contactar",
+    secondaryCtaLink: "/contact"
+  },
+  en: {
+    title: "Industrial & IT Sourcing", 
+    subtitle: "Industrial procurement specialists with 23 years of experience.",
+    ctaText: "Learn More",
+    secondaryCtaText: "Contact", 
+    secondaryCtaLink: "/en/contact"
+  }
+};
+
+const currentContent = isEnglish ? content.en : content.es;
 ---
 
 <BaseLayout title="Printek">
   <Hero 
-    title="Industrial & IT Sourcing"
-    subtitle="Estrategias personalizadas para el abastecimiento industrial."
+    title={currentContent.title}
+    subtitle={currentContent.subtitle}
     backgroundVideo="/videos/mixkit-grunge-industrial-gears-viewed-in-detail-12339-hd-ready.mp4"
     backgroundImage="/images/industrial-fallback.jpg"
-    ctaText="Ver propuestas"
+    ctaText={currentContent.ctaText}
     ctaLink="#services"
-    secondaryCtaText="Contactar"
-    secondaryCtaLink="/contact"
+    secondaryCtaText={currentContent.secondaryCtaText}
+    secondaryCtaLink={currentContent.secondaryCtaLink}
   />
   
   <ServicesSection />
