@@ -136,39 +136,49 @@
             ]
         };
 
+        // En el header, reemplaza la clase MultilingualNav por esta:
         class MultilingualNav {
             constructor() {
                 this.currentLanguage = this.detectLanguage();
                 this.init();
             }
 
-            // Detecta el idioma basándose en la URL Y el navegador
+            // NUEVA función de detección que respeta preferencias manuales
             detectLanguage() {
-                const urlPath = window.location.pathname;
+                // PRIORIDAD 1: Preferencia manual
+                const manualPref = localStorage.getItem('user_preferred_lang');
+                if (manualPref) {
+                    return manualPref;
+                }
                 
-                // Si la URL tiene /en/ o es /en, es inglés
+                // PRIORIDAD 2: URL
+                const urlPath = window.location.pathname;
                 if (urlPath.startsWith('/en/') || urlPath === '/en') {
                     return 'en';
                 }
                 
-                // Si estamos en la raíz (/), detectar desde el navegador también
-                if (urlPath === '/') {
-                    const browserLanguage = navigator.language || navigator.languages[0] || 'es';
-                    const isEnglish = browserLanguage.toLowerCase().startsWith('en');
-                    
-                    if (isEnglish) {
-                        return 'en';
-                    }
-                }
-                
-                // Si no tiene prefijo /en/ y no es raíz con navegador inglés, es español
-                return 'es';
+                // PRIORIDAD 3: Navegador (solo primera visita)
+                const browserLang = navigator.language || navigator.languages[0];
+                const langCode = browserLang.split('-')[0].toLowerCase();
+                return langCode === 'en' ? 'en' : 'es';
             }
 
-            // Obtiene la URL base sin prefijo de idioma
+            // ACTUALIZADA función de cambio de idioma
+            changeLanguage(newLang) {
+                if (newLang === this.currentLanguage) return;
+                
+                // GUARDAR preferencia manual ANTES de cambiar
+                localStorage.setItem('user_preferred_lang', newLang);
+                
+                const baseUrl = this.getBaseUrl();
+                const newUrl = this.generateUrl(baseUrl, newLang);
+                
+                window.location.href = newUrl;
+            }
+
+            // Resto de funciones igual...
             getBaseUrl() {
                 let path = window.location.pathname;
-                // Remueve el prefijo /en/ si existe
                 if (path.startsWith('/en/')) {
                     path = path.substring(3);
                 } else if (path === '/en') {
@@ -177,54 +187,46 @@
                 return path || '/';
             }
 
-            // Genera la URL para un idioma específico
             generateUrl(href, targetLang) {
-                // Si estamos cambiando desde inglés a español en la raíz
                 if (window.location.pathname === '/' && this.currentLanguage === 'en' && targetLang === 'es') {
                     return '/';
                 }
                 
                 if (targetLang === 'en') {
-                    // Para inglés, agrega /en/ al principio
                     if (href === '/') {
                         return '/en/';
                     }
                     return `/en${href}`;
                 } else {
-                    // Para español, usa la URL sin prefijo
                     return href;
                 }
             }
 
-            // Renderiza los enlaces de navegación
             renderNavigation() {
                 const navItems = navConfig[this.currentLanguage];
                 
-                // Desktop navigation
                 const desktopNav = document.getElementById('desktop-nav-links');
                 if (desktopNav) {
                     desktopNav.innerHTML = navItems.map(item => `
                         <a href="${item.href}" 
-                           class="text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group">
+                        class="text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group">
                             ${item.name}
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-200 group-hover:w-full"></span>
                         </a>
                     `).join('');
                 }
                 
-                // Mobile navigation
                 const mobileNav = document.getElementById('mobile-nav-links');
                 if (mobileNav) {
                     mobileNav.innerHTML = navItems.map(item => `
                         <a href="${item.href}" 
-                           class="block py-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200">
+                        class="block py-2 text-industrial-700 hover:text-primary-600 font-medium transition-colors duration-200">
                             ${item.name}
                         </a>
                     `).join('');
                 }
             }
 
-            // Actualiza los indicadores de idioma actual
             updateLanguageIndicators() {
                 const langMap = { es: 'ES', en: 'EN' };
                 const currentLangText = langMap[this.currentLanguage];
@@ -236,21 +238,6 @@
                 if (mobileCurrentLang) mobileCurrentLang.textContent = currentLangText;
             }
 
-            // Cambia el idioma
-            changeLanguage(newLang) {
-                if (newLang === this.currentLanguage) return;
-                
-                const baseUrl = this.getBaseUrl();
-                const newUrl = this.generateUrl(baseUrl, newLang);
-                
-                // Marcar cambio manual de idioma
-                localStorage.setItem('manual_lang_change', 'true');
-                
-                // En un entorno real, esto redirigiría a la nueva URL
-                window.location.href = newUrl;
-            }
-
-            // Cierra todos los dropdowns abiertos
             closeAllDropdowns() {
                 const langDropdown = document.getElementById('language-dropdown');
                 const mobileLangDropdown = document.getElementById('mobile-language-dropdown');
@@ -261,13 +248,10 @@
                 if (mobileLangDropdown) mobileLangDropdown.classList.add('hidden');
                 if (mobileMenu) mobileMenu.classList.add('hidden');
                 
-                // Resetea la flecha del selector de idioma
                 if (langArrow) langArrow.style.transform = 'rotate(0deg)';
             }
 
-            // Configura los event listeners
             setupEventListeners() {
-                // Desktop language selector
                 const langSelector = document.getElementById('language-selector');
                 const langDropdown = document.getElementById('language-dropdown');
                 const langArrow = document.getElementById('language-arrow');
@@ -286,7 +270,6 @@
                     });
                 }
 
-                // Mobile language selector
                 const mobileLangSelector = document.getElementById('mobile-language-selector');
                 const mobileLangDropdown = document.getElementById('mobile-language-dropdown');
                 
@@ -303,7 +286,6 @@
                     });
                 }
 
-                // Language option clicks - usando event delegation
                 document.addEventListener('click', (e) => {
                     if (e.target.closest('.language-option, .mobile-language-option')) {
                         e.preventDefault();
@@ -314,7 +296,6 @@
                     }
                 });
 
-                // Mobile menu toggle
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
                 
@@ -328,7 +309,6 @@
                     });
                 }
 
-                // Close dropdowns when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('#language-selector') && 
                         !e.target.closest('#mobile-language-selector') &&
@@ -337,7 +317,6 @@
                     }
                 });
 
-                // Manejar touch events para móvil
                 if ('ontouchstart' in window) {
                     document.addEventListener('touchstart', (e) => {
                         if (!e.target.closest('#language-selector') && 
@@ -352,7 +331,6 @@
                 }
             }
 
-            // Inicializa el componente
             init() {
                 this.renderNavigation();
                 this.updateLanguageIndicators();
@@ -360,18 +338,16 @@
             }
         }
 
-        // Auto-redirección solo en primera visita
+        // NUEVA lógica de auto-redirección que respeta preferencias manuales
         (function() {
-            // Solo ejecutar en la página raíz
             if (window.location.pathname === '/') {
-                // Verificar si es un cambio manual de idioma
-                const isManualChange = localStorage.getItem('manual_lang_change');
-                if (isManualChange) {
-                    localStorage.removeItem('manual_lang_change');
+                // Si hay preferencia manual, no redirigir automáticamente
+                const manualPref = localStorage.getItem('user_preferred_lang');
+                if (manualPref) {
                     return;
                 }
                 
-                // Verificar si ya visitó el sitio antes
+                // Solo redirigir en primera visita
                 const hasVisited = localStorage.getItem('printek_visited');
                 
                 if (!hasVisited) {
@@ -385,7 +361,6 @@
                     }
                 }
                 
-                // Marcar como visitado
                 localStorage.setItem('printek_visited', 'true');
             }
         })();

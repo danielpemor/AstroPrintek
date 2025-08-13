@@ -10,7 +10,6 @@ interface Props {
   secondaryCtaLink?: string;
 }
 
-// Recibir props opcionales (para mantener compatibilidad)
 const { 
   title, 
   subtitle, 
@@ -22,7 +21,7 @@ const {
   secondaryCtaLink
 } = Astro.props;
 
-// Detectar idioma desde la URL para coincidir con la lógica del header
+// Detectar idioma SOLO desde la URL para el lado servidor
 const currentPath = Astro.url.pathname;
 const isEnglish = currentPath.startsWith('/en/') || currentPath === '/en';
 
@@ -94,12 +93,12 @@ const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
   )}
 
   <!-- Content -->
-  <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-    <h1 class="text-5xl md:text-7xl font-heading font-bold mb-6 leading-tight">
+  <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto" id="hero-content">
+    <h1 class="text-5xl md:text-7xl font-heading font-bold mb-6 leading-tight" id="hero-title">
       {heroTitle}
     </h1>
     
-    <p class="text-xl md:text-2xl mb-8 font-light leading-relaxed opacity-90">
+    <p class="text-xl md:text-2xl mb-8 font-light leading-relaxed opacity-90" id="hero-subtitle">
       {heroSubtitle}
     </p>
 
@@ -107,6 +106,7 @@ const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
       <a 
         href={heroSecondaryCtaLink}
         class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        id="hero-secondary-cta"
       >
         {heroSecondaryCtaText}
       </a>
@@ -114,6 +114,7 @@ const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
       <a 
         href={heroCtaLink}
         class="bg-transparent border-2 border-white hover:bg-white hover:text-slate-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+        id="hero-cta"
       >
         {heroCtaText}
       </a>
@@ -137,12 +138,12 @@ const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
     object-position: center center;
   }
   
-  /* Optimización específica para dispositivos móviles - menos zoom y posición ajustada */
+  /* Optimización específica para dispositivos móviles */
   @media (max-width: 768px) {
     video {
       object-fit: cover;
-      object-position: right; /* Mover hacia la izquierda */
-      transform: scale(1); /* Menos zoom que antes */
+      object-position: right;
+      transform: scale(1);
     }
   }
   
@@ -156,15 +157,79 @@ const heroSecondaryCtaLink = secondaryCtaLink || t.secondaryCtaLink;
 </style>
 
 <script>
-// Script para manejar el video
+// Traducciones para JavaScript
+const heroTranslations = {
+  es: {
+    title: 'Industrial & IT Sourcing',
+    subtitle: 'Estrategias personalizadas para el abastecimiento industrial.',
+    ctaText: 'Ver propuestas',
+    ctaLink: '#services',
+    secondaryCtaText: 'Contactar',
+    secondaryCtaLink: '/contact'
+  },
+  en: {
+    title: 'Industrial & IT Sourcing',
+    subtitle: 'Industrial procurement specialists with 23 years of experience.',
+    ctaText: 'Learn More',
+    ctaLink: '#services',
+    secondaryCtaText: 'Contact',
+    secondaryCtaLink: '/en/contact'
+  }
+};
+
+// Función de detección unificada (COMPLETA)
+function detectLanguage() {
+  // PRIORIDAD 1: Preferencia manual (LO MÁS IMPORTANTE)
+  const manualPref = localStorage.getItem('user_preferred_lang');
+  if (manualPref) {
+    return manualPref;
+  }
+  
+  // PRIORIDAD 2: URL
+  const urlPath = window.location.pathname;
+  if (urlPath.startsWith('/en/') || urlPath === '/en') {
+    return 'en';
+  }
+  
+  // PRIORIDAD 3: Navegador
+  const browserLang = navigator.language || navigator.languages[0];
+  const langCode = browserLang.split('-')[0].toLowerCase();
+  return langCode === 'en' ? 'en' : 'es';
+}
+
+// Actualizar contenido del hero
+function updateHeroContent() {
+  const currentLang = detectLanguage();
+  const t = heroTranslations[currentLang];
+  
+  // Actualizar textos
+  const heroTitle = document.getElementById('hero-title');
+  const heroSubtitle = document.getElementById('hero-subtitle');
+  const heroCta = document.getElementById('hero-cta');
+  const heroSecondaryCta = document.getElementById('hero-secondary-cta');
+  
+  if (heroTitle) heroTitle.textContent = t.title;
+  if (heroSubtitle) heroSubtitle.textContent = t.subtitle;
+  if (heroCta) {
+    heroCta.textContent = t.ctaText;
+    heroCta.href = t.ctaLink;
+  }
+  if (heroSecondaryCta) {
+    heroSecondaryCta.textContent = t.secondaryCtaText;
+    heroSecondaryCta.href = t.secondaryCtaLink;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+  // Actualizar contenido basado en preferencias
+  updateHeroContent();
+  
+  // Video handling
   const video = document.querySelector('video');
   
   if (video) {
-    // Asegurar que esté silenciado para autoplay
     video.muted = true;
     
-    // Intentar reproducir
     const playPromise = video.play();
     
     if (playPromise !== undefined) {
@@ -175,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    // Reiniciar cuando termine (backup del atributo loop)
     video.addEventListener('ended', function() {
       this.currentTime = 0;
       this.play();

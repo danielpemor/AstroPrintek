@@ -215,17 +215,21 @@
 
             // Detecta el idioma del navegador y de la URL
             detectLanguage() {
-                // Primero intenta detectar desde la URL
+                // PRIORIDAD 1: Preferencia manual
+                const manualPref = localStorage.getItem('user_preferred_lang');
+                if (manualPref) {
+                    return manualPref;
+                }
+                
+                // PRIORIDAD 2: URL
                 const urlPath = window.location.pathname;
                 if (urlPath.startsWith('/en/') || urlPath === '/en') {
                     return 'en';
                 }
                 
-                // Si no hay prefijo en la URL, detecta del navegador
+                // PRIORIDAD 3: Navegador
                 const browserLang = navigator.language || navigator.languages[0];
                 const langCode = browserLang.split('-')[0].toLowerCase();
-                
-                // Retorna 'en' si el navegador está en inglés, sino 'es'
                 return langCode === 'en' ? 'en' : 'es';
             }
 
