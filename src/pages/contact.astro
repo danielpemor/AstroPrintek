@@ -517,8 +517,14 @@ const services = [
   </section>
 </BaseLayout>
 
+<!-- reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render=TU_SITE_KEY_V3"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Configuracion
+  const RECAPTCHA_SITE_KEY = 'TU_SITE_KEY_V3';
+  
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
   const submitText = document.getElementById('submitText');
@@ -526,7 +532,77 @@ document.addEventListener('DOMContentLoaded', function() {
   const messageField = document.getElementById('mensaje');
   
   let formLoadTime = Date.now();
-  let minTimeBeforeSubmit = 3000; // 3 segundos mínimo
+  let minTimeBeforeSubmit = 3000;
+  
+  // Rastreo de comportamiento del usuario
+  let userBehavior = {
+    mouseMovements: 0,
+    keystrokes: 0,
+    timeOnPage: 0,
+    fieldsFocused: new Set(),
+    scrollEvents: 0
+  };
+  
+  // Rastrear movimientos del mouse
+  let lastMouseMove = 0;
+  document.addEventListener('mousemove', function(e) {
+    const now = Date.now();
+    if (now - lastMouseMove > 100) {
+      userBehavior.mouseMovements++;
+      lastMouseMove = now;
+    }
+  });
+  
+  // Rastrear teclas presionadas
+  form.addEventListener('keydown', function() {
+    userBehavior.keystrokes++;
+  });
+  
+  // Rastrear scroll
+  window.addEventListener('scroll', function() {
+    userBehavior.scrollEvents++;
+  });
+  
+  // Actualizar tiempo en página
+  setInterval(() => {
+    userBehavior.timeOnPage++;
+  }, 1000);
+  
+  // Rate limiting
+  const RATE_LIMIT_KEY = 'printek_form_submissions';
+  const MAX_SUBMISSIONS_PER_HOUR = 3;
+  
+  function checkRateLimit() {
+    const now = Date.now();
+    const submissions = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
+    const recentSubmissions = submissions.filter(time => now - time < 3600000);
+    
+    if (recentSubmissions.length >= MAX_SUBMISSIONS_PER_HOUR) {
+      return false;
+    }
+    
+    return true;
+  }
+  
+  function recordSubmission() {
+    const now = Date.now();
+    const submissions = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
+    submissions.push(now);
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(submissions));
+  }
+  
+  // Generar campo dinámico
+  function generateDynamicField() {
+    const fieldName = 'check_' + Math.random().toString(36).substring(7);
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = fieldName;
+    hiddenField.value = btoa(Date.now().toString());
+    form.appendChild(hiddenField);
+    sessionStorage.setItem('dynamic_field', fieldName);
+  }
+  
+  generateDynamicField();
   
   // Establecer timestamp y habilitar detección JS
   document.getElementById('formTimestamp').value = formLoadTime;
@@ -562,19 +638,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = field.dataset.errorMessage || 'Este campo es requerido';
     let isValid = true;
     
-    // Remover estilos de error previos
     field.classList.remove('border-red-400');
     if (errorDiv) {
       errorDiv.textContent = '';
       errorDiv.classList.add('hidden');
     }
     
-    // Validación de campo requerido
     if (field.hasAttribute('required') && !field.value.trim()) {
       isValid = false;
     }
     
-    // Validación de email
     if (field.type === 'email' && field.value) {
       const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
       if (!emailRegex.test(field.value)) {
@@ -582,7 +655,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Validación de teléfono
     if (field.type === 'tel' && field.value) {
       const phoneRegex = /[\+]?[0-9\s\-\(\)]+/;
       if (!phoneRegex.test(field.value) || field.value.replace(/\D/g, '').length < 10) {
@@ -590,7 +662,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Validación de nombre (solo letras y espacios)
     if (field.id === 'nombre' && field.value) {
       const nameRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/;
       if (!nameRegex.test(field.value)) {
@@ -598,7 +669,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Validación de longitud
     if (field.hasAttribute('minlength') && field.value.length < field.getAttribute('minlength')) {
       isValid = false;
     }
@@ -607,12 +677,10 @@ document.addEventListener('DOMContentLoaded', function() {
       isValid = false;
     }
     
-    // Validación de select
     if (field.tagName === 'SELECT' && field.hasAttribute('required') && !field.value) {
       isValid = false;
     }
     
-    // Mostrar error si es inválido
     if (!isValid) {
       field.classList.add('border-red-400');
       if (errorDiv) {
@@ -624,10 +692,13 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
   
-  // Validar al salir del campo
+  // Validar al salir del campo y rastrear focus
   const fields = form.querySelectorAll('input, select, textarea');
   fields.forEach(field => {
     field.addEventListener('blur', () => validateField(field));
+    field.addEventListener('focus', () => {
+      userBehavior.fieldsFocused.add(field.id);
+    });
     field.addEventListener('input', function() {
       if (this.classList.contains('border-red-400')) {
         validateField(this);
@@ -635,8 +706,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Envío de formulario con protección anti-bot mejorada
-  form.addEventListener('submit', function(e) {
+  // Envío de formulario con sistema dual
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
     let isFormValid = true;
     
     // Validar todos los campos
@@ -649,9 +722,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Protecciones anti-bot
     const timeTaken = Date.now() - formLoadTime;
     
-    // Verificar si el formulario se envió muy rápido (probablemente un bot)
     if (timeTaken < minTimeBeforeSubmit) {
-      e.preventDefault();
       alert('Por favor tómate tu tiempo para llenar el formulario correctamente.');
       return false;
     }
@@ -664,21 +735,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if ((honeypotField && honeypotField.value) || 
         (websiteField && websiteField.value) || 
         (companyUrlField && companyUrlField.value)) {
-      e.preventDefault();
-      // Falla silenciosa para bots
       return false;
     }
     
-    // Verificar si JavaScript está habilitado
     const jsField = document.getElementById('jsEnabled');
     if (!jsField || jsField.value !== 'true') {
-      e.preventDefault();
+      return false;
+    }
+    
+    // Verificar comportamiento humano
+    const isHumanBehavior = 
+      userBehavior.mouseMovements > 5 &&
+      userBehavior.keystrokes > 10 &&
+      userBehavior.timeOnPage > 5 &&
+      userBehavior.fieldsFocused.size >= 3;
+    
+    if (!isHumanBehavior) {
+      console.warn('Comportamiento sospechoso detectado');
+    }
+    
+    // Verificar rate limit
+    if (!checkRateLimit()) {
+      alert('Has enviado demasiados formularios. Por favor espera una hora.');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Solicitar Cotización';
       return false;
     }
     
     if (!isFormValid) {
-      e.preventDefault();
-      // Scroll al primer error
       const firstError = form.querySelector('.border-red-400');
       if (firstError) {
         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -690,6 +774,96 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostrar estado de carga
     submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Enviando...';
     submitBtn.disabled = true;
+    
+    // Obtener token de reCAPTCHA
+    let recaptchaToken = '';
+    try {
+      recaptchaToken = await grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit'});
+    } catch (error) {
+      console.error('Error de reCAPTCHA:', error);
+    }
+    
+    // Preparar datos
+    const templateParams = {
+      nombre: document.getElementById('nombre').value,
+      email: document.getElementById('email').value,
+      telefono: document.getElementById('telefono').value || 'No proporcionado',
+      empresa: document.getElementById('empresa').value,
+      ubicacion: document.getElementById('ubicacion').value,
+      servicio: document.getElementById('servicio').value,
+      numeroProducto: document.getElementById('numeroProducto').value || 'No proporcionado',
+      marcaModelo: document.getElementById('marcaModelo').value || 'No proporcionado',
+      mensaje: document.getElementById('mensaje').value,
+      timestamp: new Date().toLocaleString('es-MX', { 
+        timeZone: 'America/Mexico_City',
+        dateStyle: 'full',
+        timeStyle: 'long'
+      }),
+      recaptchaScore: recaptchaToken ? 'verificado' : 'no_verificado',
+      behaviorScore: isHumanBehavior ? 'humano' : 'sospechoso',
+      idioma: 'Español'
+    };
+    
+    // NUEVO: Enviar usando Netlify Function (seguro)
+    let emailSent = false;
+    
+    try {
+      const response = await fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateParams: templateParams
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        emailSent = true;
+        console.log('Email sent successfully via Netlify Function');
+        recordSubmission();
+      } else {
+        console.error('Email failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+    
+    // If Netlify Function fails, use Netlify Forms as backup
+    if (!emailSent) {
+      try {
+        const formData = new FormData(form);
+        formData.append('emailjs_failed', 'true');
+        formData.append('error_details', JSON.stringify(emailJSError));
+        
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(formData).toString()
+        });
+        
+        if (response.ok) {
+          emailSent = true;
+          console.log('Correo enviado via Netlify Forms (respaldo)');
+          recordSubmission();
+        }
+      } catch (netlifyError) {
+        console.error('Netlify Forms también falló:', netlifyError);
+      }
+    }
+    
+    // Manejar resultado
+    if (emailSent) {
+      // Éxito - redirigir
+      window.location.href = '/gracias/';
+    } else {
+      // Error - mostrar mensaje
+      alert('Error al enviar el mensaje. Por favor intenta de nuevo o contáctanos directamente a sales@printeksupplies.com');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Solicitar Cotización';
+    }
   });
   
   // Formateo automático de teléfono
@@ -699,10 +873,8 @@ document.addEventListener('DOMContentLoaded', function() {
       let value = e.target.value.replace(/\D/g, '');
       if (value.length > 0) {
         if (value.startsWith('1') && value.length <= 11) {
-          // Formato USA: +1 (915) 307 2805
           value = value.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3 $4');
         } else if (value.startsWith('52') && value.length <= 12) {
-          // Formato México: +52 656 705 7931
           value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3 $4');
         }
       }
@@ -715,17 +887,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const showUSABtn = document.getElementById('showUSA');
   const googleMap = document.getElementById('googleMap');
 
-  // URLs de los mapas
   const mexicoMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx";
   const usaMapURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx";
 
   if (showMexicoBtn && showUSABtn && googleMap) {
-    // IMPORTANTE: México ya está establecido como ubicación por defecto en el HTML
-    // El iframe ya carga con la URL de México por defecto
-    
     showMexicoBtn.addEventListener('click', function() {
       googleMap.src = mexicoMapURL;
-      // Resaltar botón activo
       showMexicoBtn.classList.remove('bg-red-100');
       showMexicoBtn.classList.add('bg-red-200', 'ring-2', 'ring-red-300');
       showUSABtn.classList.remove('bg-blue-200', 'ring-2', 'ring-blue-300');
@@ -734,14 +901,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showUSABtn.addEventListener('click', function() {
       googleMap.src = usaMapURL;
-      // Resaltar botón activo
       showUSABtn.classList.remove('bg-blue-100');
       showUSABtn.classList.add('bg-blue-200', 'ring-2', 'ring-blue-300');
       showMexicoBtn.classList.remove('bg-red-200', 'ring-2', 'ring-red-300');
       showMexicoBtn.classList.add('bg-red-100');
     });
-
-    // México ya está activo por defecto en el HTML con las clases bg-red-200 ring-2 ring-red-300
   }
 });
 </script>
