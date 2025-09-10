@@ -46,11 +46,8 @@ const services = [
           <form 
             name="contact" 
             method="POST" 
-            data-netlify="true" 
-            data-netlify-honeypot="bot-field"
-            data-netlify-recaptcha="true"
-            netlify-to="sales@printeksupplies.com"
             action="/en/thank-you/"
+            id="contactForm"
           >
             <!-- Netlify form detection -->
             <input type="hidden" name="form-name" value="contact" />
@@ -805,54 +802,32 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Enviar usando Netlify Function (seguro)
-    let emailSent = false;
-    
-    try {
-      const response = await fetch('/.netlify/functions/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          templateParams: templateParams
-        })
-      });
-      
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        emailSent = true;
-        console.log('Email sent successfully via Netlify Function');
-        recordSubmission();
-      } else {
-        console.error('Email failed:', result.error);
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-    }
-    
-    // If Netlify Function fails, use Netlify Forms as backup
-    if (!emailSent) {
-      try {
-        const formData = new FormData(form);
-        formData.append('emailjs_failed', 'true');
-        formData.append('error_details', JSON.stringify(emailJSError));
-        
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(formData).toString()
-        });
-        
-        if (response.ok) {
-          emailSent = true;
-          console.log('Email sent via Netlify Forms (backup)');
-          recordSubmission();
-        }
-      } catch (netlifyError) {
-        console.error('Netlify Forms also failed:', netlifyError);
-      }
-    }
+// Enviar usando tu función EmailJS
+let emailSent = false;
+
+try {
+  const response = await fetch('/.netlify/functions/send-email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      templateParams: templateParams
+    })
+  });
+  
+  const result = await response.json();
+  
+  if (response.ok && result.success) {
+    emailSent = true;
+    console.log('Email sent successfully via EmailJS');
+    recordSubmission();
+  } else {
+    console.error('Email failed:', result.error);
+  }
+} catch (error) {
+  console.error('Network error:', error);
+}
     
     // Handle result
     if (emailSent) {
