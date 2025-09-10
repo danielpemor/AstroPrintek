@@ -187,7 +187,7 @@ const stats = [
         </div>
       </div>
     </div>
-  </section>
+</section>
 
   <!-- Achievements -->
   <section class="py-20 bg-white">
@@ -203,16 +203,22 @@ const stats = [
         <div class="mt-8 w-24 h-1 bg-gradient-to-r from-primary-600 to-primary-400 mx-auto rounded-full"></div>
       </div>
 
-      <!-- Stats -->
-      <div class="grid md:grid-cols-4 gap-8 text-center">
+      <!-- Stats con diseño homologado y tamaños fijos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
         {stats.map((stat) => (
           <div class="group">
-            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300">
-              <div class="text-4xl md:text-5xl font-heading font-bold text-primary-600 mb-2 group-hover:text-primary-500 transition-colors duration-300">
-                {stat.number}
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-lg group-hover:bg-white/90 group-hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-center items-center min-h-[140px]">
+              <!-- Número con altura fija y text-wrap para números largos -->
+              <div class="h-16 flex items-center justify-center mb-3 w-full">
+                <div class="text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-heading font-bold text-primary-600 group-hover:text-primary-500 transition-colors duration-300 break-words text-center leading-tight">
+                  {stat.number}
+                </div>
               </div>
-              <div class="text-gray-600 font-medium">
-                {stat.label}
+              <!-- Label con altura fija -->
+              <div class="h-12 flex items-center justify-center w-full">
+                <div class="text-gray-600 font-medium text-sm md:text-base text-center leading-tight">
+                  {stat.label}
+                </div>
               </div>
             </div>
           </div>

@@ -42,9 +42,125 @@
         .card-hover:hover {
             transform: translateY(-8px);
         }
+        /* Fix específico para el rango problemático 740-1020px */
+/* Fix específico para múltiples rangos problemáticos */
+
+/* 615-819px: Servicios quedan 2+1 */
+@media (min-width: 615px) and (max-width: 819px) {
+    #stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+        max-width: 550px;
+        margin: 0 auto;
+    }
+    
+    #stats-grid .group .bg-white\/80 {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        padding: 0.75rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+    
+    #stats-grid .text-4xl {
+        font-size: 1.75rem !important;
+        margin-bottom: 0.25rem !important;
+        line-height: 1.1 !important;
+    }
+    
+    #stats-grid .text-gray-600 {
+        font-size: 0.75rem !important;
+        line-height: 1.1 !important;
+    }
+}
+
+/* 820-1023px: Números se salen del recuadro */
+@media (min-width: 820px) and (max-width: 1023px) {
+    #stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        max-width: 650px;
+        margin: 0 auto;
+    }
+    
+    #stats-grid .group .bg-white\/80 {
+        min-height: 130px !important;
+        max-height: 130px !important;
+        padding: 1rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+    
+    #stats-grid .text-4xl {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.1 !important;
+    }
+    
+    #stats-grid .text-gray-600 {
+        font-size: 0.875rem !important;
+        line-height: 1.2 !important;
+    }
+}
+
+/* 1024-1278px: Fix para recuadros de estadísticas desiguales */
+@media (min-width: 1024px) and (max-width: 1278px) {
+    #stats-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 1rem !important;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    #stats-grid .group .bg-white\/80 {
+        height: 140px !important;
+        min-height: 140px !important;
+        max-height: 140px !important;
+        padding: 1rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+    }
+    
+    #stats-grid .text-4xl {
+        font-size: 1.875rem !important;
+        margin-bottom: 0.5rem !important;
+        line-height: 1.1 !important;
+        flex-shrink: 0 !important;
+    }
+    
+    #stats-grid .text-gray-600 {
+        font-size: 0.65rem !important;
+        line-height: 1.0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        flex-shrink: 1 !important;
+        height: 0.65rem !important;
+        display: block !important;
+        position: relative !important;
+    }
+}
+    
+    #main-title {
+        font-size: 2.75rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    #main-description {
+        font-size: 1.125rem !important;
+    }
     </style>
 </head>
 <body class="bg-gray-100">
+    
 
 <section class="py-20 gradient-bg-light text-gray-800 relative overflow-hidden">
     <!-- Geometric Pattern Overlay -->
@@ -133,7 +249,7 @@
                 },
                 {
                     number: "1000+",
-                    text: "Proyectos Completados"
+                    text: "Proyectos Entregados"
                 },
                 {
                     number: "10,000+",
