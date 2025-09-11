@@ -43,17 +43,10 @@ const services = [
 
         <!-- Form -->
         <div class="bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 rounded-2xl shadow-xl p-8 border border-slate-200">
-          <!-- Netlify Form with notifications configured from code -->
           <form 
             name="contact" 
-            method="POST" 
-            action="/en/thank-you/"
             id="contactForm"
-            netlify-honeypot="bot-field"
-            data-netlify="true"
           >
-            <!-- Netlify form detection -->
-            <input type="hidden" name="form-name" value="contact" />
             
             <!-- Enhanced honeypot field (multiple traps) -->
             <div style="display: none;">
@@ -532,6 +525,7 @@ const services = [
 // REEMPLAZA tu script actual con esta versión actualizada
 <script>
 // Reemplaza tu script actual con este - FIX para redirección
+// Reemplaza tu script actual con este - FIX para redirección
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
@@ -773,8 +767,15 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ SUCCESS: Email sent via Resend');
         console.log('Redirecting to thank you page...');
         
-        // IMMEDIATE redirect - no delays
-        window.location.replace('/en/thank-you/');
+        // Show success message briefly then redirect
+        if (submitBtn && submitText) {
+          submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Success! Redirecting...';
+        }
+        
+        // Redirect with a small delay to show success
+        setTimeout(() => {
+          window.location.href = '/en/thank-you/';
+        }, 1000);
         return;
       } else {
         console.log('❌ Resend failed, trying fallback');
@@ -782,37 +783,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch (error) {
       console.error('💥 Resend error:', error.message);
-      console.log('🔄 Falling back to Netlify form submission...');
       
-      // Reset submission flag for fallback
-      formSubmitted = false;
+      // Show error message instead of fallback
+      if (submitBtn && submitText) {
+        submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Error - Please try again';
+        submitBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+        submitBtn.classList.remove('bg-primary-600');
+        
+        // Re-enable button after 3 seconds
+        setTimeout(() => {
+          formSubmitted = false;
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
+          submitBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+          submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
+        }, 3000);
+      }
       
-      // Create temporary form for Netlify submission
-      const tempForm = document.createElement('form');
-      tempForm.method = 'POST';
-      tempForm.action = '/en/thank-you/';
-      tempForm.setAttribute('data-netlify', 'true');
-      tempForm.style.display = 'none';
-      
-      // Add all fields as hidden inputs
-      Object.keys(templateParams).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = templateParams[key];
-        tempForm.appendChild(input);
-      });
-      
-      // Add form-name for Netlify
-      const formNameInput = document.createElement('input');
-      formNameInput.type = 'hidden';
-      formNameInput.name = 'form-name';
-      formNameInput.value = 'contact';
-      tempForm.appendChild(formNameInput);
-      
-      document.body.appendChild(tempForm);
-      console.log('Submitting fallback form...');
-      tempForm.submit();
+      // Optional: Show user-friendly error message
+      alert('There was an issue sending your message. Please try again or contact us directly.');
     }
   });
   
@@ -857,4 +846,5 @@ document.addEventListener('DOMContentLoaded', function() {
       showMexicoBtn.classList.add('bg-red-100');
     });
   }
-});</script>
+});
+</script>
