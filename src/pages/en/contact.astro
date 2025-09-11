@@ -515,10 +515,9 @@ const services = [
   </section>
 </BaseLayout>
 
+// Add this to your contact.astro file - replace the existing script section
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Configuration
-  
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
   const submitText = document.getElementById('submitText');
@@ -527,6 +526,20 @@ document.addEventListener('DOMContentLoaded', function() {
   
   let formLoadTime = Date.now();
   let minTimeBeforeSubmit = 3000;
+  
+  // IMMEDIATELY set the js-enabled field to true
+  const jsEnabledField = document.getElementById('jsEnabled');
+  if (jsEnabledField) {
+    jsEnabledField.value = 'true';
+    console.log('JavaScript enabled field set to:', jsEnabledField.value);
+  }
+  
+  // Set timestamp
+  const timestampField = document.getElementById('formTimestamp');
+  if (timestampField) {
+    timestampField.value = formLoadTime;
+    console.log('Form timestamp set to:', formLoadTime);
+  }
   
   // User behavior tracking
   let userBehavior = {
@@ -562,46 +575,6 @@ document.addEventListener('DOMContentLoaded', function() {
     userBehavior.timeOnPage++;
   }, 1000);
   
-  // Rate limiting
-  const RATE_LIMIT_KEY = 'printek_form_submissions';
-  const MAX_SUBMISSIONS_PER_HOUR = 3;
-  
-  function checkRateLimit() {
-    const now = Date.now();
-    const submissions = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
-    const recentSubmissions = submissions.filter(time => now - time < 3600000);
-    
-    if (recentSubmissions.length >= MAX_SUBMISSIONS_PER_HOUR) {
-      return false;
-    }
-    
-    return true;
-  }
-  
-  function recordSubmission() {
-    const now = Date.now();
-    const submissions = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
-    submissions.push(now);
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(submissions));
-  }
-  
-  // Generate dynamic field
-  function generateDynamicField() {
-    const fieldName = 'check_' + Math.random().toString(36).substring(7);
-    const hiddenField = document.createElement('input');
-    hiddenField.type = 'hidden';
-    hiddenField.name = fieldName;
-    hiddenField.value = btoa(Date.now().toString());
-    form.appendChild(hiddenField);
-    sessionStorage.setItem('dynamic_field', fieldName);
-  }
-  
-  generateDynamicField();
-  
-  // Set timestamp and enable JS detection
-  document.getElementById('formTimestamp').value = formLoadTime;
-  document.getElementById('jsEnabled').value = 'true';
-  
   // Character counter for message
   if (messageField && charCount) {
     messageField.addEventListener('input', function() {
@@ -620,186 +593,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Enable submit button after minimum time
   setTimeout(() => {
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-    submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'hover:shadow-lg', 'transform', 'hover:-translate-y-1');
-    submitText.textContent = 'Request Quote';
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'hover:shadow-lg', 'transform', 'hover:-translate-y-1');
+      if (submitText) {
+        submitText.textContent = 'Request Quote';
+      }
+    }
   }, minTimeBeforeSubmit);
   
-    // Form submission with enhanced debugging
-form.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  console.log('=== FORM SUBMISSION DEBUG START ===');
-  
-  let isFormValid = true;
-  
-  // Validate all fields
-  fields.forEach(field => {
-    if (!validateField(field)) {
-      isFormValid = false;
-    }
-  });
-  
-  if (!isFormValid) {
-    console.log('Form validation failed');
-    const firstError = form.querySelector('.border-red-400');
-    if (firstError) {
-      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      firstError.focus();
-    }
-    return false;
-  }
-  
-  // Show loading state
-  submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
-  submitBtn.disabled = true;
-  
-  // Collect form data with detailed logging
-  const formData = {
-    nombre: document.getElementById('nombre')?.value?.trim() || '',
-    email: document.getElementById('email')?.value?.trim()?.toLowerCase() || '',
-    telefono: document.getElementById('telefono')?.value?.trim() || 'Not provided',
-    empresa: document.getElementById('empresa')?.value?.trim() || '',
-    ubicacion: document.getElementById('ubicacion')?.value?.trim() || '',
-    servicio: document.getElementById('servicio')?.value || '',
-    numeroProducto: document.getElementById('numeroProducto')?.value?.trim() || 'Not provided',
-    marcaModelo: document.getElementById('marcaModelo')?.value?.trim() || 'Not provided',
-    mensaje: document.getElementById('mensaje')?.value?.trim() || ''
-  };
-  
-  console.log('Form data collected:', {
-    nombre: formData.nombre ? `"${formData.nombre}"` : 'EMPTY',
-    email: formData.email ? `"${formData.email}"` : 'EMPTY',
-    empresa: formData.empresa ? `"${formData.empresa}"` : 'EMPTY',
-    mensaje: formData.mensaje ? `"${formData.mensaje.substring(0, 50)}..."` : 'EMPTY',
-    servicio: formData.servicio ? `"${formData.servicio}"` : 'EMPTY'
-  });
-  
-  // Check for required fields manually
-  const requiredFields = ['nombre', 'email', 'empresa', 'mensaje'];
-  const missingFields = requiredFields.filter(field => !formData[field]);
-  
-  if (missingFields.length > 0) {
-    console.error('Missing required fields:', missingFields);
-    alert(`Missing required fields: ${missingFields.join(', ')}`);
-    resetSubmitButton();
-    return false;
-  }
-  
-  // Validate email format
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(formData.email)) {
-    console.error('Invalid email format:', formData.email);
-    alert('Please enter a valid email address');
-    resetSubmitButton();
-    return false;
-  }
-  
-  // Prepare the payload
-  const payload = {
-    templateParams: {
-      ...formData,
-      timestamp: new Date().toLocaleString('en-US', { 
-        timeZone: 'America/Chicago',
-        dateStyle: 'full',
-        timeStyle: 'long'
-      }),
-      language: 'English',
-      form_source: 'Printek Website Contact Form',
-      page_url: window.location.href
-    }
-  };
-  
-  console.log('Payload prepared:', {
-    templateParams_keys: Object.keys(payload.templateParams),
-    payload_size: JSON.stringify(payload).length
-  });
-  
-  let emailSent = false;
-  let errorMessage = 'Unknown error occurred';
-  let debugInfo = {};
-  
-  try {
-    console.log('Sending request to:', '/.netlify/functions/send-email');
-    
-    const response = await fetch('/.netlify/functions/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    });
-    
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-    
-    let result;
-    const responseText = await response.text();
-    console.log('Raw response:', responseText);
-    
-    try {
-      result = JSON.parse(responseText);
-      console.log('Parsed response:', result);
-    } catch (parseError) {
-      console.error('Failed to parse response JSON:', parseError);
-      result = { error: 'Invalid response format', raw_response: responseText };
-    }
-    
-    if (response.ok && result.success) {
-      emailSent = true;
-      console.log('SUCCESS: Email sent successfully');
-      if (typeof recordSubmission === 'function') {
-        recordSubmission();
-      }
-    } else {
-      console.error('Request failed:', {
-        status: response.status,
-        result: result
-      });
-      
-      errorMessage = result.error || result.message || `Server error (${response.status})`;
-      debugInfo = result.debug || {};
-      
-      // Show detailed error information
-      if (result.missing_fields) {
-        errorMessage += `\nMissing fields: ${result.missing_fields.join(', ')}`;
-      }
-      if (result.details) {
-        errorMessage += `\nDetails: ${result.details}`;
-      }
-    }
-  } catch (error) {
-    console.error('Network/Request error:', error);
-    errorMessage = `Connection error: ${error.message}`;
-    debugInfo = { network_error: error.message };
-  }
-  
-  // Handle result
-  if (emailSent) {
-    console.log('Redirecting to thank you page');
-    window.location.href = '/en/thank-you/';
-  } else {
-    console.error('=== EMAIL SENDING FAILED ===');
-    console.error('Error message:', errorMessage);
-    console.error('Debug info:', debugInfo);
-    
-    // Show comprehensive error message
-    alert(`Failed to send message:\n\n${errorMessage}\n\nPlease try again or contact us directly:\nsales@printeksupplies.com\n+1 (915) 307 2805`);
-    
-    resetSubmitButton();
-  }
-  
-  function resetSubmitButton() {
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-    submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
-    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
-  }
-  
-  console.log('=== FORM SUBMISSION DEBUG END ===');
-});
-  // Custom validation
+  // Custom validation function
   function validateField(field) {
     const errorDiv = field.parentElement.querySelector('.error-message');
     const errorMessage = field.dataset.errorMessage || 'This field is required';
@@ -873,9 +677,11 @@ form.addEventListener('submit', async function(e) {
     });
   });
   
-  // Form submission with dual system
+  // Form submission with detailed debugging
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    
+    console.log('=== FORM SUBMISSION DEBUG START ===');
     
     let isFormValid = true;
     
@@ -886,8 +692,19 @@ form.addEventListener('submit', async function(e) {
       }
     });
     
+    if (!isFormValid) {
+      console.log('Form validation failed');
+      const firstError = form.querySelector('.border-red-400');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstError.focus();
+      }
+      return false;
+    }
+    
     // Anti-bot protections
     const timeTaken = Date.now() - formLoadTime;
+    console.log('Time taken to submit:', timeTaken, 'ms');
     
     if (timeTaken < minTimeBeforeSubmit) {
       alert('Please take your time to fill out the form correctly.');
@@ -902,39 +719,7 @@ form.addEventListener('submit', async function(e) {
     if ((honeypotField && honeypotField.value) || 
         (websiteField && websiteField.value) || 
         (companyUrlField && companyUrlField.value)) {
-      return false;
-    }
-    
-    const jsField = document.getElementById('jsEnabled');
-    if (!jsField || jsField.value !== 'true') {
-      return false;
-    }
-    
-    // Check human behavior
-    const isHumanBehavior = 
-      userBehavior.mouseMovements > 2 &&
-      userBehavior.keystrokes > 5 &&
-      userBehavior.timeOnPage > 3 &&
-      userBehavior.fieldsFocused.size >= 2;
-    
-    if (!isHumanBehavior) {
-      console.warn('Suspicious behavior detected');
-    }
-    
-    // Check rate limit
-    if (!checkRateLimit()) {
-      alert('You have sent too many forms. Please wait an hour.');
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
-      return false;
-    }
-    
-    if (!isFormValid) {
-      const firstError = form.querySelector('.border-red-400');
-      if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstError.focus();
-      }
+      console.log('Honeypot triggered');
       return false;
     }
     
@@ -942,76 +727,148 @@ form.addEventListener('submit', async function(e) {
     submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
     submitBtn.disabled = true;
     
-    // Prepare data with reCAPTCHA
+    // Collect form data with explicit js-enabled field
+    const templateParams = {
+      nombre: document.getElementById('nombre').value.trim(),
+      email: document.getElementById('email').value.trim().toLowerCase(),
+      telefono: document.getElementById('telefono').value.trim() || 'Not provided',
+      empresa: document.getElementById('empresa').value.trim(),
+      ubicacion: document.getElementById('ubicacion').value.trim(),
+      servicio: document.getElementById('servicio').value,
+      numeroProducto: document.getElementById('numeroProducto').value.trim() || 'Not provided',
+      marcaModelo: document.getElementById('marcaModelo').value.trim() || 'Not provided',
+      mensaje: document.getElementById('mensaje').value.trim(),
+      timestamp: formLoadTime.toString(),
+      'js-enabled': 'true', // Explicitly set this field
+      language: 'English',
+      form_source: 'Printek Website Contact Form',
+      page_url: window.location.href
+    };
+    
+    console.log('Form data collected:', {
+      nombre: templateParams.nombre ? `"${templateParams.nombre}"` : 'EMPTY',
+      email: templateParams.email ? `"${templateParams.email}"` : 'EMPTY',
+      empresa: templateParams.empresa ? `"${templateParams.empresa}"` : 'EMPTY',
+      mensaje: templateParams.mensaje ? `"${templateParams.mensaje.substring(0, 50)}..."` : 'EMPTY',
+      servicio: templateParams.servicio ? `"${templateParams.servicio}"` : 'EMPTY',
+      'js-enabled': templateParams['js-enabled']
+    });
+    
+    // Check for required fields manually
+    const requiredFields = ['nombre', 'email', 'empresa', 'mensaje'];
+    const missingFields = requiredFields.filter(field => !templateParams[field]);
+    
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields);
+      alert(`Missing required fields: ${missingFields.join(', ')}`);
+      resetSubmitButton();
+      return false;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(templateParams.email)) {
+      console.error('Invalid email format:', templateParams.email);
+      alert('Please enter a valid email address');
+      resetSubmitButton();
+      return false;
+    }
+    
+    // Get reCAPTCHA token
     let recaptchaToken = null;
     if (typeof grecaptcha !== 'undefined') {
       try {
-        recaptchaToken = await grecaptcha.execute('TU_SITE_KEY_DE_RECAPTCHA', {action: 'contact_form'});
+        recaptchaToken = await grecaptcha.execute('6LfvisUrAAAAAGLWEcGYiuMdNn54E-5T8P90rx__', {action: 'contact_form'});
         console.log('reCAPTCHA token obtained');
       } catch (error) {
         console.log('reCAPTCHA error:', error);
       }
     }
-
-    const templateParams = {
-      nombre: document.getElementById('nombre').value,
-      email: document.getElementById('email').value,
-      telefono: document.getElementById('telefono').value || 'Not provided',
-      empresa: document.getElementById('empresa').value,
-      ubicacion: document.getElementById('ubicacion').value,
-      servicio: document.getElementById('servicio').value,
-      numeroProducto: document.getElementById('numeroProducto').value || 'Not provided',
-      marcaModelo: document.getElementById('marcaModelo').value || 'Not provided',
-      mensaje: document.getElementById('mensaje').value,
-      timestamp: new Date().toLocaleString('en-US', { 
-        timeZone: 'America/Chicago',
-        dateStyle: 'full',
-        timeStyle: 'long'
-      }),
-      'js-enabled': 'true', // Agregar este campo
-      behaviorScore: 'human',
-      language: 'English'
-    };
     
-    // Enviar usando Netlify Function (seguro)
-// Enviar usando tu función EmailJS
-let emailSent = false;
-
-try {
-  const response = await fetch('/.netlify/functions/send-email', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+    // Prepare the payload
+    const payload = {
       templateParams: templateParams,
       recaptchaToken: recaptchaToken
-    })
-  });
-  
-  const result = await response.json();
-  
-  if (response.ok && result.success) {
-    emailSent = true;
-    console.log('Email sent successfully via EmailJS');
-    recordSubmission();
-  } else {
-    console.error('Email failed:', result.error);
-  }
-} catch (error) {
-  console.error('Network error:', error);
-}
+    };
+    
+    console.log('Payload prepared:', {
+      templateParams_keys: Object.keys(payload.templateParams),
+      hasRecaptchaToken: !!payload.recaptchaToken,
+      'js-enabled': payload.templateParams['js-enabled']
+    });
+    
+    let emailSent = false;
+    let errorMessage = 'Unknown error occurred';
+    
+    try {
+      console.log('Sending request to:', '/.netlify/functions/send-email');
+      
+      const response = await fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      console.log('Response status:', response.status);
+      
+      let result;
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
+      
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed response:', result);
+      } catch (parseError) {
+        console.error('Failed to parse response JSON:', parseError);
+        result = { error: 'Invalid response format', raw_response: responseText };
+      }
+      
+      if (response.ok && result.success) {
+        emailSent = true;
+        console.log('SUCCESS: Email sent successfully');
+      } else {
+        console.error('Request failed:', {
+          status: response.status,
+          result: result
+        });
+        
+        errorMessage = result.error || result.message || `Server error (${response.status})`;
+        
+        if (result.missing_fields) {
+          errorMessage += `\nMissing fields: ${result.missing_fields.join(', ')}`;
+        }
+        if (result.details) {
+          errorMessage += `\nDetails: ${result.details}`;
+        }
+      }
+    } catch (error) {
+      console.error('Network/Request error:', error);
+      errorMessage = `Connection error: ${error.message}`;
+    }
     
     // Handle result
     if (emailSent) {
-      // Success - redirect
+      console.log('Redirecting to thank you page');
       window.location.href = '/en/thank-you/';
     } else {
-      // Error - show message
-      alert('Error sending message. Please try again or contact us directly at sales@printeksupplies.com');
+      console.error('=== EMAIL SENDING FAILED ===');
+      console.error('Error message:', errorMessage);
+      
+      alert(`Failed to send message:\n\n${errorMessage}\n\nPlease try again or contact us directly:\nsales@printeksupplies.com\n+1 (915) 307 2805`);
+      
+      resetSubmitButton();
+    }
+    
+    function resetSubmitButton() {
       submitBtn.disabled = false;
+      submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
       submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
     }
+    
+    console.log('=== FORM SUBMISSION DEBUG END ===');
   });
   
   // Automatic phone formatting
