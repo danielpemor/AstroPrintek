@@ -371,7 +371,7 @@ Source: Printek Website Contact Form
       // Send email using Resend
       const emailData = await resend.emails.send({
         from: 'Printek Contact Form <onboarding@resend.dev>', // Cambiar por tu dominio verificado cuando tengas uno
-        to: ['sales@printeksupplies.com'], // Email donde quieres recibir los mensajes
+        to: ['danielpemor123@gmail.com'], // Email donde quieres recibir los mensajes
         subject: `New Contact Request from ${templateParams.nombre} - ${templateParams.empresa}`,
         html: emailHtml,
         text: emailText,
