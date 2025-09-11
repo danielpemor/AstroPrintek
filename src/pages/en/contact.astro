@@ -531,6 +531,7 @@ const services = [
 // Add this to your contact.astro file - replace the existing script section
 // REEMPLAZA tu script actual con esta versión actualizada
 <script>
+// Reemplaza tu script actual con este - FIX para redirección
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
@@ -540,23 +541,21 @@ document.addEventListener('DOMContentLoaded', function() {
   
   let formLoadTime = Date.now();
   let minTimeBeforeSubmit = 3000;
-  let formSubmitted = false; // Prevenir doble envío
+  let formSubmitted = false;
   
-  // IMMEDIATELY set the js-enabled field to true
+  // Set JavaScript fields immediately
   const jsEnabledField = document.getElementById('jsEnabled');
+  const timestampField = document.getElementById('formTimestamp');
+  
   if (jsEnabledField) {
     jsEnabledField.value = 'true';
-    console.log('JavaScript enabled field set to:', jsEnabledField.value);
   }
   
-  // Set timestamp
-  const timestampField = document.getElementById('formTimestamp');
   if (timestampField) {
     timestampField.value = formLoadTime;
-    console.log('Form timestamp set to:', formLoadTime);
   }
   
-  // Character counter for message
+  // Character counter
   if (messageField && charCount) {
     messageField.addEventListener('input', function() {
       const length = this.value.length;
@@ -572,19 +571,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Enable submit button after minimum time
+  // Enable submit button after delay
   setTimeout(() => {
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700', 'hover:shadow-lg', 'transform', 'hover:-translate-y-1');
+      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
       if (submitText) {
         submitText.textContent = 'Request Quote';
       }
     }
   }, minTimeBeforeSubmit);
   
-  // Custom validation function
+  // Validation function
   function validateField(field) {
     const errorDiv = field.parentElement.querySelector('.error-message');
     const errorMessage = field.dataset.errorMessage || 'This field is required';
@@ -596,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
       errorDiv.classList.add('hidden');
     }
     
+    // Validation logic
     if (field.hasAttribute('required') && !field.value.trim()) {
       isValid = false;
     }
@@ -644,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
   
-  // Validate on field blur
+  // Field validation events
   const fields = form.querySelectorAll('input, select, textarea');
   fields.forEach(field => {
     field.addEventListener('blur', () => validateField(field));
@@ -655,20 +655,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // NUEVO: Form submission con estrategia híbrida
+  // MAIN FORM SUBMISSION - FIXED VERSION
   form.addEventListener('submit', async function(e) {
-    e.preventDefault(); // Siempre prevenir el envío normal
+    e.preventDefault();
     
     if (formSubmitted) {
-      console.log('Form already submitted, ignoring');
-      return;
+      console.log('Form already submitted');
+      return false;
     }
     
     console.log('=== FORM SUBMISSION START ===');
     
-    let isFormValid = true;
-    
     // Validate all fields
+    let isFormValid = true;
     fields.forEach(field => {
       if (!validateField(field)) {
         isFormValid = false;
@@ -687,14 +686,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Anti-bot checks
     const timeTaken = Date.now() - formLoadTime;
-    console.log('Time taken to submit:', timeTaken, 'ms');
-    
     if (timeTaken < minTimeBeforeSubmit) {
       alert('Please take your time to fill out the form correctly.');
       return false;
     }
     
-    // Check honeypot fields
+    // Honeypot check
     const honeypotField = form.querySelector('input[name="bot-field"]');
     const websiteField = form.querySelector('input[name="website"]');
     const companyUrlField = form.querySelector('input[name="company-url"]');
@@ -706,11 +703,13 @@ document.addEventListener('DOMContentLoaded', function() {
       return false;
     }
     
-    formSubmitted = true; // Prevenir doble envío
+    formSubmitted = true;
     
     // Show loading state
-    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
-    submitBtn.disabled = true;
+    if (submitBtn && submitText) {
+      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
+      submitBtn.disabled = true;
+    }
     
     // Collect form data
     const templateParams = {
@@ -730,8 +729,10 @@ document.addEventListener('DOMContentLoaded', function() {
       page_url: window.location.href
     };
     
-    console.log('Form data collected - nombre:', templateParams.nombre ? 'OK' : 'MISSING');
-    console.log('Form data collected - email:', templateParams.email ? 'OK' : 'MISSING');
+    console.log('Collected form data:', {
+      nombre: templateParams.nombre ? 'OK' : 'MISSING',
+      email: templateParams.email ? 'OK' : 'MISSING'
+    });
     
     // Get reCAPTCHA token
     let recaptchaToken = null;
@@ -750,7 +751,7 @@ document.addEventListener('DOMContentLoaded', function() {
       recaptchaToken: recaptchaToken
     };
     
-    console.log('Attempting to send via Resend...');
+    console.log('Sending to Resend function...');
     
     try {
       const response = await fetch('/.netlify/functions/send-email', {
@@ -762,35 +763,38 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       
       console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
       
       const result = await response.json();
       console.log('Response result:', result);
       
-      if (response.ok && result.success) {
-        console.log('SUCCESS: Email sent via Resend');
-        // Redirigir inmediatamente al thank you page
-        window.location.href = '/en/thank-you/';
+      // FIXED: Más flexible en la verificación de éxito
+      if (response.ok && (result.success || result.emailId)) {
+        console.log('✅ SUCCESS: Email sent via Resend');
+        console.log('Redirecting to thank you page...');
+        
+        // IMMEDIATE redirect - no delays
+        window.location.replace('/en/thank-you/');
         return;
       } else {
-        throw new Error(result.error || 'Email sending failed');
+        console.log('❌ Resend failed, trying fallback');
+        throw new Error(result.error || `HTTP ${response.status}: Email sending failed`);
       }
     } catch (error) {
-      console.error('Resend failed:', error);
+      console.error('💥 Resend error:', error.message);
+      console.log('🔄 Falling back to Netlify form submission...');
       
-      // FALLBACK: Si Resend falla, usar Netlify forms como backup
-      console.log('Falling back to Netlify form submission...');
-      
-      // Resetear el formulario para envío tradicional
+      // Reset submission flag for fallback
       formSubmitted = false;
       
-      // Crear un formulario temporal con todos los datos
+      // Create temporary form for Netlify submission
       const tempForm = document.createElement('form');
       tempForm.method = 'POST';
       tempForm.action = '/en/thank-you/';
       tempForm.setAttribute('data-netlify', 'true');
       tempForm.style.display = 'none';
       
-      // Agregar todos los campos como hidden inputs
+      // Add all fields as hidden inputs
       Object.keys(templateParams).forEach(key => {
         const input = document.createElement('input');
         input.type = 'hidden';
@@ -799,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tempForm.appendChild(input);
       });
       
-      // Agregar form-name para Netlify
+      // Add form-name for Netlify
       const formNameInput = document.createElement('input');
       formNameInput.type = 'hidden';
       formNameInput.name = 'form-name';
@@ -807,11 +811,12 @@ document.addEventListener('DOMContentLoaded', function() {
       tempForm.appendChild(formNameInput);
       
       document.body.appendChild(tempForm);
+      console.log('Submitting fallback form...');
       tempForm.submit();
     }
   });
   
-  // Automatic phone formatting (mantener igual)
+  // Phone formatting
   const phoneField = document.getElementById('telefono');
   if (phoneField) {
     phoneField.addEventListener('input', function(e) {
@@ -827,7 +832,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Interactive map functionality (mantener igual)
+  // Map functionality
   const showMexicoBtn = document.getElementById('showMexico');
   const showUSABtn = document.getElementById('showUSA');
   const googleMap = document.getElementById('googleMap');
