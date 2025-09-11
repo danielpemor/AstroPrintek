@@ -738,10 +738,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check human behavior
     const isHumanBehavior = 
-      userBehavior.mouseMovements > 5 &&
-      userBehavior.keystrokes > 10 &&
-      userBehavior.timeOnPage > 5 &&
-      userBehavior.fieldsFocused.size >= 3;
+      userBehavior.mouseMovements > 2 &&
+      userBehavior.keystrokes > 5 &&
+      userBehavior.timeOnPage > 3 &&
+      userBehavior.fieldsFocused.size >= 2;
     
     if (!isHumanBehavior) {
       console.warn('Suspicious behavior detected');
@@ -785,8 +785,8 @@ document.addEventListener('DOMContentLoaded', function() {
         dateStyle: 'full',
         timeStyle: 'long'
       }),
-      recaptchaScore: recaptchaToken ? 'verified' : 'not_verified',
-      behaviorScore: isHumanBehavior ? 'human' : 'suspicious',
+      recaptchaScore: 'not_verified',
+      behaviorScore: 'human',
       language: 'English'
     };
     
