@@ -49,6 +49,8 @@ const services = [
             method="POST" 
             action="/en/thank-you/"
             id="contactForm"
+            netlify-honeypot="bot-field"
+            data-netlify="true"
           >
             <!-- Netlify form detection -->
             <input type="hidden" name="form-name" value="contact" />
@@ -249,8 +251,19 @@ const services = [
 
             <!-- reCAPTCHA -->
             <div class="mb-6 flex justify-center">
-              <div data-netlify-recaptcha="true"></div>
             </div>
+              <div class="mb-6 text-center">
+                <div id="recaptcha-container" class="inline-block"></div>
+                <div class="text-sm text-slate-500 mt-2 bg-slate-50 p-4 rounded-lg border">
+                  <span class="inline-flex items-center">
+                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Protected by reCAPTCHA and anti-spam measures
+                  </span>
+                </div>
+              </div>
+
 
             <!-- Submit Button -->
             <div class="text-center">
@@ -516,6 +529,7 @@ const services = [
 </BaseLayout>
 
 // Add this to your contact.astro file - replace the existing script section
+// REEMPLAZA tu script actual con esta versión actualizada
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form[name="contact"]');
@@ -526,6 +540,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   let formLoadTime = Date.now();
   let minTimeBeforeSubmit = 3000;
+  let formSubmitted = false; // Prevenir doble envío
   
   // IMMEDIATELY set the js-enabled field to true
   const jsEnabledField = document.getElementById('jsEnabled');
@@ -540,40 +555,6 @@ document.addEventListener('DOMContentLoaded', function() {
     timestampField.value = formLoadTime;
     console.log('Form timestamp set to:', formLoadTime);
   }
-  
-  // User behavior tracking
-  let userBehavior = {
-    mouseMovements: 0,
-    keystrokes: 0,
-    timeOnPage: 0,
-    fieldsFocused: new Set(),
-    scrollEvents: 0
-  };
-  
-  // Track mouse movements
-  let lastMouseMove = 0;
-  document.addEventListener('mousemove', function(e) {
-    const now = Date.now();
-    if (now - lastMouseMove > 100) {
-      userBehavior.mouseMovements++;
-      lastMouseMove = now;
-    }
-  });
-  
-  // Track keystrokes
-  form.addEventListener('keydown', function() {
-    userBehavior.keystrokes++;
-  });
-  
-  // Track scroll
-  window.addEventListener('scroll', function() {
-    userBehavior.scrollEvents++;
-  });
-  
-  // Update time on page
-  setInterval(() => {
-    userBehavior.timeOnPage++;
-  }, 1000);
   
   // Character counter for message
   if (messageField && charCount) {
@@ -663,13 +644,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return isValid;
   }
   
-  // Validate on field blur and track focus
+  // Validate on field blur
   const fields = form.querySelectorAll('input, select, textarea');
   fields.forEach(field => {
     field.addEventListener('blur', () => validateField(field));
-    field.addEventListener('focus', () => {
-      userBehavior.fieldsFocused.add(field.id);
-    });
     field.addEventListener('input', function() {
       if (this.classList.contains('border-red-400')) {
         validateField(this);
@@ -677,11 +655,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Form submission with detailed debugging
+  // NUEVO: Form submission con estrategia híbrida
   form.addEventListener('submit', async function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Siempre prevenir el envío normal
     
-    console.log('=== FORM SUBMISSION DEBUG START ===');
+    if (formSubmitted) {
+      console.log('Form already submitted, ignoring');
+      return;
+    }
+    
+    console.log('=== FORM SUBMISSION START ===');
     
     let isFormValid = true;
     
@@ -702,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return false;
     }
     
-    // Anti-bot protections
+    // Anti-bot checks
     const timeTaken = Date.now() - formLoadTime;
     console.log('Time taken to submit:', timeTaken, 'ms');
     
@@ -723,11 +706,13 @@ document.addEventListener('DOMContentLoaded', function() {
       return false;
     }
     
+    formSubmitted = true; // Prevenir doble envío
+    
     // Show loading state
     submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
     submitBtn.disabled = true;
     
-    // Collect form data with explicit js-enabled field
+    // Collect form data
     const templateParams = {
       nombre: document.getElementById('nombre').value.trim(),
       email: document.getElementById('email').value.trim().toLowerCase(),
@@ -739,40 +724,14 @@ document.addEventListener('DOMContentLoaded', function() {
       marcaModelo: document.getElementById('marcaModelo').value.trim() || 'Not provided',
       mensaje: document.getElementById('mensaje').value.trim(),
       timestamp: formLoadTime.toString(),
-      'js-enabled': 'true', // Explicitly set this field
+      'js-enabled': 'true',
       language: 'English',
       form_source: 'Printek Website Contact Form',
       page_url: window.location.href
     };
     
-    console.log('Form data collected:', {
-      nombre: templateParams.nombre ? `"${templateParams.nombre}"` : 'EMPTY',
-      email: templateParams.email ? `"${templateParams.email}"` : 'EMPTY',
-      empresa: templateParams.empresa ? `"${templateParams.empresa}"` : 'EMPTY',
-      mensaje: templateParams.mensaje ? `"${templateParams.mensaje.substring(0, 50)}..."` : 'EMPTY',
-      servicio: templateParams.servicio ? `"${templateParams.servicio}"` : 'EMPTY',
-      'js-enabled': templateParams['js-enabled']
-    });
-    
-    // Check for required fields manually
-    const requiredFields = ['nombre', 'email', 'empresa', 'mensaje'];
-    const missingFields = requiredFields.filter(field => !templateParams[field]);
-    
-    if (missingFields.length > 0) {
-      console.error('Missing required fields:', missingFields);
-      alert(`Missing required fields: ${missingFields.join(', ')}`);
-      resetSubmitButton();
-      return false;
-    }
-    
-    // Validate email format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(templateParams.email)) {
-      console.error('Invalid email format:', templateParams.email);
-      alert('Please enter a valid email address');
-      resetSubmitButton();
-      return false;
-    }
+    console.log('Form data collected - nombre:', templateParams.nombre ? 'OK' : 'MISSING');
+    console.log('Form data collected - email:', templateParams.email ? 'OK' : 'MISSING');
     
     // Get reCAPTCHA token
     let recaptchaToken = null;
@@ -785,24 +744,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Prepare the payload
+    // Prepare payload
     const payload = {
       templateParams: templateParams,
       recaptchaToken: recaptchaToken
     };
     
-    console.log('Payload prepared:', {
-      templateParams_keys: Object.keys(payload.templateParams),
-      hasRecaptchaToken: !!payload.recaptchaToken,
-      'js-enabled': payload.templateParams['js-enabled']
-    });
-    
-    let emailSent = false;
-    let errorMessage = 'Unknown error occurred';
+    console.log('Attempting to send via Resend...');
     
     try {
-      console.log('Sending request to:', '/.netlify/functions/send-email');
-      
       const response = await fetch('/.netlify/functions/send-email', {
         method: 'POST',
         headers: {
@@ -813,65 +763,55 @@ document.addEventListener('DOMContentLoaded', function() {
       
       console.log('Response status:', response.status);
       
-      let result;
-      const responseText = await response.text();
-      console.log('Raw response:', responseText);
-      
-      try {
-        result = JSON.parse(responseText);
-        console.log('Parsed response:', result);
-      } catch (parseError) {
-        console.error('Failed to parse response JSON:', parseError);
-        result = { error: 'Invalid response format', raw_response: responseText };
-      }
+      const result = await response.json();
+      console.log('Response result:', result);
       
       if (response.ok && result.success) {
-        emailSent = true;
-        console.log('SUCCESS: Email sent successfully');
+        console.log('SUCCESS: Email sent via Resend');
+        // Redirigir inmediatamente al thank you page
+        window.location.href = '/en/thank-you/';
+        return;
       } else {
-        console.error('Request failed:', {
-          status: response.status,
-          result: result
-        });
-        
-        errorMessage = result.error || result.message || `Server error (${response.status})`;
-        
-        if (result.missing_fields) {
-          errorMessage += `\nMissing fields: ${result.missing_fields.join(', ')}`;
-        }
-        if (result.details) {
-          errorMessage += `\nDetails: ${result.details}`;
-        }
+        throw new Error(result.error || 'Email sending failed');
       }
     } catch (error) {
-      console.error('Network/Request error:', error);
-      errorMessage = `Connection error: ${error.message}`;
-    }
-    
-    // Handle result
-    if (emailSent) {
-      console.log('Redirecting to thank you page');
-      window.location.href = '/en/thank-you/';
-    } else {
-      console.error('=== EMAIL SENDING FAILED ===');
-      console.error('Error message:', errorMessage);
+      console.error('Resend failed:', error);
       
-      alert(`Failed to send message:\n\n${errorMessage}\n\nPlease try again or contact us directly:\nsales@printeksupplies.com\n+1 (915) 307 2805`);
+      // FALLBACK: Si Resend falla, usar Netlify forms como backup
+      console.log('Falling back to Netlify form submission...');
       
-      resetSubmitButton();
+      // Resetear el formulario para envío tradicional
+      formSubmitted = false;
+      
+      // Crear un formulario temporal con todos los datos
+      const tempForm = document.createElement('form');
+      tempForm.method = 'POST';
+      tempForm.action = '/en/thank-you/';
+      tempForm.setAttribute('data-netlify', 'true');
+      tempForm.style.display = 'none';
+      
+      // Agregar todos los campos como hidden inputs
+      Object.keys(templateParams).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = templateParams[key];
+        tempForm.appendChild(input);
+      });
+      
+      // Agregar form-name para Netlify
+      const formNameInput = document.createElement('input');
+      formNameInput.type = 'hidden';
+      formNameInput.name = 'form-name';
+      formNameInput.value = 'contact';
+      tempForm.appendChild(formNameInput);
+      
+      document.body.appendChild(tempForm);
+      tempForm.submit();
     }
-    
-    function resetSubmitButton() {
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
-      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
-    }
-    
-    console.log('=== FORM SUBMISSION DEBUG END ===');
   });
   
-  // Automatic phone formatting
+  // Automatic phone formatting (mantener igual)
   const phoneField = document.getElementById('telefono');
   if (phoneField) {
     phoneField.addEventListener('input', function(e) {
@@ -887,7 +827,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Interactive map functionality
+  // Interactive map functionality (mantener igual)
   const showMexicoBtn = document.getElementById('showMexico');
   const showUSABtn = document.getElementById('showUSA');
   const googleMap = document.getElementById('googleMap');
