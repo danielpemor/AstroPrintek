@@ -625,6 +625,179 @@ document.addEventListener('DOMContentLoaded', function() {
     submitText.textContent = 'Request Quote';
   }, minTimeBeforeSubmit);
   
+    // Form submission with enhanced debugging
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  console.log('=== FORM SUBMISSION DEBUG START ===');
+  
+  let isFormValid = true;
+  
+  // Validate all fields
+  fields.forEach(field => {
+    if (!validateField(field)) {
+      isFormValid = false;
+    }
+  });
+  
+  if (!isFormValid) {
+    console.log('Form validation failed');
+    const firstError = form.querySelector('.border-red-400');
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstError.focus();
+    }
+    return false;
+  }
+  
+  // Show loading state
+  submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
+  submitBtn.disabled = true;
+  
+  // Collect form data with detailed logging
+  const formData = {
+    nombre: document.getElementById('nombre')?.value?.trim() || '',
+    email: document.getElementById('email')?.value?.trim()?.toLowerCase() || '',
+    telefono: document.getElementById('telefono')?.value?.trim() || 'Not provided',
+    empresa: document.getElementById('empresa')?.value?.trim() || '',
+    ubicacion: document.getElementById('ubicacion')?.value?.trim() || '',
+    servicio: document.getElementById('servicio')?.value || '',
+    numeroProducto: document.getElementById('numeroProducto')?.value?.trim() || 'Not provided',
+    marcaModelo: document.getElementById('marcaModelo')?.value?.trim() || 'Not provided',
+    mensaje: document.getElementById('mensaje')?.value?.trim() || ''
+  };
+  
+  console.log('Form data collected:', {
+    nombre: formData.nombre ? `"${formData.nombre}"` : 'EMPTY',
+    email: formData.email ? `"${formData.email}"` : 'EMPTY',
+    empresa: formData.empresa ? `"${formData.empresa}"` : 'EMPTY',
+    mensaje: formData.mensaje ? `"${formData.mensaje.substring(0, 50)}..."` : 'EMPTY',
+    servicio: formData.servicio ? `"${formData.servicio}"` : 'EMPTY'
+  });
+  
+  // Check for required fields manually
+  const requiredFields = ['nombre', 'email', 'empresa', 'mensaje'];
+  const missingFields = requiredFields.filter(field => !formData[field]);
+  
+  if (missingFields.length > 0) {
+    console.error('Missing required fields:', missingFields);
+    alert(`Missing required fields: ${missingFields.join(', ')}`);
+    resetSubmitButton();
+    return false;
+  }
+  
+  // Validate email format
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(formData.email)) {
+    console.error('Invalid email format:', formData.email);
+    alert('Please enter a valid email address');
+    resetSubmitButton();
+    return false;
+  }
+  
+  // Prepare the payload
+  const payload = {
+    templateParams: {
+      ...formData,
+      timestamp: new Date().toLocaleString('en-US', { 
+        timeZone: 'America/Chicago',
+        dateStyle: 'full',
+        timeStyle: 'long'
+      }),
+      language: 'English',
+      form_source: 'Printek Website Contact Form',
+      page_url: window.location.href
+    }
+  };
+  
+  console.log('Payload prepared:', {
+    templateParams_keys: Object.keys(payload.templateParams),
+    payload_size: JSON.stringify(payload).length
+  });
+  
+  let emailSent = false;
+  let errorMessage = 'Unknown error occurred';
+  let debugInfo = {};
+  
+  try {
+    console.log('Sending request to:', '/.netlify/functions/send-email');
+    
+    const response = await fetch('/.netlify/functions/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+    
+    let result;
+    const responseText = await response.text();
+    console.log('Raw response:', responseText);
+    
+    try {
+      result = JSON.parse(responseText);
+      console.log('Parsed response:', result);
+    } catch (parseError) {
+      console.error('Failed to parse response JSON:', parseError);
+      result = { error: 'Invalid response format', raw_response: responseText };
+    }
+    
+    if (response.ok && result.success) {
+      emailSent = true;
+      console.log('SUCCESS: Email sent successfully');
+      if (typeof recordSubmission === 'function') {
+        recordSubmission();
+      }
+    } else {
+      console.error('Request failed:', {
+        status: response.status,
+        result: result
+      });
+      
+      errorMessage = result.error || result.message || `Server error (${response.status})`;
+      debugInfo = result.debug || {};
+      
+      // Show detailed error information
+      if (result.missing_fields) {
+        errorMessage += `\nMissing fields: ${result.missing_fields.join(', ')}`;
+      }
+      if (result.details) {
+        errorMessage += `\nDetails: ${result.details}`;
+      }
+    }
+  } catch (error) {
+    console.error('Network/Request error:', error);
+    errorMessage = `Connection error: ${error.message}`;
+    debugInfo = { network_error: error.message };
+  }
+  
+  // Handle result
+  if (emailSent) {
+    console.log('Redirecting to thank you page');
+    window.location.href = '/en/thank-you/';
+  } else {
+    console.error('=== EMAIL SENDING FAILED ===');
+    console.error('Error message:', errorMessage);
+    console.error('Debug info:', debugInfo);
+    
+    // Show comprehensive error message
+    alert(`Failed to send message:\n\n${errorMessage}\n\nPlease try again or contact us directly:\nsales@printeksupplies.com\n+1 (915) 307 2805`);
+    
+    resetSubmitButton();
+  }
+  
+  function resetSubmitButton() {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+    submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
+    submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
+  }
+  
+  console.log('=== FORM SUBMISSION DEBUG END ===');
+});
   // Custom validation
   function validateField(field) {
     const errorDiv = field.parentElement.querySelector('.error-message');
