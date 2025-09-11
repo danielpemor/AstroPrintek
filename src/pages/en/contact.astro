@@ -524,8 +524,7 @@ const services = [
 // Add this to your contact.astro file - replace the existing script section
 // REEMPLAZA tu script actual con esta versión actualizada
 <script>
-// Reemplaza tu script actual con este - FIX para redirección
-// Reemplaza tu script actual con este - FIX para redirección
+
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
@@ -649,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // MAIN FORM SUBMISSION - FIXED VERSION
+  // MAIN FORM SUBMISSION - CORRECTED VERSION
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -762,33 +761,43 @@ document.addEventListener('DOMContentLoaded', function() {
       const result = await response.json();
       console.log('Response result:', result);
       
-      // FIXED: Más flexible en la verificación de éxito
-      if (response.ok && (result.success || result.emailId)) {
+      // FIXED: Correct success condition matching your Resend function response
+      if (response.ok && result.success === true && result.emailId) {
         console.log('✅ SUCCESS: Email sent via Resend');
+        console.log('Email ID:', result.emailId);
         console.log('Redirecting to thank you page...');
         
         // Show success message briefly then redirect
         if (submitBtn && submitText) {
           submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Success! Redirecting...';
+          submitBtn.classList.remove('bg-primary-600');
+          submitBtn.classList.add('bg-green-500');
         }
         
         // Redirect with a small delay to show success
         setTimeout(() => {
           window.location.href = '/en/thank-you/';
-        }, 1000);
+        }, 1500);
         return;
       } else {
-        console.log('❌ Resend failed, trying fallback');
+        console.log('❌ Email sending failed');
+        console.log('Response details:', { 
+          ok: response.ok, 
+          success: result.success, 
+          emailId: result.emailId,
+          error: result.error 
+        });
         throw new Error(result.error || `HTTP ${response.status}: Email sending failed`);
       }
     } catch (error) {
-      console.error('💥 Resend error:', error.message);
+      console.error('💥 Error sending email:', error.message);
+      console.error('Full error:', error);
       
-      // Show error message instead of fallback
+      // Show error message
       if (submitBtn && submitText) {
         submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Error - Please try again';
-        submitBtn.classList.add('bg-red-500', 'hover:bg-red-600');
         submitBtn.classList.remove('bg-primary-600');
+        submitBtn.classList.add('bg-red-500', 'hover:bg-red-600');
         
         // Re-enable button after 3 seconds
         setTimeout(() => {
@@ -800,7 +809,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
       }
       
-      // Optional: Show user-friendly error message
+      // Show user-friendly error message
       alert('There was an issue sending your message. Please try again or contact us directly.');
     }
   });
