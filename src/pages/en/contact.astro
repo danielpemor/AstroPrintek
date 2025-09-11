@@ -514,13 +514,9 @@ const services = [
   </section>
 </BaseLayout>
 
-<!-- reCAPTCHA v3 -->
-<script src="https://www.google.com/recaptcha/api.js?render=TU_SITE_KEY_V3"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Configuration
-  const RECAPTCHA_SITE_KEY = 'TU_SITE_KEY_V3';
   
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
@@ -772,13 +768,6 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
     submitBtn.disabled = true;
     
-    // Get reCAPTCHA token
-    let recaptchaToken = '';
-    try {
-      recaptchaToken = await grecaptcha.execute(RECAPTCHA_SITE_KEY, {action: 'submit'});
-    } catch (error) {
-      console.error('reCAPTCHA error:', error);
-    }
     
     // Prepare data
     const templateParams = {
