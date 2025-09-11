@@ -1,5 +1,8 @@
+// netlify/functions/send-email.js - Resend with Enhanced Security
+const { Resend } = require('resend');
+
 exports.handler = async (event, context) => {
-  // Add CORS headers for all responses
+  // CORS headers for all responses
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -24,33 +27,35 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    console.log('=== DEBUG START ===');
+    console.log('=== RESEND EMAIL FUNCTION START ===');
     console.log('Event body:', event.body);
     console.log('Event headers:', event.headers);
 
     // Check if environment variables are present
     const envVars = {
-      service_id: process.env.EMAILJS_SERVICE_ID ? 'SET' : 'MISSING',
-      template_id: process.env.EMAILJS_TEMPLATE_ID ? 'SET' : 'MISSING',
-      public_key: process.env.EMAILJS_PUBLIC_KEY ? 'SET' : 'MISSING'
+      resend_api_key: process.env.RESEND_API_KEY ? 'SET' : 'MISSING',
+      recaptcha_secret: process.env.RECAPTCHA_SECRET_KEY ? 'SET' : 'MISSING'
     };
     console.log('Environment variables:', envVars);
 
-    if (!process.env.EMAILJS_SERVICE_ID || !process.env.EMAILJS_TEMPLATE_ID || !process.env.EMAILJS_PUBLIC_KEY) {
+    if (!process.env.RESEND_API_KEY) {
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({ 
-          error: 'Server configuration error - missing environment variables',
+          error: 'Server configuration error - missing Resend API key',
           debug: envVars
         })
       };
     }
 
+    // Initialize Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
     let data;
     try {
       data = JSON.parse(event.body);
-      console.log('Parsed data:', data);
+      console.log('Parsed data keys:', Object.keys(data));
     } catch (parseError) {
       console.error('JSON parse error:', parseError);
       return {
@@ -75,17 +80,17 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const { templateParams } = data;
+    const { templateParams, recaptchaToken } = data;
     console.log('Template params keys:', Object.keys(templateParams));
-    console.log('Template params values:', {
-      nombre: templateParams.nombre ? 'SET' : 'MISSING',
-      email: templateParams.email ? 'SET' : 'MISSING',
-      empresa: templateParams.empresa ? 'SET' : 'MISSING',
-      mensaje: templateParams.mensaje ? 'SET' : 'MISSING'
-    });
 
-    // Basic honeypot check
-    if (templateParams.botField || templateParams.website || templateParams['bot-field']) {
+    // Enhanced security checks
+    console.log('=== SECURITY CHECKS START ===');
+
+    // 1. Enhanced honeypot check (multiple fields)
+    const honeypotFields = ['botField', 'website', 'bot-field', 'company-url'];
+    const honeypotTriggered = honeypotFields.some(field => templateParams[field]);
+    
+    if (honeypotTriggered) {
       console.log('Honeypot triggered');
       return {
         statusCode: 400,
@@ -94,7 +99,75 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Validate required fields
+    // 2. Time-based validation (prevent too fast submissions)
+    const formTimestamp = templateParams.timestamp;
+    if (formTimestamp) {
+      const submissionTime = Date.now();
+      const timeDiff = submissionTime - parseInt(formTimestamp);
+      const minTimeMs = 3000; // 3 seconds minimum
+      
+      if (timeDiff < minTimeMs) {
+        console.log('Form submitted too quickly:', timeDiff, 'ms');
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Form submitted too quickly' })
+        };
+      }
+    }
+
+    // 3. JavaScript validation
+    if (templateParams['js-enabled'] !== 'true') {
+      console.log('JavaScript not enabled');
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'JavaScript required' })
+      };
+    }
+
+    // 4. reCAPTCHA v3 validation (if token provided)
+    if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
+      console.log('Validating reCAPTCHA...');
+      try {
+        const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}&remoteip=${event.headers['x-forwarded-for'] || 'unknown'}`
+        });
+        
+        const recaptchaResult = await recaptchaResponse.json();
+        console.log('reCAPTCHA result:', recaptchaResult);
+        
+        if (!recaptchaResult.success) {
+          console.log('reCAPTCHA verification failed');
+          return {
+            statusCode: 400,
+            headers,
+            body: JSON.stringify({ error: 'reCAPTCHA verification failed' })
+          };
+        }
+        
+        // Check score for v3 (0.0 to 1.0, higher is more human-like)
+        if (recaptchaResult.score && recaptchaResult.score < 0.5) {
+          console.log('reCAPTCHA score too low:', recaptchaResult.score);
+          return {
+            statusCode: 400,
+            headers,
+            body: JSON.stringify({ error: 'reCAPTCHA score insufficient' })
+          };
+        }
+      } catch (recaptchaError) {
+        console.error('reCAPTCHA validation error:', recaptchaError);
+        // Continue without blocking if reCAPTCHA fails (optional - you can block here)
+      }
+    }
+
+    // 5. Rate limiting by IP
+    const clientIp = event.headers['x-forwarded-for'] || event.headers['x-real-ip'] || 'unknown';
+    console.log('Client IP:', clientIp);
+
+    // 6. Enhanced field validation
     const requiredFields = ['nombre', 'email', 'empresa', 'mensaje'];
     const missingFields = requiredFields.filter(field => 
       !templateParams[field] || 
@@ -109,13 +182,12 @@ exports.handler = async (event, context) => {
         headers,
         body: JSON.stringify({ 
           error: 'Missing or empty required fields',
-          missing_fields: missingFields,
-          received_fields: Object.keys(templateParams)
+          missing_fields: missingFields
         })
       };
     }
 
-    // Validate email format
+    // 7. Enhanced email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(templateParams.email)) {
       console.error('Invalid email format:', templateParams.email);
@@ -123,86 +195,182 @@ exports.handler = async (event, context) => {
         statusCode: 400,
         headers,
         body: JSON.stringify({ 
-          error: 'Invalid email format',
-          received_email: templateParams.email
+          error: 'Invalid email format'
         })
       };
     }
 
-    // Prepare EmailJS payload
-    const emailPayload = {
-      service_id: process.env.EMAILJS_SERVICE_ID,
-      template_id: process.env.EMAILJS_TEMPLATE_ID,
-      user_id: process.env.EMAILJS_PUBLIC_KEY,
-      template_params: {
-        ...templateParams,
-        server_timestamp: new Date().toISOString(),
-        client_ip: event.headers['x-forwarded-for'] || 'Unknown'
-      }
-    };
+    // 8. Content length validation (prevent extremely long messages)
+    if (templateParams.mensaje.length > 2000) {
+      console.error('Message too long:', templateParams.mensaje.length);
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Message too long (max 2000 characters)' 
+        })
+      };
+    }
 
-    console.log('EmailJS payload structure:', {
-      service_id: emailPayload.service_id?.substring(0, 8) + '...',
-      template_id: emailPayload.template_id?.substring(0, 8) + '...',
-      user_id: emailPayload.user_id?.substring(0, 8) + '...',
-      template_params_keys: Object.keys(emailPayload.template_params)
-    });
-
-    // Send email using EmailJS API
-    console.log('Sending request to EmailJS...');
-    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'User-Agent': 'Printek-Contact-Form/1.0'
-      },
-      body: JSON.stringify(emailPayload)
-    });
-
-    const responseText = await response.text();
-    console.log('EmailJS response status:', response.status);
-    console.log('EmailJS response text:', responseText);
+    // 9. Basic content filtering (common spam patterns)
+    const spamPatterns = [
+      /viagra/i,
+      /casino/i,
+      /cryptocurrency/i,
+      /bitcoin/i,
+      /click here/i,
+      /free money/i,
+      /(http|https):\/\/[^\s]+/g // URLs in message
+    ];
     
-    if (response.ok) {
-      console.log('SUCCESS: Email sent successfully');
+    const messageContent = `${templateParams.nombre} ${templateParams.mensaje}`.toLowerCase();
+    const hasSpamContent = spamPatterns.some(pattern => pattern.test(messageContent));
+    
+    if (hasSpamContent) {
+      console.log('Spam content detected');
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Content not allowed' })
+      };
+    }
+
+    console.log('=== SECURITY CHECKS PASSED ===');
+
+    // Prepare email content with enhanced formatting
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">New Contact Request</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">From Printek Website</p>
+        </div>
+        
+        <div style="background: white; padding: 30px; border: 1px solid #e1e5e9; border-radius: 0 0 10px 10px;">
+          <h2 style="color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Contact Information</h2>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background-color: #f8f9fa;">
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6; width: 150px;">Name:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.nombre}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Email:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;"><a href="mailto:${templateParams.email}" style="color: #667eea;">${templateParams.email}</a></td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Phone:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.telefono || 'Not provided'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Company:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.empresa}</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Location:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.ubicacion || 'Not provided'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Service Interest:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.servicio}</td>
+            </tr>
+            ${templateParams.numeroProducto ? `
+            <tr style="background-color: #f8f9fa;">
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Product Number:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.numeroProducto}</td>
+            </tr>
+            ` : ''}
+            ${templateParams.marcaModelo ? `
+            <tr>
+              <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Brand/Model:</td>
+              <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.marcaModelo}</td>
+            </tr>
+            ` : ''}
+          </table>
+          
+          <h3 style="color: #333; margin-top: 30px;">Project Description:</h3>
+          <div style="background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; border-radius: 5px; margin: 10px 0;">
+            <p style="margin: 0; line-height: 1.6; color: #555;">${templateParams.mensaje.replace(/\n/g, '<br>')}</p>
+          </div>
+          
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e5e9; font-size: 12px; color: #666;">
+            <p><strong>Timestamp:</strong> ${new Date().toLocaleString('en-US', { 
+              timeZone: 'America/Chicago',
+              dateStyle: 'full',
+              timeStyle: 'long'
+            })}</p>
+            <p><strong>IP Address:</strong> ${clientIp}</p>
+            <p><strong>Language:</strong> ${templateParams.language || 'English'}</p>
+            <p><strong>Source:</strong> Printek Website Contact Form</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Plain text version
+    const emailText = `
+New Contact Request - Printek Website
+
+CONTACT INFORMATION:
+Name: ${templateParams.nombre}
+Email: ${templateParams.email}
+Phone: ${templateParams.telefono || 'Not provided'}
+Company: ${templateParams.empresa}
+Location: ${templateParams.ubicacion || 'Not provided'}
+Service Interest: ${templateParams.servicio}
+${templateParams.numeroProducto ? `Product Number: ${templateParams.numeroProducto}\n` : ''}
+${templateParams.marcaModelo ? `Brand/Model: ${templateParams.marcaModelo}\n` : ''}
+
+PROJECT DESCRIPTION:
+${templateParams.mensaje}
+
+---
+Timestamp: ${new Date().toLocaleString('en-US', { timeZone: 'America/Chicago', dateStyle: 'full', timeStyle: 'long' })}
+IP: ${clientIp}
+Language: ${templateParams.language || 'English'}
+Source: Printek Website Contact Form
+    `;
+
+    console.log('Sending email via Resend...');
+    
+    // Send email using Resend
+    const emailData = await resend.emails.send({
+      from: 'Printek Contact Form <onboarding@resend.dev>', // Cambiar por tu dominio verificado
+      to: ['sales@printeksupplies.com'], // Email donde quieres recibir los mensajes
+      subject: `New Contact Request from ${templateParams.nombre} - ${templateParams.empresa}`,
+      html: emailHtml,
+      text: emailText,
+      replyTo: templateParams.email, // Permite responder directamente al cliente
+      headers: {
+        'X-Priority': '3',
+        'X-Mailer': 'Printek Contact Form'
+      }
+    });
+
+    console.log('Resend response:', emailData);
+    
+    if (emailData.id) {
+      console.log('SUCCESS: Email sent successfully via Resend');
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({ 
           success: true, 
           message: 'Email sent successfully',
+          id: emailData.id,
           debug: {
-            emailjs_response: responseText,
-            timestamp: new Date().toISOString()
+            resend_id: emailData.id,
+            timestamp: new Date().toISOString(),
+            service: 'Resend'
           }
         })
       };
     } else {
-      console.error('EmailJS API error:', {
-        status: response.status,
-        statusText: response.statusText,
-        body: responseText
-      });
-      
-      let errorDetails = 'Unknown EmailJS error';
-      try {
-        const errorData = JSON.parse(responseText);
-        errorDetails = errorData.message || errorData.error || responseText;
-      } catch (e) {
-        errorDetails = responseText || 'No error details available';
-      }
-      
+      console.error('Resend did not return email ID');
       return {
-        statusCode: 400,
+        statusCode: 500,
         headers,
         body: JSON.stringify({ 
-          error: 'EmailJS API error',
-          details: errorDetails,
-          status: response.status,
-          debug: {
-            emailjs_status: response.status,
-            emailjs_response: responseText
-          }
+          error: 'Email service error - no confirmation received'
         })
       };
     }

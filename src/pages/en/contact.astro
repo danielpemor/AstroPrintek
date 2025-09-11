@@ -12,7 +12,8 @@ const services = [
 ---
 
 <BaseLayout title="Contact - Printek" description="Contact us for the best industrial and IT solutions. We're here to help you.">
-  <!-- Hero Section -->
+  <!-- Agregar reCAPTCHA script -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LfvisUrAAAAAGLWEcGYiuMdNn54E-5T8P90rx__" async defer></script>
   <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
     <div class="container mx-auto px-4 lg:px-6">
       <div class="max-w-4xl mx-auto text-center">
@@ -941,8 +942,17 @@ form.addEventListener('submit', async function(e) {
     submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
     submitBtn.disabled = true;
     
-    
-    // Prepare data
+    // Prepare data with reCAPTCHA
+    let recaptchaToken = null;
+    if (typeof grecaptcha !== 'undefined') {
+      try {
+        recaptchaToken = await grecaptcha.execute('TU_SITE_KEY_DE_RECAPTCHA', {action: 'contact_form'});
+        console.log('reCAPTCHA token obtained');
+      } catch (error) {
+        console.log('reCAPTCHA error:', error);
+      }
+    }
+
     const templateParams = {
       nombre: document.getElementById('nombre').value,
       email: document.getElementById('email').value,
@@ -958,7 +968,7 @@ form.addEventListener('submit', async function(e) {
         dateStyle: 'full',
         timeStyle: 'long'
       }),
-      recaptchaScore: 'not_verified',
+      'js-enabled': 'true', // Agregar este campo
       behaviorScore: 'human',
       language: 'English'
     };
@@ -974,7 +984,8 @@ try {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      templateParams: templateParams
+      templateParams: templateParams,
+      recaptchaToken: recaptchaToken
     })
   });
   
