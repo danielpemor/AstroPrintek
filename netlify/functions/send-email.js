@@ -13,8 +13,12 @@ exports.handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
-      headers,
-      body: ''
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://TU-SITIO.netlify.app',
+        'Access-Control-Allow-Headers': 'Content-Type',
+  },
+      body: JSON.stringify({ success: true, message: 'Email enviado exitosamente' }),
     };
   }
 
@@ -68,16 +72,13 @@ exports.handler = async (event, context) => {
         })
       };
     }
-    
+        
     if (!data.templateParams) {
-      console.error('Missing templateParams in data:', Object.keys(data));
       return {
         statusCode: 400,
-        headers,
         body: JSON.stringify({ 
-          error: 'Missing template parameters',
-          received_keys: Object.keys(data)
-        })
+          error: 'Missing template parameters. Expected { templateParams: { nombre, email, ... } }' 
+        }),
       };
     }
 
@@ -421,22 +422,13 @@ Source: Printek Website Contact Form
     }
 
   } catch (error) {
-    console.error('=== FUNCTION ERROR ===');
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    
-    return {
-      statusCode: 500,
-      headers,
+    console.error("Error al enviar email:", error);
+    return { 
+      statusCode: 500, 
       body: JSON.stringify({ 
-        error: 'Internal server error',
-        debug: {
-          error_name: error.name,
-          error_message: error.message,
-          timestamp: new Date().toISOString()
-        }
-      })
+        error: "Error interno al enviar el correo", 
+        details: error.message 
+      }) 
     };
   }
 };
