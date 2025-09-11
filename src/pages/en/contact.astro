@@ -12,8 +12,7 @@ const services = [
 ---
 
 <BaseLayout title="Contact - Printek" description="Contact us for the best industrial and IT solutions. We're here to help you.">
-  <!-- Agregar reCAPTCHA script -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LfvisUrAAAAAGLWEcGYiuMdNn54E-5T8P90rx__" async defer></script>
+  <!-- Hero Section -->
   <section class="bg-gradient-to-r from-industrial-900 to-primary-800 text-white py-20 mt-20">
     <div class="container mx-auto px-4 lg:px-6">
       <div class="max-w-4xl mx-auto text-center">
@@ -43,10 +42,18 @@ const services = [
 
         <!-- Form -->
         <div class="bg-gradient-to-br from-slate-100 via-gray-50 to-blue-50 rounded-2xl shadow-xl p-8 border border-slate-200">
+          <!-- Netlify Form with configured notifications -->
           <form 
             name="contact" 
-            id="contactForm"
+            method="POST" 
+            data-netlify="true" 
+            data-netlify-honeypot="bot-field"
+            data-netlify-recaptcha="true"
+            netlify-to="sales@printeksupplies.com"
+            action="/en/thank-you/"
           >
+            <!-- Netlify form detection -->
+            <input type="hidden" name="form-name" value="contact" />
             
             <!-- Enhanced honeypot field (multiple traps) -->
             <div style="display: none;">
@@ -76,7 +83,7 @@ const services = [
                   required
                   minlength="2"
                   maxlength="100"
-                  
+                  pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
                   placeholder="Your full name"
                   data-error-message="Please enter a valid name (letters only, 2-100 characters)"
@@ -94,7 +101,7 @@ const services = [
                   id="email"
                   name="email"
                   required
-                  
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
                   placeholder="your@email.com"
                   data-error-message="Please enter a valid email"
@@ -113,7 +120,7 @@ const services = [
                   type="tel"
                   id="telefono"
                   name="telefono"
-                  
+                  pattern="[\+]?[0-9\s\-\(\)]+"
                   minlength="10"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
                   placeholder="+1 915 123 4567"
@@ -244,19 +251,8 @@ const services = [
 
             <!-- reCAPTCHA -->
             <div class="mb-6 flex justify-center">
+              <div data-netlify-recaptcha="true"></div>
             </div>
-              <div class="mb-6 text-center">
-                <div id="recaptcha-container" class="inline-block"></div>
-                <div class="text-sm text-slate-500 mt-2 bg-slate-50 p-4 rounded-lg border">
-                  <span class="inline-flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    Protected by reCAPTCHA and anti-spam measures
-                  </span>
-                </div>
-              </div>
-
 
             <!-- Submit Button -->
             <div class="text-center">
@@ -309,7 +305,7 @@ const services = [
               allowfullscreen="" 
               loading="lazy" 
               referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3370.0945673!2d-106.3072624!3d31.7465476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e7437e05df51db%3A0xa3470ffb38cfb838!2sPrintek%20Supplies%20Inc!5e0!3m2!1sen!2smx!4v1702000000000!5m2!1sen!2smx">
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3368.234567!2d-106.4085409!3d31.709317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86e75d350dd9eda9%3A0xa1ef15cd701b0240!2sDacodex%20%7C%20Oficinas%20amuebladas!5e0!3m2!1sen!2smx!4v1702000000001!5m2!1sen!2smx">
             </iframe>
           </div>
           
@@ -321,14 +317,14 @@ const services = [
             <div class="flex justify-center space-x-4">
               <button 
                 id="showMexico" 
-                class="flex items-center px-6 py-3 bg-red-100 hover:bg-red-200 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+                class="flex items-center px-6 py-3 bg-red-200 ring-2 ring-red-300 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
               >
                 <img src="/images/mexico.png" alt="Mexico" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
                 <span class="text-sm font-semibold text-gray-700">Mexico</span>
               </button>
               <button 
                 id="showUSA" 
-                class="flex items-center px-6 py-3 bg-blue-200 ring-2 ring-blue-300 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
+                class="flex items-center px-6 py-3 bg-blue-100 hover:bg-blue-200 rounded-xl transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5 group"
               >
                 <img src="/images/estados-unidos.png" alt="United States" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform">
                 <span class="text-sm font-semibold text-gray-700">United States</span>
@@ -521,10 +517,11 @@ const services = [
   </section>
 </BaseLayout>
 
-// Add this to your contact.astro file - replace the existing script section
-// REEMPLAZA tu script actual con esta versión actualizada
-<script>
+<!-- reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfvisUrAAAAAGLWEcGYiuMdNn54E-5T8P90rx__"></script>
 
+// Form submission script - Updated English version matching Spanish functionality
+<script>
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form[name="contact"]');
   const submitBtn = document.getElementById('submitBtn');
@@ -533,20 +530,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const messageField = document.getElementById('mensaje');
   
   let formLoadTime = Date.now();
-  let minTimeBeforeSubmit = 3000;
   let formSubmitted = false;
   
-  // Set JavaScript fields immediately
-  const jsEnabledField = document.getElementById('jsEnabled');
-  const timestampField = document.getElementById('formTimestamp');
-  
-  if (jsEnabledField) {
-    jsEnabledField.value = 'true';
-  }
-  
-  if (timestampField) {
-    timestampField.value = formLoadTime;
-  }
+  // Set JavaScript fields
+  document.getElementById('formTimestamp').value = formLoadTime;
+  document.getElementById('jsEnabled').value = 'true';
   
   // Character counter
   if (messageField && charCount) {
@@ -564,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Enable submit button after delay
+  // Enable submit button after 3 seconds
   setTimeout(() => {
     if (submitBtn) {
       submitBtn.disabled = false;
@@ -574,21 +562,18 @@ document.addEventListener('DOMContentLoaded', function() {
         submitText.textContent = 'Request Quote';
       }
     }
-  }, minTimeBeforeSubmit);
+  }, 3000);
   
-  // Validation function
+  // Basic validation function
   function validateField(field) {
     const errorDiv = field.parentElement.querySelector('.error-message');
-    const errorMessage = field.dataset.errorMessage || 'This field is required';
     let isValid = true;
     
     field.classList.remove('border-red-400');
     if (errorDiv) {
-      errorDiv.textContent = '';
       errorDiv.classList.add('hidden');
     }
     
-    // Validation logic
     if (field.hasAttribute('required') && !field.value.trim()) {
       isValid = false;
     }
@@ -600,66 +585,28 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    if (field.type === 'tel' && field.value) {
-      const phoneRegex = /[\+]?[0-9\s\-\(\)]+/;
-      if (!phoneRegex.test(field.value) || field.value.replace(/\D/g, '').length < 10) {
-        isValid = false;
-      }
-    }
-    
-    if (field.id === 'nombre' && field.value) {
-      const nameRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/;
-      if (!nameRegex.test(field.value)) {
-        isValid = false;
-      }
-    }
-    
-    if (field.hasAttribute('minlength') && field.value.length < field.getAttribute('minlength')) {
-      isValid = false;
-    }
-    
-    if (field.hasAttribute('maxlength') && field.value.length > field.getAttribute('maxlength')) {
-      isValid = false;
-    }
-    
-    if (field.tagName === 'SELECT' && field.hasAttribute('required') && !field.value) {
-      isValid = false;
-    }
-    
-    if (!isValid) {
+    if (!isValid && errorDiv) {
       field.classList.add('border-red-400');
-      if (errorDiv) {
-        errorDiv.textContent = errorMessage;
-        errorDiv.classList.remove('hidden');
-      }
+      errorDiv.classList.remove('hidden');
+      errorDiv.textContent = field.dataset.errorMessage || 'This field is required';
     }
     
     return isValid;
   }
   
-  // Field validation events
-  const fields = form.querySelectorAll('input, select, textarea');
+  // Add validation to fields
+  const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
   fields.forEach(field => {
     field.addEventListener('blur', () => validateField(field));
-    field.addEventListener('input', function() {
-      if (this.classList.contains('border-red-400')) {
-        validateField(this);
-      }
-    });
   });
   
-  // MAIN FORM SUBMISSION - CORRECTED VERSION
+  // Form submission - Updated to match Spanish version
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    if (formSubmitted) {
-      console.log('Form already submitted');
-      return false;
-    }
+    if (formSubmitted) return false;
     
-    console.log('=== FORM SUBMISSION START ===');
-    
-    // Validate all fields
+    // Validate all required fields
     let isFormValid = true;
     fields.forEach(field => {
       if (!validateField(field)) {
@@ -667,24 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    if (!isFormValid) {
-      console.log('Form validation failed');
-      const firstError = form.querySelector('.border-red-400');
-      if (firstError) {
-        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstError.focus();
-      }
-      return false;
-    }
-    
-    // Anti-bot checks
-    const timeTaken = Date.now() - formLoadTime;
-    if (timeTaken < minTimeBeforeSubmit) {
-      alert('Please take your time to fill out the form correctly.');
-      return false;
-    }
-    
-    // Honeypot check
+    // Check honeypot
     const honeypotField = form.querySelector('input[name="bot-field"]');
     const websiteField = form.querySelector('input[name="website"]');
     const companyUrlField = form.querySelector('input[name="company-url"]');
@@ -696,36 +626,22 @@ document.addEventListener('DOMContentLoaded', function() {
       return false;
     }
     
+    if (!isFormValid) {
+      const firstError = form.querySelector('.border-red-400');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstError.focus();
+      }
+      return false;
+    }
+    
     formSubmitted = true;
     
-    // Show loading state
+    // Show loading
     if (submitBtn && submitText) {
       submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Sending...';
       submitBtn.disabled = true;
     }
-    
-    // Collect form data
-    const templateParams = {
-      nombre: document.getElementById('nombre').value.trim(),
-      email: document.getElementById('email').value.trim().toLowerCase(),
-      telefono: document.getElementById('telefono').value.trim() || 'Not provided',
-      empresa: document.getElementById('empresa').value.trim(),
-      ubicacion: document.getElementById('ubicacion').value.trim(),
-      servicio: document.getElementById('servicio').value,
-      numeroProducto: document.getElementById('numeroProducto').value.trim() || 'Not provided',
-      marcaModelo: document.getElementById('marcaModelo').value.trim() || 'Not provided',
-      mensaje: document.getElementById('mensaje').value.trim(),
-      timestamp: formLoadTime.toString(),
-      'js-enabled': 'true',
-      language: 'English',
-      form_source: 'Printek Website Contact Form',
-      page_url: window.location.href
-    };
-    
-    console.log('Collected form data:', {
-      nombre: templateParams.nombre ? 'OK' : 'MISSING',
-      email: templateParams.email ? 'OK' : 'MISSING'
-    });
     
     // Get reCAPTCHA token
     let recaptchaToken = null;
@@ -738,15 +654,38 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Prepare payload
-    const payload = {
-      templateParams: templateParams,
-      recaptchaToken: recaptchaToken
-    };
-    
-    console.log('Sending to Resend function...');
-    
+    // Try Netlify Function first
     try {
+      const templateParams = {
+        nombre: document.getElementById('nombre').value.trim(),
+        email: document.getElementById('email').value.trim().toLowerCase(),
+        telefono: document.getElementById('telefono').value.trim() || 'Not provided',
+        empresa: document.getElementById('empresa').value.trim(),
+        ubicacion: document.getElementById('ubicacion').value.trim(),
+        servicio: document.getElementById('servicio').value,
+        numeroProducto: document.getElementById('numeroProducto').value.trim() || 'Not provided',
+        marcaModelo: document.getElementById('marcaModelo').value.trim() || 'Not provided',
+        mensaje: document.getElementById('mensaje').value.trim(),
+        timestamp: formLoadTime.toString(),
+        'js-enabled': 'true',
+        language: 'English',
+        form_source: 'Printek Website Contact Form',
+        page_url: window.location.href
+      };
+      
+      console.log('Collected form data:', {
+        nombre: templateParams.nombre ? 'OK' : 'MISSING',
+        email: templateParams.email ? 'OK' : 'MISSING'
+      });
+      
+      // Prepare payload
+      const payload = {
+        templateParams: templateParams,
+        recaptchaToken: recaptchaToken
+      };
+      
+      console.log('Sending to Resend function...');
+      
       const response = await fetch('/.netlify/functions/send-email', {
         method: 'POST',
         headers: {
@@ -761,9 +700,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const result = await response.json();
       console.log('Response result:', result);
       
-      // FIXED: Correct success condition matching your Resend function response
+      // Check for success matching Resend function response
       if (response.ok && result.success === true && result.emailId) {
-        console.log('✅ SUCCESS: Email sent via Resend');
+        console.log('✅ Email sent successfully');
         console.log('Email ID:', result.emailId);
         console.log('Redirecting to thank you page...');
         
@@ -790,27 +729,39 @@ document.addEventListener('DOMContentLoaded', function() {
         throw new Error(result.error || `HTTP ${response.status}: Email sending failed`);
       }
     } catch (error) {
-      console.error('💥 Error sending email:', error.message);
-      console.error('Full error:', error);
+      console.log('Netlify function failed:', error);
+    }
+    
+    // Fallback to Netlify Forms
+    try {
+      const formData = new FormData(form);
+      formData.append('g-recaptcha-response', recaptchaToken || '');
       
-      // Show error message
-      if (submitBtn && submitText) {
-        submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Error - Please try again';
-        submitBtn.classList.remove('bg-primary-600');
-        submitBtn.classList.add('bg-red-500', 'hover:bg-red-600');
-        
-        // Re-enable button after 3 seconds
-        setTimeout(() => {
-          formSubmitted = false;
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
-          submitBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
-          submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
-        }, 3000);
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString()
+      });
+      
+      if (response.ok) {
+        console.log('✅ Sent via Netlify Forms');
+        window.location.href = '/en/thank-you/';
+        return;
       }
-      
-      // Show user-friendly error message
-      alert('There was an issue sending your message. Please try again or contact us directly.');
+    } catch (error) {
+      console.log('Netlify Forms failed:', error);
+    }
+    
+    // If everything fails
+    alert('Error sending message. Please contact directly at sales@printeksupplies.com');
+    
+    // Reset button
+    formSubmitted = false;
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+      submitBtn.classList.add('bg-primary-600', 'hover:bg-primary-700');
+      submitBtn.innerHTML = '<img src="/images/email.png" alt="email" class="w-5 h-5 mr-2" />Request Quote';
     }
   });
   
