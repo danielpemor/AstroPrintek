@@ -39,6 +39,7 @@ exports.handler = async (event, context) => {
     console.log('Environment variables:', envVars);
 
     if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is missing');
       return {
         statusCode: 500,
         headers,
@@ -126,42 +127,75 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // 4. reCAPTCHA v3 validation (if token provided)
+    // 4. reCAPTCHA v3 validation (if token provided) - MEJORADO CON DEBUG
+    console.log('=== reCAPTCHA VALIDATION START ===');
+    console.log('Token received:', recaptchaToken ? 'YES' : 'NO');
+    console.log('Token length:', recaptchaToken ? recaptchaToken.length : 0);
+    console.log('Secret key available:', process.env.RECAPTCHA_SECRET_KEY ? 'YES' : 'NO');
+    
     if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
       console.log('Validating reCAPTCHA...');
       try {
+        const recaptchaPayload = `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}&remoteip=${event.headers['x-forwarded-for'] || 'unknown'}`;
+        
         const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}&remoteip=${event.headers['x-forwarded-for'] || 'unknown'}`
+          body: recaptchaPayload
         });
         
+        console.log('reCAPTCHA API response status:', recaptchaResponse.status);
+        
         const recaptchaResult = await recaptchaResponse.json();
-        console.log('reCAPTCHA result:', recaptchaResult);
+        console.log('reCAPTCHA result:', JSON.stringify(recaptchaResult, null, 2));
         
         if (!recaptchaResult.success) {
           console.log('reCAPTCHA verification failed');
+          console.log('Error codes:', recaptchaResult['error-codes']);
+          
           return {
             statusCode: 400,
             headers,
-            body: JSON.stringify({ error: 'reCAPTCHA verification failed' })
+            body: JSON.stringify({ 
+              error: 'reCAPTCHA verification failed',
+              details: recaptchaResult['error-codes'] || 'Unknown reCAPTCHA error',
+              debug: {
+                tokenReceived: !!recaptchaToken,
+                secretKeyExists: !!process.env.RECAPTCHA_SECRET_KEY,
+                recaptchaSuccess: recaptchaResult.success,
+                recaptchaHostname: recaptchaResult.hostname
+              }
+            })
           };
         }
         
         // Check score for v3 (0.0 to 1.0, higher is more human-like)
-        if (recaptchaResult.score && recaptchaResult.score < 0.5) {
+        console.log('reCAPTCHA score:', recaptchaResult.score);
+        if (recaptchaResult.score && recaptchaResult.score < 0.3) { // CAMBIADO DE 0.5 A 0.3 PARA SER MENOS ESTRICTO
           console.log('reCAPTCHA score too low:', recaptchaResult.score);
           return {
             statusCode: 400,
             headers,
-            body: JSON.stringify({ error: 'reCAPTCHA score insufficient' })
+            body: JSON.stringify({ 
+              error: 'reCAPTCHA score insufficient',
+              score: recaptchaResult.score,
+              minimum: 0.3
+            })
           };
         }
+        
+        console.log('reCAPTCHA validation successful');
       } catch (recaptchaError) {
         console.error('reCAPTCHA validation error:', recaptchaError);
-        // Continue without blocking if reCAPTCHA fails (optional - you can block here)
+        
+        // CAMBIO IMPORTANTE: NO BLOQUEAR SI RECAPTCHA FALLA, SOLO REGISTRAR
+        console.log('Continuing without reCAPTCHA due to validation error');
       }
+    } else {
+      console.log('reCAPTCHA validation skipped - missing token or secret');
     }
+
+    console.log('=== reCAPTCHA VALIDATION END ===');
 
     // 5. Rate limiting by IP
     const clientIp = event.headers['x-forwarded-for'] || event.headers['x-real-ip'] || 'unknown';
@@ -273,13 +307,13 @@ exports.handler = async (event, context) => {
               <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Service Interest:</td>
               <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.servicio}</td>
             </tr>
-            ${templateParams.numeroProducto ? `
+            ${templateParams.numeroProducto && templateParams.numeroProducto !== 'Not provided' ? `
             <tr style="background-color: #f8f9fa;">
               <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Product Number:</td>
               <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.numeroProducto}</td>
             </tr>
             ` : ''}
-            ${templateParams.marcaModelo ? `
+            ${templateParams.marcaModelo && templateParams.marcaModelo !== 'Not provided' ? `
             <tr>
               <td style="padding: 12px; font-weight: bold; border: 1px solid #dee2e6;">Brand/Model:</td>
               <td style="padding: 12px; border: 1px solid #dee2e6;">${templateParams.marcaModelo}</td>
@@ -317,8 +351,8 @@ Phone: ${templateParams.telefono || 'Not provided'}
 Company: ${templateParams.empresa}
 Location: ${templateParams.ubicacion || 'Not provided'}
 Service Interest: ${templateParams.servicio}
-${templateParams.numeroProducto ? `Product Number: ${templateParams.numeroProducto}\n` : ''}
-${templateParams.marcaModelo ? `Brand/Model: ${templateParams.marcaModelo}\n` : ''}
+${templateParams.numeroProducto && templateParams.numeroProducto !== 'Not provided' ? `Product Number: ${templateParams.numeroProducto}\n` : ''}
+${templateParams.marcaModelo && templateParams.marcaModelo !== 'Not provided' ? `Brand/Model: ${templateParams.marcaModelo}\n` : ''}
 
 PROJECT DESCRIPTION:
 ${templateParams.mensaje}
@@ -332,45 +366,56 @@ Source: Printek Website Contact Form
 
     console.log('Sending email via Resend...');
     
-    // Send email using Resend
-    const emailData = await resend.emails.send({
-      from: 'Printek Contact Form <onboarding@resend.dev>', // Cambiar por tu dominio verificado
-      to: ['danielpemor123@gmail.com'], // Email donde quieres recibir los mensajes
-      subject: `New Contact Request from ${templateParams.nombre} - ${templateParams.empresa}`,
-      html: emailHtml,
-      text: emailText,
-      replyTo: templateParams.email, // Permite responder directamente al cliente
-      headers: {
-        'X-Priority': '3',
-        'X-Mailer': 'Printek Contact Form'
-      }
-    });
+    // CAMBIO IMPORTANTE: BETTER ERROR HANDLING FOR RESEND
+    try {
+      // Send email using Resend
+      const emailData = await resend.emails.send({
+        from: 'Printek Contact Form <onboarding@resend.dev>', // Cambiar por tu dominio verificado cuando tengas uno
+        to: ['sales@printeksupplies.com'], // Email donde quieres recibir los mensajes
+        subject: `New Contact Request from ${templateParams.nombre} - ${templateParams.empresa}`,
+        html: emailHtml,
+        text: emailText,
+        replyTo: templateParams.email, // Permite responder directamente al cliente
+        headers: {
+          'X-Priority': '3',
+          'X-Mailer': 'Printek Contact Form'
+        }
+      });
 
-    console.log('Resend response:', emailData);
-    
-    if (emailData.id) {
-      console.log('SUCCESS: Email sent successfully via Resend');
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ 
-          success: true, 
-          message: 'Email sent successfully',
-          id: emailData.id,
-          debug: {
-            resend_id: emailData.id,
-            timestamp: new Date().toISOString(),
-            service: 'Resend'
-          }
-        })
-      };
-    } else {
-      console.error('Resend did not return email ID');
+      console.log('Resend response:', emailData);
+      
+      if (emailData.id) {
+        console.log('SUCCESS: Email sent successfully via Resend');
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ 
+            success: true, 
+            message: 'Email sent successfully',
+            id: emailData.id,
+            service: 'Resend',
+            debug: {
+              resend_id: emailData.id,
+              timestamp: new Date().toISOString(),
+              service: 'Resend'
+            }
+          })
+        };
+      } else {
+        throw new Error('Resend did not return email ID');
+      }
+    } catch (resendError) {
+      console.error('Resend email sending failed:', resendError);
+      
+      // Return error para que el frontend pueda usar el fallback
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({ 
-          error: 'Email service error - no confirmation received'
+          error: 'Email service temporarily unavailable',
+          details: resendError.message,
+          service: 'Resend',
+          fallback_available: true
         })
       };
     }
