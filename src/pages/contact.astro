@@ -83,7 +83,7 @@ const services = [
                   required
                   minlength="2"
                   maxlength="100"
-                  pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+"
+                  pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$"
                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white"
                   placeholder="Tu nombre completo"
                   data-error-message="Por favor ingresa un nombre válido (solo letras, 2-100 caracteres)"
