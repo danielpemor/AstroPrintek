@@ -165,8 +165,8 @@ exports.handler = async (event, context) => {
 
     // Enviar email
     const result = await resend.emails.send({
-      from: 'Printek <onboarding@resend.dev>',
-      to: ['dpm__10@hotmail.com'],
+      from: 'Printek Contacto <contact@printeksupplies.com>',
+      to: ['sales@printeksupplies.com'],
       subject: `Contacto: ${params.nombre} - ${params.empresa}`,
       html: emailContent,
       replyTo: params.email
