@@ -1,6 +1,1 @@
-# Forzar dominio sin www
-https://www.printeksupplies.com/* https://printeksupplies.com/:splat 301!
-
-# Luego redirigir al nuevo dominio
-https://printeksupplies.com/* https://printektech.com/:splat 301!
-http://printeksupplies.com/* https://printektech.com/:splat 301!
+/*  https://printektech.com/:splat  301!
